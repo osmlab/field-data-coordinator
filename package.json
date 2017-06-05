@@ -4,12 +4,30 @@
   "description": "Coordinator app for the field data project",
   "main": "main.js",
   "scripts": {
-    "lint": "standard"
+    "lint": "standard",
+    "clean": "gulp clean",
+    "build": "gulp",
+    "start": "cross-env NODE_ENV=development electron main.js"
   },
   "repository": "git@github.com:osmlab/field-data-coordinator.git",
   "author": "Derek Lieu <dl@dereklieu.com>",
   "license": "ISC",
   "devDependencies": {
-    "standard": "^10.0.2"
+    "browserify": "^14.4.0",
+    "cross-env": "^5.0.0",
+    "del": "^2.2.2",
+    "electron": "^1.6.10",
+    "electron-hot-loader": "^0.8.0",
+    "envify": "^4.0.0",
+    "gulp": "^3.9.1",
+    "npm-run-all": "^4.0.2",
+    "reactify": "^1.1.1",
+    "standard": "^10.0.2",
+    "vinyl-buffer": "^1.0.0",
+    "vinyl-source-stream": "^1.1.0"
+  },
+  "dependencies": {
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4"
   }
 }

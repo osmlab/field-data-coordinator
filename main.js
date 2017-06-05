@@ -1,6 +1,8 @@
 'use strict'
 
 const path = require('path')
+const mkdirp = require('mkdirp')
+const api = require('./lib/api')
 const settings = require('electron-settings')
 const electron = require('electron')
 const app = electron.app
@@ -28,6 +30,12 @@ function createWindow () {
   })
   return win
 }
+
+const userDataPath = path.join(app.getPath('userData'), 'org.osm-labs.field-data-coordinator')
+mkdirp.sync(userDataPath)
+const dbPath = path.join(userDataPath, 'db')
+mkdirp.sync(dbPath)
+api.start(dbPath)
 
 app.on('ready', init)
 

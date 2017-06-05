@@ -1,28 +1,35 @@
 'use strict'
 
 const path = require('path')
+const settings = require('electron-settings')
 const electron = require('electron')
 const app = electron.app
 const BrowserWindow = electron.BrowserWindow
 
-let mainWindow
-
-function createWindow () {
-  mainWindow = new BrowserWindow({width: 800, height: 600})
-
-  if (process.env.NODE_ENV === 'development') {
-    mainWindow.loadURL(path.join('file://', __dirname, 'src/index.html'))
-    mainWindow.webContents.openDevTools()
-  } else {
-    mainWindow.loadURL(path.join('file://', __dirname, 'dist/index.html'))
-  }
-
-  mainWindow.on('closed', function () {
-    mainWindow = null
+let main
+function init () {
+  main = createWindow()
+  main.on('closed', function () {
+    main = null
   })
 }
 
-app.on('ready', createWindow)
+function createWindow () {
+  const opts = Object.assign({}, settings.get('winBounds'))
+  const win = new BrowserWindow(opts)
+  if (process.env.NODE_ENV === 'development') {
+    win.loadURL(path.join('file://', __dirname, 'src/index.html'))
+    win.webContents.openDevTools()
+  } else {
+    win.loadURL(path.join('file://', __dirname, 'dist/index.html'))
+  }
+  win.on('close', function () {
+    settings.set('winBounds', win.getBounds())
+  })
+  return win
+}
+
+app.on('ready', init)
 
 app.on('window-all-closed', function () {
   // On OS X it is common for applications and their menu bar
@@ -35,7 +42,7 @@ app.on('window-all-closed', function () {
 app.on('activate', function () {
   // On OS X it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) {
-    createWindow()
+  if (main === null) {
+    init()
   }
 })

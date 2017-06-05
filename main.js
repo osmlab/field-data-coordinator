@@ -7,6 +7,7 @@ const server = require('./lib/server')
 const settings = require('electron-settings')
 const electron = require('electron')
 const app = electron.app
+const Menu = electron.Menu
 const BrowserWindow = electron.BrowserWindow
 
 let main
@@ -15,6 +16,7 @@ function init () {
   main.on('closed', function () {
     main = null
   })
+  setupMenu()
 }
 
 function createWindow () {
@@ -30,6 +32,12 @@ function createWindow () {
     settings.set('winBounds', win.getBounds())
   })
   return win
+}
+
+function setupMenu () {
+  const template = require('./lib/menu')(app)
+  const menu = Menu.buildFromTemplate(template)
+  Menu.setApplicationMenu(menu)
 }
 
 const userDataPath = path.join(app.getPath('userData'), 'org.osm-labs.field-data-coordinator')

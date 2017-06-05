@@ -2,7 +2,7 @@
 
 const path = require('path')
 const mkdirp = require('mkdirp')
-const api = require('./lib/api')
+const db = require('./lib/db')
 const settings = require('electron-settings')
 const electron = require('electron')
 const app = electron.app
@@ -35,7 +35,7 @@ const userDataPath = path.join(app.getPath('userData'), 'org.osm-labs.field-data
 mkdirp.sync(userDataPath)
 const dbPath = path.join(userDataPath, 'db')
 mkdirp.sync(dbPath)
-api.start(dbPath)
+db.start(dbPath)
 
 app.on('ready', init)
 

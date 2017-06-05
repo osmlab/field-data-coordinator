@@ -3,6 +3,7 @@
 const path = require('path')
 const mkdirp = require('mkdirp')
 const db = require('./lib/db')
+const server = require('./lib/server')
 const settings = require('electron-settings')
 const electron = require('electron')
 const app = electron.app
@@ -36,6 +37,7 @@ mkdirp.sync(userDataPath)
 const dbPath = path.join(userDataPath, 'db')
 mkdirp.sync(dbPath)
 db.start(dbPath)
+server.listen()
 
 app.on('ready', init)
 

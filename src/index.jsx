@@ -1,5 +1,5 @@
 const React = require('react')
 const ReactDOM = require('react-dom')
-const App = require('./ui/App.jsx')
+const Home = require('./ui/Home.jsx')
 
-ReactDOM.render(<App />, document.getElementById('root'))
+ReactDOM.render(<Home />, document.getElementById('root'))

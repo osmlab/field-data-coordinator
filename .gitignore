@@ -3,3 +3,4 @@ npm-debug.log
 dist/
 build/
 .env
+bin/observations

@@ -1,6 +1,12 @@
 'use strict'
-const { Map } = require('immutable')
-const initialState = Map({})
+const { List, fromJS } = require('immutable')
+const initialState = List()
+
 module.exports = function (state = initialState, action) {
-  return state
+  switch (action.type) {
+    case 'SYNC_SUCCESS':
+      return fromJS(action.observations)
+    default:
+      return state
+  }
 }

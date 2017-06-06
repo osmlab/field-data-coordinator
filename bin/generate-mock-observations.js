@@ -20,6 +20,7 @@ for (let i = 0; i < count; ++i) {
   const payload = {
     type: 'Feature',
     geometry: {
+      type: 'Point',
       coordinates: randomCoords().split(', ')
     },
     properties: {}

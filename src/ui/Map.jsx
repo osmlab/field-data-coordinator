@@ -18,6 +18,10 @@ class Map extends React.Component {
     })
   }
 
+  componentWillUnmount () {
+    this.map = null
+  }
+
   render () {
     return (
       <div className='map' ref={this.init} />

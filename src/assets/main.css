@@ -1,4 +1,7 @@
 body {}
+.header__title {
+  display: inline-block;
+}
 .map {
   height: 70vh;
 }

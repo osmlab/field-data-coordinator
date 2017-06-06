@@ -1,5 +1,4 @@
 'use strict'
-const { combineReducers } = require('redux')
-module.exports = combineReducers({
-  features: (state) => state || {}
-})
+const { combineReducers } = require('redux-immutable')
+const observations = require('./observations')
+module.exports = combineReducers({ observations })

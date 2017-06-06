@@ -35,6 +35,7 @@
     "express": "^4.15.3",
     "immutable": "^3.8.1",
     "level": "^1.7.0",
+    "mapbox-gl": "^0.37.0",
     "material-ui": "^0.18.1",
     "mkdirp": "^0.5.1",
     "object-path": "^0.11.4",

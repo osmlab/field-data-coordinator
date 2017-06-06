@@ -64,3 +64,7 @@ app.on('activate', function () {
     init()
   }
 })
+
+// export the db object so we can remote require it on render threads
+// https://github.com/electron/electron/blob/master/docs/api/remote.md
+module.exports.db = db

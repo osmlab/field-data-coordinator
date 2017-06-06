@@ -18,7 +18,7 @@ const count = Array.isArray(argv._) ? argv._[0] : 50
 
 for (let i = 0; i < count; ++i) {
   const payload = {
-    type: 'Point',
+    type: 'Feature',
     geometry: {
       coordinates: randomCoords().split(', ')
     },

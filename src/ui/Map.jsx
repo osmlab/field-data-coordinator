@@ -12,6 +12,7 @@ class Map extends React.Component {
   }
 
   init (el) {
+    if (!el) return
     this.map = new mapboxgl.Map({
       container: el,
       style: 'mapbox://styles/mapbox/satellite-v9'

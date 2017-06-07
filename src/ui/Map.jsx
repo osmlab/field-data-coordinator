@@ -21,11 +21,16 @@ const markerStyle = {
   filter: ['==', '$type', 'Point']
 }
 
+function tooltip (feature) {
+  return `<p>${JSON.stringify(feature.properties)}</p>`
+}
+
 class Map extends React.Component {
   constructor (props) {
     super(props)
     this.init = this.init.bind(this)
     this.mousemove = this.mousemove.bind(this)
+    this.mouseclick = this.mouseclick.bind(this)
   }
 
   componentWillReceiveProps ({ activeIds, activeFeatures }) {
@@ -39,6 +44,7 @@ class Map extends React.Component {
 
   componentWillUnmount () {
     this.map.off('mousemove', this.mousemove)
+    this.map.off('click', this.mouseclick)
     this.map.remove()
     this.map = null
   }
@@ -60,12 +66,33 @@ class Map extends React.Component {
       }
       map.addLayer(markerStyle)
       map.on('mousemove', this.mousemove)
+      map.on('click', this.mouseclick)
+      this.popup = new mapboxgl.Popup({
+        closeButton: true,
+        closeOnClick: true
+      })
     })
   }
 
   mousemove (e) {
     const features = this.map.queryRenderedFeatures(e.point, { layer: [SOURCE] })
     this.map.getCanvas().style.cursor = features.length ? 'pointer' : ''
+  }
+
+  mouseclick (e) {
+    const features = this.map.queryRenderedFeatures(e.point, { layer: [SOURCE] })
+    if (features.length) this.open(e.lngLat, features[0])
+  }
+
+  open (lngLat, feature) {
+    this.popup
+    .setLngLat(lngLat)
+    .setHTML(tooltip(feature))
+    .addTo(this.map)
+  }
+
+  close () {
+    this.popup.remove()
   }
 
   whenReady (fn) {

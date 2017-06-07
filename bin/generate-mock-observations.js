@@ -17,11 +17,12 @@ const argv = minimist(process.argv.slice(2))
 const count = Array.isArray(argv._) ? argv._[0] : 50
 
 for (let i = 0; i < count; ++i) {
+  const coordinates = randomCoords().split(', ')
   const payload = {
     type: 'Feature',
     geometry: {
       type: 'Point',
-      coordinates: randomCoords().split(', ')
+      coordinates: [coordinates[1], coordinates[0]]
     },
     properties: {}
   }

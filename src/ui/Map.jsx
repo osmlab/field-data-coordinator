@@ -2,8 +2,16 @@
 const React = require('react')
 const mapboxgl = require('mapbox-gl')
 const { connect } = require('react-redux')
+const PropTypes = require('prop-types')
+const immutable = require('immutable')
+const { getActiveFeatures } = require('../reducers/observations')
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwZWd5cHQiLCJhIjoiY2l6ZTk5YTNxMjV3czMzdGU5ZXNhNzdraSJ9.HPI_4OulrnpD8qI57P12tg'
+const SOURCE = 'ACTIVE_OBSERVATIONS'
+const emptyFeatureCollection = {
+  type: 'FeatureCollection',
+  features: []
+}
 
 class Map extends React.Component {
   constructor (props) {
@@ -11,16 +19,33 @@ class Map extends React.Component {
     this.init = this.init.bind(this)
   }
 
-  init (el) {
-    if (!el) return
-    this.map = new mapboxgl.Map({
-      container: el,
-      style: 'mapbox://styles/mapbox/satellite-v9'
-    })
+  componentWillReceiveProps ({ activeIds, activeFeatures }) {
+    if (activeIds !== this.props.activeIds) {
+      this.whenReady(() => this.map.getSource(SOURCE).setData(activeFeatures))
+    }
   }
 
   componentWillUnmount () {
     this.map = null
+  }
+
+  init (el) {
+    if (!el) return
+    const map = this.map = new mapboxgl.Map({
+      container: el,
+      style: 'mapbox://styles/mapbox/satellite-v9'
+    })
+    map.addControl(new mapboxgl.NavigationControl())
+    map.dragRotate.disable()
+    map.touchZoomRotate.disableRotation()
+    this.whenReady(() => {
+      map.addSource(SOURCE, { type: 'geojson', data: emptyFeatureCollection })
+    })
+  }
+
+  whenReady (fn) {
+    if (this.map.loaded()) fn()
+    else this.map.once('load', () => fn.call(this))
   }
 
   render () {
@@ -30,5 +55,15 @@ class Map extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({ observations: state.observations })
+Map.propTypes = {
+  // immutable list for speedy comparisons
+  activeIds: PropTypes.instanceOf(immutable.List),
+  // just a regular geojson FeatureCollection
+  activeFeatures: PropTypes.object
+}
+
+const mapStateToProps = state => ({
+  activeIds: state.observations.get('active'),
+  activeFeatures: getActiveFeatures(state.observations)
+})
 module.exports = connect(mapStateToProps)(Map)

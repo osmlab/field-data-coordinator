@@ -4,6 +4,7 @@ const mapboxgl = require('mapbox-gl')
 const { connect } = require('react-redux')
 const PropTypes = require('prop-types')
 const immutable = require('immutable')
+const extent = require('turf-extent')
 const { getActiveFeatures } = require('../reducers/observations')
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwZWd5cHQiLCJhIjoiY2l6ZTk5YTNxMjV3czMzdGU5ZXNhNzdraSJ9.HPI_4OulrnpD8qI57P12tg'
@@ -11,6 +12,17 @@ const SOURCE = 'ACTIVE_OBSERVATIONS'
 const emptyFeatureCollection = {
   type: 'FeatureCollection',
   features: []
+}
+
+const markerStyle = {
+  id: 'observations',
+  type: 'circle',
+  source: SOURCE,
+  paint: {
+    'circle-radius': 6,
+    'circle-color': '#B42222'
+  },
+  filter: ['==', '$type', 'Point']
 }
 
 class Map extends React.Component {
@@ -21,7 +33,10 @@ class Map extends React.Component {
 
   componentWillReceiveProps ({ activeIds, activeFeatures }) {
     if (activeIds !== this.props.activeIds) {
-      this.whenReady(() => this.map.getSource(SOURCE).setData(activeFeatures))
+      this.whenReady(() => {
+        this.map.getSource(SOURCE).setData(activeFeatures)
+        this.map.fitBounds(extent(activeFeatures))
+      })
     }
   }
 
@@ -40,6 +55,7 @@ class Map extends React.Component {
     map.touchZoomRotate.disableRotation()
     this.whenReady(() => {
       map.addSource(SOURCE, { type: 'geojson', data: emptyFeatureCollection })
+      map.addLayer(markerStyle)
     })
   }
 

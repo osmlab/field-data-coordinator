@@ -29,6 +29,7 @@ class Map extends React.Component {
   constructor (props) {
     super(props)
     this.init = this.init.bind(this)
+    this.mousemove = this.mousemove.bind(this)
   }
 
   componentWillReceiveProps ({ activeIds, activeFeatures }) {
@@ -41,6 +42,8 @@ class Map extends React.Component {
   }
 
   componentWillUnmount () {
+    this.map.off('mousemove', this.mousemove)
+    this.map.remove()
     this.map = null
   }
 
@@ -56,7 +59,13 @@ class Map extends React.Component {
     this.whenReady(() => {
       map.addSource(SOURCE, { type: 'geojson', data: emptyFeatureCollection })
       map.addLayer(markerStyle)
+      map.on('mousemove', this.mousemove)
     })
+  }
+
+  mousemove (e) {
+    const features = this.map.queryRenderedFeatures(e.point, { layer: [SOURCE] })
+    this.map.getCanvas().style.cursor = features.length ? 'pointer' : ''
   }
 
   whenReady (fn) {

@@ -1,6 +1,17 @@
 'use strict'
 const { Map, List } = require('immutable')
 
+const initialState = Map({
+  active: List(),
+  all: List(),
+  filter: () => true,
+
+  // An non-immutable object containing normal geojson objects.
+  // Note this should never be used in a react component.
+  // Use a helper like `getActiveFeatures` instead.
+  _map: Map()
+})
+
 function newObservationMap (observations) {
   const map = {}
   observations.forEach(obs => {
@@ -14,15 +25,9 @@ function activeObservations (observations, filter) {
   return List(activeIds)
 }
 
-const initialState = Map({
-  active: List(),
-  filter: () => true,
-
-  // An non-immutable object containing normal geojson objects.
-  // Note this should never be used in a react component.
-  // Use a helper like `getActiveFeatures` instead.
-  _map: Map()
-})
+function allObservations (observations) {
+  return List(observations.map(ob => ob.id))
+}
 
 module.exports.default = function (state = initialState, action) {
   switch (action.type) {
@@ -30,6 +35,7 @@ module.exports.default = function (state = initialState, action) {
       return state
         .set('_map', newObservationMap(action.observations))
         .set('active', activeObservations(action.observations, state.get('filter')))
+        .set('all', allObservations(action.observations))
     default:
       return state
   }
@@ -43,4 +49,10 @@ module.exports.getActiveFeatures = function (state) {
     type: 'FeatureCollection',
     features: activeFeatures
   }
+}
+
+module.exports.getPropertiesList = function (state) {
+  const all = state.get('_map')
+  // TODO implement properties getter
+  return all
 }

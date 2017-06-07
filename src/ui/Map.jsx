@@ -67,10 +67,6 @@ class Map extends React.Component {
       map.addLayer(markerStyle)
       map.on('mousemove', this.mousemove)
       map.on('click', this.mouseclick)
-      this.popup = new mapboxgl.Popup({
-        closeButton: true,
-        closeOnClick: true
-      })
     })
   }
 
@@ -85,7 +81,11 @@ class Map extends React.Component {
   }
 
   open (lngLat, feature) {
-    this.popup
+    if (this.popup) this.popup.remove()
+    this.popup = new mapboxgl.Popup({
+      closeButton: true,
+      closeOnClick: true
+    })
     .setLngLat(lngLat)
     .setHTML(tooltip(feature))
     .addTo(this.map)
@@ -114,8 +114,10 @@ Map.propTypes = {
   activeFeatures: PropTypes.object
 }
 
-const mapStateToProps = state => ({
-  activeIds: state.observations.get('active'),
-  activeFeatures: getActiveFeatures(state.observations)
-})
+const mapStateToProps = state => {
+  return {
+    activeIds: state.observations.get('active'),
+    activeFeatures: getActiveFeatures(state.observations)
+  }
+}
 module.exports = connect(mapStateToProps)(Map)

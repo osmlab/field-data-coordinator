@@ -1,14 +1,18 @@
 'use strict'
 const React = require('react')
+const { connect } = require('react-redux')
+const Checkbox = require('material-ui/Checkbox').default
 
 class Sidebar extends React.Component {
   render () {
     return (
       <aside role='complementary' className='sidebar'>
-        <h1>Sidebar</h1>
+        <h2>Survey Attributes</h2>
+        <Checkbox label='something' />
       </aside>
     )
   }
 }
 
-module.exports = Sidebar
+const mapStateToProps = state => (state)
+module.exports = connect(mapStateToProps)(Sidebar)

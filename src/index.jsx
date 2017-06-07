@@ -3,7 +3,7 @@ const ReactDOM = require('react-dom')
 const { createStore, applyMiddleware } = require('redux')
 const { Provider } = require('react-redux')
 const createSagaMiddleware = require('redux-saga').default
-const { HashRouter, Route } = require('react-router-dom')
+const { HashRouter, Route, Redirect } = require('react-router-dom')
 const { MuiThemeProvider } = require('material-ui/styles')
 const reducers = require('./reducers')
 const { rootSaga } = require('./sagas')
@@ -26,8 +26,9 @@ ReactDOM.render((
     <Provider store={store}>
       <HashRouter>
         <App>
-          <Route path='/' component={Home} />
+          <Route path='/home' component={Home} />
           <Route path='/data' component={Data} />
+          <Redirect from='/' to='/home' />
         </App>
       </HashRouter>
     </Provider>

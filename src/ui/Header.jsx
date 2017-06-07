@@ -16,10 +16,12 @@ module.exports = class Header extends React.Component {
   render () {
     return (
       <header className='header'>
-        <Link to='/'><h1 className='header__title'>{t.header.title}</h1></Link>
-        <Link to='/data'><FlatButton label={t.header.data} /></Link>
-        <FlatButton label={t.header.survey} />
-        <FlatButton label={t.header.about} />
+        <nav role='navigation'>
+          <Link to='/home'><h1 className='header__title'>{t.header.title}</h1></Link>
+          <Link to='/data'><FlatButton label={t.header.data} /></Link>
+          <FlatButton label={t.header.survey} />
+          <FlatButton label={t.header.about} />
+        </nav>
       </header>
     )
   }

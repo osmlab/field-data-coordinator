@@ -2,8 +2,14 @@
 const { Map, List } = require('immutable')
 
 const initialState = Map({
+  // Immutable list of active (aka filtered) observation id's.
   active: List(),
+
+  // Immutable list of all observation id's contained in the osm p2p db.
   all: List(),
+
+  // Immutable list of property keys, used to filter 'active' observations
+  // from all observations.
   filterProperties: List(),
 
   // An non-immutable object of normal geojson objects mapped to id.

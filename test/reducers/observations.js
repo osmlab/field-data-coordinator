@@ -2,6 +2,7 @@
 const test = require('tape')
 const observationsReducer = require('../../src/reducers/observations')
 const reducer = observationsReducer.default
+const { getActiveFeatures, getPropertiesList } = observationsReducer
 const { List } = require('immutable')
 const observations = require('../fixtures/observations.json')
 
@@ -18,7 +19,7 @@ test('observations reducers', function (t) {
     t.end()
   })
 
-  t.test('successful sync action and filter', function (t) {
+  t.test('sync and filter', function (t) {
     const state0 = reducer(undefined, { type: SYNC, observations })
     const all = ['0', '1', '2']
     t.deepEqual(Object.keys(state0.get('_map')), all, '_map keys are ids')
@@ -35,6 +36,25 @@ test('observations reducers', function (t) {
     t.deepEqual(Object.keys(state3.get('_map')), ['1', '2'], '_map overwritten by sync')
     t.deepEqual(state3.get('all').toJS(), ['1', '2'], 'ids affected by new sync')
     t.equal(state3.get('active').size, 0, 'filters unaffected by new sync')
+    t.end()
+  })
+
+  t.test('getActiveFeatures', function (t) {
+    const state0 = reducer(undefined, { type: SYNC, observations })
+    t.deepEqual(getActiveFeatures(state0).features, observations, 'returns all active features when no filter')
+    const state1 = reducer(state0, { type: FILTER, property: 'hearing' })
+    t.deepEqual(getActiveFeatures(state1).features, [observations[0]], 'returns filtered features with filter')
+    t.end()
+  })
+
+  t.test('getPropertiesList', function (t) {
+    const state0 = reducer(undefined, { type: SYNC, observations })
+    const state1 = reducer(state0, { type: FILTER, property: 'hearing' })
+    t.deepEqual(getPropertiesList(state1), {
+      hearing: 1,
+      friendly: 1,
+      numeral: 1
+    }, 'returns all properties even with a filter')
     t.end()
   })
   t.end()

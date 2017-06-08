@@ -4,12 +4,12 @@ const { Map, List } = require('immutable')
 const initialState = Map({
   active: List(),
   all: List(),
-  filter: () => true,
+  filterProperties: List(),
 
-  // An non-immutable object containing normal geojson objects.
+  // An non-immutable object of normal geojson objects mapped to id.
   // Note this should never be used in a react component.
   // Use a helper like `getActiveFeatures` instead.
-  _map: Map()
+  _map: {}
 })
 
 function newObservationMap (observations) {
@@ -20,25 +20,42 @@ function newObservationMap (observations) {
   return map
 }
 
-function activeObservations (observations, filter) {
-  const activeIds = observations.filter(filter).map(ob => ob.id)
+function createFilter (filterProperties) {
+  if (!filterProperties.size) return () => true
+  const filters = filterProperties.toJS()
+  return ({properties}) => {
+    for (let i = 0; i < filters.length; ++i) {
+      if (!properties.hasOwnProperty(filters[i])) {
+        return false
+      }
+    }
+    return true
+  }
+}
+
+function activeObservations (_map, filterProperties) {
+  const filterFn = createFilter(filterProperties)
+  const activeIds = Object.keys(_map).filter(key => filterFn(_map[key]))
   return List(activeIds)
 }
 
-function allObservations (observations) {
-  return List(observations.map(ob => ob.id))
-}
-
 module.exports.default = function (state = initialState, action) {
-  switch (action.type) {
-    case 'SYNC_SUCCESS':
-      return state
-        .set('_map', newObservationMap(action.observations))
-        .set('active', activeObservations(action.observations, state.get('filter')))
-        .set('all', allObservations(action.observations))
-    default:
-      return state
-  }
+  if (action.type === 'SYNC_SUCCESS') {
+    let _map = newObservationMap(action.observations)
+    return state
+    .set('_map', _map)
+    .set('active', activeObservations(_map, state.get('filterProperties')))
+    .set('all', List(Object.keys(_map)))
+  } else if (action.type === 'TOGGLE_FILTER_PROPERTY') {
+    let { property } = action
+    let currentProperties = state.get('filterProperties')
+    let indexOfProperty = currentProperties.indexOf(property)
+    let newProperties = (indexOfProperty === -1)
+      ? currentProperties.push(property) : currentProperties.remove(indexOfProperty)
+    return state
+    .set('filterProperties', newProperties)
+    .set('active', activeObservations(state.get('_map'), newProperties))
+  } else return state
 }
 
 module.exports.getActiveFeatures = function (state) {
@@ -52,7 +69,13 @@ module.exports.getActiveFeatures = function (state) {
 }
 
 module.exports.getPropertiesList = function (state) {
-  const all = state.get('_map')
-  // TODO implement properties getter
-  return all
+  const _map = state.get('_map')
+  const result = {}
+  state.get('all').forEach(id => {
+    let { properties } = _map[id]
+    for (let key in properties) {
+      result[key] = result[key] ? result[key] + 1 : 1
+    }
+  })
+  return result
 }

@@ -35,3 +35,10 @@ node ./generate-mock-observations.js 10
 ls observations
 ./upload-mock-observations.sh
 ```
+
+### Testing
+
+```
+yarn lint
+yarn test
+```

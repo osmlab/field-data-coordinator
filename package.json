@@ -8,6 +8,7 @@
     "clean": "gulp clean",
     "build": "gulp",
     "start": "cross-env NODE_ENV=development electron main.js",
+    "test": "./node_modules/.bin/tape 'test/**/*.js'",
     "postinstall": "electron-rebuild"
   },
   "repository": "git@github.com:osmlab/field-data-coordinator.git",
@@ -26,6 +27,7 @@
     "npm-run-all": "^4.0.2",
     "reactify": "^1.1.1",
     "standard": "^10.0.2",
+    "tape": "^4.6.3",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0"
   },

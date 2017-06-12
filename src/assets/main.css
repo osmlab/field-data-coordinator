@@ -1,0 +1,23 @@
+.content {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.header {
+  flex: 1 100%;
+}
+
+.sidebar {
+  flex: 1 auto;
+}
+
+.main {
+  flex: 5 0px;
+}
+
+.header__title {
+  display: inline-block;
+}
+.map {
+  height: 70vh;
+}

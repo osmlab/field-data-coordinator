@@ -1,0 +1,5 @@
+[
+  {"id": 0, "type":"Feature","geometry":{"type":"Point","coordinates":["18.90182","64.20367"]},"properties":{"hearing":"engineer"}},
+  {"id": 1, "type":"Feature","geometry":{"type":"Point","coordinates":["-1.78018","79.15357"]},"properties":{"friendly":"meet"}},
+  {"id": 2, "type":"Feature","geometry":{"type":"Point","coordinates":["165.2186","79.86472"]},"properties":{"numeral":"mouth"}}
+]

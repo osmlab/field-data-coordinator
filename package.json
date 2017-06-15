@@ -34,6 +34,7 @@
   },
   "dependencies": {
     "body-parser": "^1.17.2",
+    "end-of-stream": "^1.4.0",
     "es6-promisify": "^5.0.0",
     "express": "^4.15.3",
     "immutable": "^3.8.1",
@@ -55,6 +56,7 @@
     "redux": "^3.6.0",
     "redux-saga": "^0.15.3",
     "through2": "^2.0.3",
-    "turf-extent": "^1.0.4"
+    "turf-extent": "^1.0.4",
+    "websocket-stream": "^5.0.0"
   }
 }

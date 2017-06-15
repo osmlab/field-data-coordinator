@@ -17,6 +17,7 @@ function init () {
     main = null
   })
   setupMenu()
+  setupFileIPCs(main, electron.ipcMain, main.webContents)
 }
 
 function createWindow () {
@@ -38,6 +39,13 @@ function setupMenu () {
   const template = require('./lib/menu')(app)
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
+}
+
+function setupFileIPCs (main, inChannel, outChannel) {
+  inChannel.on('upload-survey', uploadSurvey)
+
+  function uploadSurvey () {
+  }
 }
 
 const userDataPath = path.join(app.getPath('userData'), 'org.osm-labs.field-data-coordinator')

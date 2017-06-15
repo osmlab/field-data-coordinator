@@ -1,6 +1,7 @@
 'use strict'
 const React = require('react')
 const RaisedButton = require('material-ui/RaisedButton').default
+const { ipcRenderer } = require('electron')
 
 class UploadSurvey extends React.Component {
   constructor (props) {
@@ -9,7 +10,7 @@ class UploadSurvey extends React.Component {
   }
 
   upload () {
-    console.log('making the upload modal!')
+    ipcRenderer.send('upload-survey')
   }
 
   render () {

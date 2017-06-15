@@ -16,7 +16,7 @@ class UploadSurvey extends React.Component {
     return (
       <div>
         <h3>Upload a new survey spreadsheet</h3>
-        <RaisedButton label='Upload' primary={true} onTouchTap={this.upload} />
+        <RaisedButton label='Upload' onTouchTap={this.upload} />
       </div>
     )
   }

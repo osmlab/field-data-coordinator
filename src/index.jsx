@@ -9,9 +9,9 @@ const reducers = require('./reducers')
 const { rootSaga } = require('./sagas')
 const { sync } = require('./actions')
 
-const App = require('./ui/App.jsx')
-const Home = require('./ui/Home.jsx')
-const Data = require('./ui/Data.jsx')
+const App = require('./ui/app/index.jsx')
+const Home = require('./ui/home/index.jsx')
+const Data = require('./ui/data/index.jsx')
 
 // https://github.com/callemall/material-ui#react-tap-event-plugin
 require('react-tap-event-plugin')()

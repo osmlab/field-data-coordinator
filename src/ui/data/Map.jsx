@@ -5,7 +5,7 @@ const { connect } = require('react-redux')
 const PropTypes = require('prop-types')
 const immutable = require('immutable')
 const extent = require('turf-extent')
-const { getActiveFeatures } = require('../reducers/observations')
+const { getActiveFeatures } = require('../../reducers/observations')
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwZWd5cHQiLCJhIjoiY2l6ZTk5YTNxMjV3czMzdGU5ZXNhNzdraSJ9.HPI_4OulrnpD8qI57P12tg'
 const SOURCE = 'ACTIVE_OBSERVATIONS'

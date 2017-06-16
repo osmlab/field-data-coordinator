@@ -53,9 +53,7 @@ function setupFileIPCs (main, inChannel, outChannel) {
   }
 }
 
-const userDataPath = path.join(app.getPath('userData'), 'org.osm-labs.field-data-coordinator')
-mkdirp.sync(userDataPath)
-const dbPath = path.join(userDataPath, 'db')
+const dbPath = path.join(app.getPath('userData'), 'db')
 mkdirp.sync(dbPath)
 db.start(dbPath)
 server.listen()

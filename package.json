@@ -1,5 +1,6 @@
 {
   "name": "field-data-coordinator",
+  "productName": "Field Data Coordinator",
   "version": "0.0.1",
   "description": "Coordinator app for the field data project",
   "main": "main.js",

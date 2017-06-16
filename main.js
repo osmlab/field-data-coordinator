@@ -1,5 +1,6 @@
 'use strict'
 
+const fs = require('fs')
 const path = require('path')
 
 const async = require('async')
@@ -7,6 +8,8 @@ const { app, BrowserWindow, ipcMain, Menu } = require('electron')
 const settings = require('electron-settings')
 const mkdirp = require('mkdirp')
 const { compileSurvey } = require('@mojodna/observe-tools')
+const { pack } = require('tar-stream')
+const uuidV4 = require('uuid/v4')
 
 const db = require('./lib/db')
 const server = require('./lib/server')
@@ -76,13 +79,27 @@ app.on('activate', function () {
   }
 })
 
+function bundleSurvey (surveyDefinition, callback) {
+  const bundle = pack()
+
+  bundle.entry({
+    name: 'survey.json'
+  },
+  JSON.stringify(surveyDefinition))
+
+  bundle.pipe(fs.createWriteStream(path.join(app.getPath('userData'), uuidV4() + '-survey.tgz')))
+}
+
 app.on('importSurvey', function (files) {
   return async.map(files, compileSurvey, (err, surveyDefinitions) => {
     if (err) {
       console.warn(err.stack)
     }
 
-    console.log('survey definitions:', surveyDefinitions)
+    // TODO fetch additional resources like icons, etc.
+
+    return async.forEach(surveyDefinitions, bundleSurvey, err =>
+      err && console.warn(err.stack))
   })
 })
 

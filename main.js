@@ -6,6 +6,7 @@ const path = require('path')
 const async = require('async')
 const { app, BrowserWindow, ipcMain, Menu } = require('electron')
 const settings = require('electron-settings')
+const eos = require('end-of-stream')
 const mkdirp = require('mkdirp')
 const { compileSurvey } = require('@mojodna/observe-tools')
 const { pack } = require('tar-stream')
@@ -81,6 +82,8 @@ app.on('activate', function () {
 
 function bundleSurvey (surveyDefinition, callback) {
   const bundle = pack()
+  // call the callback when the stream ends, one way or another
+  eos(bundle, callback)
 
   bundle.entry({
     name: 'survey.json'

@@ -39,6 +39,10 @@ function setupMenu () {
   const template = require('./lib/menu')(app)
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
+
+  // TODO see Darwin-specific menu configuration here for better Windows
+  // behavior:
+  // https://github.com/electron/electron/blob/master/docs/api/menu.md#main-process
 }
 
 function setupFileIPCs (main, inChannel, outChannel) {

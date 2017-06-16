@@ -23,6 +23,8 @@
     "electron-rebuild": "^1.5.11",
     "electron-settings": "^3.1.1",
     "envify": "^4.0.0",
+    "eslint": "^4.0.0",
+    "eslint-config-standard": "^10.2.1",
     "gulp": "^3.9.1",
     "npm-run-all": "^4.0.2",
     "reactify": "^1.1.1",

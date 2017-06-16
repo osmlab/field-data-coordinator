@@ -62,7 +62,7 @@ class Map extends React.Component {
       const { activeFeatures } = this.props
       map.addSource(SOURCE, { type: 'geojson', data: activeFeatures })
       if (activeFeatures.features.length) {
-        this.map.fitBounds(extent(activeFeatures))
+        this.map.fitBounds(extent(activeFeatures), { padding: 10 })
       }
       map.addLayer(markerStyle)
       map.on('mousemove', this.mousemove)

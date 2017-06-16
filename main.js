@@ -2,9 +2,11 @@
 
 const path = require('path')
 
+const async = require('async')
 const { app, BrowserWindow, ipcMain, Menu } = require('electron')
 const settings = require('electron-settings')
 const mkdirp = require('mkdirp')
+const { compileSurvey } = require('@mojodna/observe-tools')
 
 const db = require('./lib/db')
 const server = require('./lib/server')
@@ -74,6 +76,16 @@ app.on('activate', function () {
   if (main === null) {
     init()
   }
+})
+
+app.on('importSurvey', function (files) {
+  return async.map(files, compileSurvey, (err, surveyDefinitions) => {
+    if (err) {
+      console.warn(err.stack)
+    }
+
+    console.log('survey definitions:', surveyDefinitions)
+  })
 })
 
 // export the db object so we can remote require it on render threads

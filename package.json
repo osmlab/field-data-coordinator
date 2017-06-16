@@ -40,6 +40,7 @@
     "@mojodna/observe-tools": "^0.0.1",
     "async": "^2.4.1",
     "body-parser": "^1.17.2",
+    "drag-drop": "^2.13.2",
     "end-of-stream": "^1.4.0",
     "es6-promisify": "^5.0.0",
     "express": "^4.15.3",

@@ -1,14 +1,13 @@
 'use strict'
 
 const path = require('path')
+
+const { app, BrowserWindow, ipcMain, Menu } = require('electron')
+const settings = require('electron-settings')
 const mkdirp = require('mkdirp')
+
 const db = require('./lib/db')
 const server = require('./lib/server')
-const settings = require('electron-settings')
-const electron = require('electron')
-const app = electron.app
-const Menu = electron.Menu
-const BrowserWindow = electron.BrowserWindow
 
 let main
 function init () {
@@ -17,7 +16,7 @@ function init () {
     main = null
   })
   setupMenu()
-  setupFileIPCs(main, electron.ipcMain, main.webContents)
+  setupFileIPCs(main, ipcMain, main.webContents)
 }
 
 function createWindow () {

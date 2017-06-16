@@ -60,9 +60,9 @@
     "react-tap-event-plugin": "^2.0.1",
     "redux": "^3.6.0",
     "redux-saga": "^0.15.3",
+    "slugify": "^1.1.0",
     "tar-stream": "^1.5.4",
     "through2": "^2.0.3",
-    "turf-extent": "^1.0.4",
-    "uuid": "^3.0.1"
+    "turf-extent": "^1.0.4"
   }
 }

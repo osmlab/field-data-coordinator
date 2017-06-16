@@ -9,8 +9,8 @@ const settings = require('electron-settings')
 const eos = require('end-of-stream')
 const mkdirp = require('mkdirp')
 const { compileSurvey } = require('@mojodna/observe-tools')
+const slugify = require('slugify')
 const { pack } = require('tar-stream')
-const uuidV4 = require('uuid/v4')
 
 const db = require('./lib/db')
 const server = require('./lib/server')
@@ -90,7 +90,11 @@ function bundleSurvey (surveyDefinition, callback) {
   },
   JSON.stringify(surveyDefinition))
 
-  bundle.pipe(fs.createWriteStream(path.join(app.getPath('userData'), uuidV4() + '-survey.tgz')))
+  const { name, version } = surveyDefinition
+
+  const filename = `${slugify(name)}-${version}.tgz`
+
+  bundle.pipe(fs.createWriteStream(path.join(app.getPath('userData'), filename)))
 }
 
 app.on('importSurvey', function (files) {

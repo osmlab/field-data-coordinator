@@ -1,27 +1,22 @@
 'use strict'
 
-const { ipcRenderer } = require('electron')
 const RaisedButton = require('material-ui/RaisedButton').default
 const React = require('react')
+const { connect } = require('react-redux')
 
-class UploadSurvey extends React.Component {
-  constructor (props) {
-    super(props)
-    this.import = this.import.bind(this)
-  }
+const { importSurvey } = require('../../actions')
 
-  import () {
-    ipcRenderer.send('trigger-import-survey-dialog')
-  }
-
+class Import extends React.Component {
   render () {
+    const { importSurvey } = this.props
+
     return (
       <div>
         <h3>Import a new survey</h3>
-        <RaisedButton label='Import' onTouchTap={this.import} />
+        <RaisedButton label='Import' onTouchTap={importSurvey} />
       </div>
     )
   }
 }
 
-module.exports = UploadSurvey
+module.exports = connect(null, { importSurvey })(Import)

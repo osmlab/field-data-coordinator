@@ -1,10 +1,11 @@
 'use strict'
 
 const dragDrop = require('drag-drop')
-const { ipcRenderer } = require('electron')
 const React = require('react')
+const { connect } = require('react-redux')
 
 const ImportSurvey = require('./Import.jsx')
+const { getSurveys } = require('../../selectors')
 
 // TODO this doesn't work yet
 dragDrop('#root', {
@@ -22,37 +23,14 @@ dragDrop('#root', {
   }
 })
 
-module.exports = class Surveys extends React.Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      surveys: []
-    }
-  }
-
-  componentWillMount () {
-    ipcRenderer.send('list-surveys')
-    ipcRenderer.send('subscribe-to-survey-list-updates')
-
-    ipcRenderer.on('receive-survey-list', (evt, surveys) =>
-      this.setState({
-        surveys
-      })
-    )
-  }
-
-  componentWillUmount () {
-    ipcRenderer.send('unsubscribe-from-survey-list-updates')
-  }
-
+class Surveys extends React.Component {
   render () {
-    const { surveys } = this.state
+    const { surveys } = this.props
 
     // TODO wire up drag-drop to allow surveys to be dragged in
     return (
       <div>
-        {surveys && surveys.length > 0
+        {surveys && surveys.size > 0
           ? <div>
             <h3>Available Surveys</h3>
             <ul>
@@ -66,3 +44,9 @@ module.exports = class Surveys extends React.Component {
     )
   }
 }
+
+const mapStateToProps = state => ({
+  surveys: getSurveys(state)
+})
+
+module.exports = connect(mapStateToProps)(Surveys)

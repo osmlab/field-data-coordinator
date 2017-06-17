@@ -14,8 +14,11 @@ const { pack } = require('tar-stream')
 
 const db = require('./lib/db')
 const server = require('./lib/server')
+const { updateSurveyList } = require('./src/actions')
 
 let main
+let dispatch = () => console.warn('dispatch not yet connected')
+
 function init () {
   main = createWindow()
   main.on('closed', function () {
@@ -23,6 +26,22 @@ function init () {
   })
   setupMenu()
   setupFileIPCs(main, ipcMain, main.webContents)
+
+  // wire up communication between threads so actions can be triggered from the main thread
+  ipcMain.on('redux-initialized', ({ sender }) => {
+    dispatch = payload => {
+      sender.send('dispatch', payload)
+    }
+
+    // update the Redux store with the list of available surveys
+    listSurveys((err, surveys) => {
+      if (err) {
+        return console.warn(err.stack)
+      }
+
+      return dispatch(updateSurveyList(surveys))
+    })
+  })
 }
 
 function createWindow () {
@@ -50,8 +69,7 @@ function setupMenu () {
   // https://github.com/electron/electron/blob/master/docs/api/menu.md#main-process
 }
 
-function setupFileIPCs (main, inChannel, outChannel) {
-}
+function setupFileIPCs (main, inChannel, outChannel) {}
 
 const dbPath = path.join(app.getPath('userData'), 'db')
 mkdirp.sync(dbPath)
@@ -90,41 +108,8 @@ const listSurveys = function (callback) {
   })
 }
 
-const surveyListSubscribers = []
-
-ipcMain.on('subscribe-to-survey-list-updates', function (evt) {
-  if (surveyListSubscribers.indexOf(evt.sender) < 0) {
-    surveyListSubscribers.push(evt.sender)
-  }
-})
-
-ipcMain.on('unsubscribe-from-survey-list-updates', function (evt) {
-  surveyListSubscribers.splice(surveyListSubscribers.indexOf(evt.sender), 1)
-})
-
-app.on('survey-list-changed', function () {
-  console.log('survey list updated')
-  return listSurveys((err, surveys) => {
-    if (err) {
-      return console.warn(err.stack)
-    }
-
-    surveyListSubscribers.forEach(x => x.send('receive-survey-list', surveys))
-  })
-})
-
-ipcMain.on('list-surveys', function (evt) {
-  return listSurveys((err, surveys) => {
-    if (err) {
-      return console.warn(err.stack)
-    }
-
-    evt.sender.send('receive-survey-list', surveys)
-  })
-})
-
-ipcMain.on('trigger-import-survey-dialog', function (evt) {
-  return dialog.showOpenDialog(
+const openImportSurveyDialog = (module.exports.openImportSurveyDialog = () =>
+  dialog.showOpenDialog(
     {
       buttonLabel: 'Import',
       filters: [
@@ -137,8 +122,9 @@ ipcMain.on('trigger-import-survey-dialog', function (evt) {
       // TODO emit seems like the wrong method
     },
     app.emit.bind(app, 'importSurvey')
-  )
-})
+  ))
+
+app.on('open-import-survey-dialog', openImportSurveyDialog)
 
 function bundleSurvey (surveyDefinition, callback) {
   const bundle = pack()
@@ -179,7 +165,13 @@ app.on('importSurvey', function (files) {
         return console.warn(err.stack)
       }
 
-      app.emit('survey-list-changed')
+      return listSurveys((err, surveys) => {
+        if (err) {
+          return console.warn(err.stack)
+        }
+
+        return dispatch(updateSurveyList(surveys))
+      })
     })
   })
 })

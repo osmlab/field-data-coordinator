@@ -1,3 +1,4 @@
+const { ipcRenderer } = require('electron')
 const React = require('react')
 const ReactDOM = require('react-dom')
 const { createStore, applyMiddleware } = require('redux')
@@ -5,6 +6,7 @@ const { Provider } = require('react-redux')
 const createSagaMiddleware = require('redux-saga').default
 const { HashRouter, Route, Redirect } = require('react-router-dom')
 const { MuiThemeProvider } = require('material-ui/styles')
+
 const reducers = require('./reducers')
 const { rootSaga } = require('./sagas')
 const { sync } = require('./actions')
@@ -22,7 +24,11 @@ const store = createStore(reducers, applyMiddleware(sagaMiddleware))
 sagaMiddleware.run(rootSaga)
 store.dispatch(sync())
 
-ReactDOM.render((
+// register a dispatch listener so that actions can be sent between processes
+ipcRenderer.on('dispatch', (evt, payload) => store.dispatch(payload))
+ipcRenderer.send('redux-initialized')
+
+ReactDOM.render(
   <MuiThemeProvider>
     <Provider store={store}>
       <HashRouter>
@@ -34,5 +40,6 @@ ReactDOM.render((
         </App>
       </HashRouter>
     </Provider>
-  </MuiThemeProvider>
-), document.getElementById('root'))
+  </MuiThemeProvider>,
+  document.getElementById('root')
+)

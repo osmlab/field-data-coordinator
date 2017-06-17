@@ -2,6 +2,7 @@
 const React = require('react')
 const FlatButton = require('material-ui/FlatButton').default
 const { Link } = require('react-router-dom')
+const { withRouter } = require('react-router')
 
 const t = {
   header: {
@@ -12,17 +13,31 @@ const t = {
   }
 }
 
-module.exports = class Header extends React.Component {
+class Header extends React.Component {
+  activeClass (match) {
+    const { pathname } = this.props.location
+    return pathname.slice(0, match.length) === match ? 'header__active' : null
+  }
+
   render () {
     return (
       <header className='header'>
         <nav role='navigation'>
-          <Link to='/home'><h1 className='header__title'>{t.header.title}</h1></Link>
-          <Link to='/data'><FlatButton label={t.header.data} /></Link>
-          <Link to='/surveys'><FlatButton label={t.header.survey} /></Link>
-          <FlatButton label={t.header.about} />
+          <Link to='/home' className={this.activeClass('/home')}>
+            <h1 className='header__title'>{t.header.title}</h1>
+          </Link>
+          <Link to='/data' className={this.activeClass('/data')}>
+            <FlatButton label={t.header.data} />
+          </Link>
+          <Link to='/surveys' className={this.activeClass('/surveys')}>
+            <FlatButton label={t.header.survey} />
+          </Link>
+          <Link to='/about' className={this.activeClass('/about')}>
+            <FlatButton label={t.header.about} />
+          </Link>
         </nav>
       </header>
     )
   }
 }
+module.exports = withRouter(Header)

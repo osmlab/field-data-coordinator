@@ -18,6 +18,11 @@
 .header__title {
   display: inline-block;
 }
+
+.header__active {
+  border-bottom: 1px solid black;
+}
+
 .map {
   height: 70vh;
 }

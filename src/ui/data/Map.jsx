@@ -22,7 +22,10 @@ const markerStyle = {
 }
 
 function tooltip (feature) {
-  return `<p>${JSON.stringify(feature.properties)}</p>`
+  return `
+  <p>${JSON.stringify(feature.properties)}</p>
+  <p data-href="${feature.properties.id}" data-observation=1>Link</p>
+  `
 }
 
 class Map extends React.Component {
@@ -31,6 +34,7 @@ class Map extends React.Component {
     this.init = this.init.bind(this)
     this.mousemove = this.mousemove.bind(this)
     this.mouseclick = this.mouseclick.bind(this)
+    this.navigate = this.navigate.bind(this)
   }
 
   componentWillReceiveProps ({ activeIds, activeFeatures }) {
@@ -100,9 +104,17 @@ class Map extends React.Component {
     else this.map.once('load', () => fn.call(this))
   }
 
+  navigate ({ target }) {
+    // true if it's an observation link
+    if (typeof target.getAttribute === 'function' && target.getAttribute('data-observation')) {
+      const href = target.getAttribute('data-href')
+      // trigger a new route
+    }
+  }
+
   render () {
     return (
-      <div className='map' ref={this.init} />
+      <div className='map' ref={this.init} onClick={this.navigate} />
     )
   }
 }

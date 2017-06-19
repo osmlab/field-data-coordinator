@@ -2,7 +2,7 @@
 const test = require('tape')
 const observationsReducer = require('../../src/reducers/observations')
 const reducer = observationsReducer.default
-const { getActiveFeatures, getPropertiesList } = observationsReducer
+const { getActiveFeatures, getFlattenedProperties } = observationsReducer
 const { List } = require('immutable')
 const observations = require('../fixtures/observations.json')
 
@@ -47,13 +47,13 @@ test('observations reducers', function (t) {
     t.end()
   })
 
-  t.test('getPropertiesList', function (t) {
+  t.test('getFlattenedProperties', function (t) {
     const state0 = reducer(undefined, { type: SYNC, observations })
     const state1 = reducer(state0, { type: FILTER, property: 'hearing' })
-    t.deepEqual(getPropertiesList(state1), {
-      hearing: 1,
-      friendly: 1,
-      numeral: 1
+    t.deepEqual(getFlattenedProperties(state1), {
+      hearing: { engineer: 1 },
+      friendly: { meet: 1 },
+      numeral: { mouth: 1 }
     }, 'returns all properties even with a filter')
     t.end()
   })

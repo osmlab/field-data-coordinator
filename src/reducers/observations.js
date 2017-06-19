@@ -64,6 +64,9 @@ module.exports.default = function (state = initialState, action) {
   } else return state
 }
 
+/*
+ * Get a FeatureCollection of all active Observations
+ */
 module.exports.getActiveFeatures = function (state) {
   const all = state.get('_map')
   const activeFeatures = []
@@ -74,14 +77,28 @@ module.exports.getActiveFeatures = function (state) {
   }
 }
 
-module.exports.getPropertiesList = function (state) {
+/*
+ * Get a flattened, non-immutable map of Observation properties
+ * eg.
+ * {
+ *  propertyName: {
+ *    response1: response1_count,
+ *    response2: response2_count
+ *  }
+ * }
+ */
+module.exports.getFlattenedProperties = function (state) {
   const _map = state.get('_map')
-  const result = {}
+  const flattened = {}
   state.get('all').forEach(id => {
     let { properties } = _map[id]
-    for (let key in properties) {
-      result[key] = result[key] ? result[key] + 1 : 1
+    for (let propertyName in properties) {
+      let response = properties[propertyName]
+      flattened[propertyName] = flattened[propertyName] || {}
+      let count = flattened[propertyName][response]
+        ? flattened[propertyName][response] + 1 : 1
+      flattened[propertyName][response] = count
     }
   })
-  return result
+  return flattened
 }

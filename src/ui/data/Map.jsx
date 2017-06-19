@@ -42,7 +42,7 @@ class Map extends React.Component {
     if (activeIds !== this.props.activeIds) {
       this.whenReady(() => {
         this.map.getSource(SOURCE).setData(activeFeatures)
-        this.map.fitBounds(extent(activeFeatures))
+        this.fit(activeFeatures)
       })
     }
   }
@@ -66,9 +66,7 @@ class Map extends React.Component {
     this.whenReady(() => {
       const { activeFeatures } = this.props
       map.addSource(SOURCE, { type: 'geojson', data: activeFeatures })
-      if (activeFeatures.features.length) {
-        this.map.fitBounds(extent(activeFeatures), { padding: 10 })
-      }
+      this.fit(activeFeatures)
       map.addLayer(markerStyle)
       map.on('mousemove', this.mousemove)
       map.on('click', this.mouseclick)
@@ -111,6 +109,19 @@ class Map extends React.Component {
       const observationId = target.getAttribute('data-href')
       const { history, match } = this.props
       history.push(`${match.url}/observations/${observationId}`)
+    }
+  }
+
+  fit (activeFeatures) {
+    const { features } = activeFeatures
+    if (features && features.length) {
+      if (features.length === 1) {
+        this.map.setCenter(features[0].geometry.coordinates)
+        this.open(features[0].geometry.coordinates, features[0])
+      } else {
+        this.map.fitBounds(extent(activeFeatures), { padding: 20 })
+        if (this.popup) this.close()
+      }
     }
   }
 

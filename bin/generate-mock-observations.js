@@ -16,6 +16,10 @@ const minimist = require('minimist')
 const argv = minimist(process.argv.slice(2))
 const count = Array.isArray(argv._) ? argv._[0] : 50
 
+const possibleKeys = []
+const possibleKeysCount = 2 + Math.floor(Math.random() * 3)
+for (let i = 0; i < possibleKeysCount; ++i, possibleKeys.push(randomWords())) {}
+
 for (let i = 0; i < count; ++i) {
   const coordinates = randomCoords().split(', ')
   const payload = {
@@ -26,8 +30,8 @@ for (let i = 0; i < count; ++i) {
     },
     properties: {}
   }
-  for (let k = 0; k < 3; ++k) {
-    payload.properties[randomWords()] = randomWords()
-  }
+  possibleKeys.forEach((key) => {
+    payload.properties[key] = randomWords()
+  })
   fs.writeFileSync(path.join(destination, `${i}.json`), JSON.stringify(payload))
 }

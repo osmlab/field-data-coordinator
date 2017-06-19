@@ -40,10 +40,8 @@ class Map extends React.Component {
 
   componentWillReceiveProps ({ activeIds, activeFeatures }) {
     if (activeIds !== this.props.activeIds) {
-      this.whenReady(() => {
-        this.map.getSource(SOURCE).setData(activeFeatures)
-        this.fit(activeFeatures)
-      })
+      this.map.getSource(SOURCE).setData(activeFeatures)
+      this.fit(activeFeatures)
     }
   }
 
@@ -63,7 +61,7 @@ class Map extends React.Component {
     map.addControl(new mapboxgl.NavigationControl())
     map.dragRotate.disable()
     map.touchZoomRotate.disableRotation()
-    this.whenReady(() => {
+    map.once('load', () => {
       const { activeFeatures } = this.props
       map.addSource(SOURCE, { type: 'geojson', data: activeFeatures })
       this.fit(activeFeatures)
@@ -98,11 +96,6 @@ class Map extends React.Component {
     this.popup.remove()
   }
 
-  whenReady (fn) {
-    if (this.map.loaded()) fn()
-    else this.map.once('load', () => fn.call(this))
-  }
-
   navigate ({ target }) {
     // true if it's an observation link
     if (typeof target.getAttribute === 'function' && target.getAttribute('data-observation')) {
@@ -122,7 +115,7 @@ class Map extends React.Component {
         this.map.fitBounds(extent(activeFeatures), { padding: 20 })
         if (this.popup) this.close()
       }
-    }
+    } else if (this.popup) this.close()
   }
 
   render () {

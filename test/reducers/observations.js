@@ -3,7 +3,7 @@ const test = require('tape')
 const observationsReducer = require('../../src/reducers/observations')
 const reducer = observationsReducer.default
 const { getActiveFeatures, getFlattenedProperties } = observationsReducer
-const { List } = require('immutable')
+const { List, Map } = require('immutable')
 const observations = require('../fixtures/observations.json')
 
 const SYNC = 'SYNC_SUCCESS'
@@ -14,7 +14,7 @@ test('observations reducers', function (t) {
     const state = reducer(undefined, {})
     t.ok(state.get('active') instanceof List, 'active is an immutable list')
     t.ok(state.get('all') instanceof List, 'all is an immutable list')
-    t.ok(state.get('filterProperties') instanceof List, 'filter properties is an immutable list')
+    t.ok(state.get('filterProperties') instanceof Map, 'filter properties is an immutable map')
     t.ok(state.get('_map') instanceof Object, '_map is a vanilla js object')
     t.end()
   })
@@ -26,7 +26,7 @@ test('observations reducers', function (t) {
     t.deepEqual(state0.get('active').toJS(), all, 'all ids are active with no filter')
     t.deepEqual(state0.get('all').toJS(), all, 'all ids are included')
 
-    const state1 = reducer(state0, { type: FILTER, property: 'hearing' })
+    const state1 = reducer(state0, { type: FILTER, property: { k: 'hearing', v: 'engineer' } })
     t.deepEqual(state1.get('active').toJS(), ['0'], 'filters active ids')
 
     const state2 = reducer(state1, { type: FILTER, property: 'friendly' })
@@ -42,7 +42,7 @@ test('observations reducers', function (t) {
   t.test('getActiveFeatures', function (t) {
     const state0 = reducer(undefined, { type: SYNC, observations })
     t.deepEqual(getActiveFeatures(state0).features, observations, 'returns all active features when no filter')
-    const state1 = reducer(state0, { type: FILTER, property: 'hearing' })
+    const state1 = reducer(state0, { type: FILTER, property: { k: 'hearing', v: 'engineer' } })
     t.deepEqual(getActiveFeatures(state1).features, [observations[0]], 'returns filtered features with filter')
     t.end()
   })

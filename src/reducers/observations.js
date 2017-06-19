@@ -8,9 +8,9 @@ const initialState = Map({
   // Immutable list of all observation id's contained in the osm p2p db.
   all: List(),
 
-  // Immutable list of property keys, used to filter 'active' observations
-  // from all observations.
-  filterProperties: List(),
+  // Immutable map of property keys and values,
+  // used to filter 'active' observations from all observations.
+  filterProperties: Map(),
 
   // An non-immutable object of normal geojson objects mapped to id.
   // Note this should never be used in a react component.
@@ -30,8 +30,8 @@ function createFilter (filterProperties) {
   if (!filterProperties.size) return () => true
   const filters = filterProperties.toJS()
   return ({properties}) => {
-    for (let i = 0; i < filters.length; ++i) {
-      if (!properties.hasOwnProperty(filters[i])) {
+    for (let name in filters) {
+      if (!properties.hasOwnProperty(name) || properties[name] !== filters[name]) {
         return false
       }
     }
@@ -53,11 +53,10 @@ module.exports.default = function (state = initialState, action) {
     .set('active', activeObservations(_map, state.get('filterProperties')))
     .set('all', List(Object.keys(_map)))
   } else if (action.type === 'TOGGLE_FILTER_PROPERTY') {
-    let { property } = action
-    let currentProperties = state.get('filterProperties')
-    let indexOfProperty = currentProperties.indexOf(property)
-    let newProperties = (indexOfProperty === -1)
-      ? currentProperties.push(property) : currentProperties.remove(indexOfProperty)
+    let { k, v } = action.property
+    let filterProperties = state.get('filterProperties')
+    let newProperties = filterProperties.has(k)
+      ? filterProperties.delete(k) : filterProperties.set(k, v)
     return state
     .set('filterProperties', newProperties)
     .set('active', activeObservations(state.get('_map'), newProperties))

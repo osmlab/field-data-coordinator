@@ -5,6 +5,7 @@ const { connect } = require('react-redux')
 const PropTypes = require('prop-types')
 const immutable = require('immutable')
 const extent = require('turf-extent')
+const { withRouter } = require('react-router-dom')
 const { getActiveFeatures } = require('../../reducers/observations')
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwZWd5cHQiLCJhIjoiY2l6ZTk5YTNxMjV3czMzdGU5ZXNhNzdraSJ9.HPI_4OulrnpD8qI57P12tg'
@@ -24,7 +25,7 @@ const markerStyle = {
 function tooltip (feature) {
   return `
   <p>${JSON.stringify(feature.properties)}</p>
-  <p data-href="${feature.properties.id}" data-observation=1>Link</p>
+  <p data-href='${feature.properties.id}' data-observation=1>Link</p>
   `
 }
 
@@ -107,8 +108,9 @@ class Map extends React.Component {
   navigate ({ target }) {
     // true if it's an observation link
     if (typeof target.getAttribute === 'function' && target.getAttribute('data-observation')) {
-      const href = target.getAttribute('data-href')
-      // trigger a new route
+      const observationId = target.getAttribute('data-href')
+      const { history, match } = this.props
+      history.push(`${match.url}/observations/${observationId}`)
     }
   }
 
@@ -123,7 +125,8 @@ Map.propTypes = {
   // immutable list for speedy comparisons
   activeIds: PropTypes.instanceOf(immutable.List),
   // just a regular geojson FeatureCollection
-  activeFeatures: PropTypes.object
+  activeFeatures: PropTypes.object,
+  observationId: PropTypes.string
 }
 
 const mapStateToProps = state => {
@@ -132,4 +135,4 @@ const mapStateToProps = state => {
     activeFeatures: getActiveFeatures(state.observations)
   }
 }
-module.exports = connect(mapStateToProps)(Map)
+module.exports = withRouter(connect(mapStateToProps)(Map))

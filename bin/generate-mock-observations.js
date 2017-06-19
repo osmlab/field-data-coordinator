@@ -33,5 +33,8 @@ for (let i = 0; i < count; ++i) {
   possibleKeys.forEach((key) => {
     payload.properties[key] = randomWords()
   })
+  payload.properties._device_id = 'foo'
+  payload.properties._preset_id = 'bar'
+  payload.properties._timestamp = new Date().getTime()
   fs.writeFileSync(path.join(destination, `${i}.json`), JSON.stringify(payload))
 }

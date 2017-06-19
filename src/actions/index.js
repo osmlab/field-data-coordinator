@@ -11,6 +11,8 @@ module.exports.toggleFilterProperty = property => ({
   property
 })
 
+module.exports.clearFilterProperties = () => ({ type: 'CLEAR_FILTER_PROPERTIES' })
+
 module.exports.updateSurveyList = surveys => {
   return {
     type: 'RECEIVE_SURVEY_LIST',

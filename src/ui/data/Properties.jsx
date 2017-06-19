@@ -5,12 +5,17 @@ const Checkbox = require('material-ui/Checkbox').default
 const immutable = require('immutable')
 const PropTypes = require('prop-types')
 const { getFlattenedProperties } = require('../../reducers/observations')
-const { toggleFilterProperty } = require('../../actions')
+const { toggleFilterProperty, clearFilterProperties } = require('../../actions')
 
 class Sidebar extends React.Component {
   constructor (props) {
     super(props)
     this.toggleFilterProperty = this.toggleFilterProperty.bind(this)
+    this.clearFilterProperties = this.clearFilterProperties.bind(this)
+  }
+
+  clearFilterProperties () {
+    this.props.dispatch(clearFilterProperties())
   }
 
   render () {
@@ -18,6 +23,7 @@ class Sidebar extends React.Component {
     return (
       <aside role='complementary' className='sidebar'>
         <h2>Survey Attributes</h2>
+        <a onClick={this.clearFilterProperties}>Clear</a>
         {Object.keys(properties).map(name => {
           if (name === 'id') return null
           return this.renderProperty(name, properties[name])

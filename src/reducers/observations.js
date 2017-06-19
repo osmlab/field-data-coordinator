@@ -46,20 +46,44 @@ function activeObservations (_map, filterProperties) {
 }
 
 module.exports.default = function (state = initialState, action) {
+  /*
+   * On sync, replace the internal data representation
+   * and update the currently active observations,
+   * as well as the all-inclusive List of id's
+   */
   if (action.type === 'SYNC_SUCCESS') {
     let _map = newObservationMap(action.observations)
     return state
     .set('_map', _map)
     .set('active', activeObservations(_map, state.get('filterProperties')))
     .set('all', List(Object.keys(_map)))
+
+  /*
+   * Update the filterProperties Map with the given key/value.
+   */
   } else if (action.type === 'TOGGLE_FILTER_PROPERTY') {
     let { k, v } = action.property
     let filterProperties = state.get('filterProperties')
-    let newProperties = filterProperties.has(k)
-      ? filterProperties.delete(k) : filterProperties.set(k, v)
+    let existingFilter = filterProperties.get(k)
+    let newProperties
+    if (typeof existingFilter === 'undefined' || existingFilter !== v) {
+      newProperties = filterProperties.set(k, v)
+    } else {
+      newProperties = filterProperties.delete(k)
+    }
     return state
     .set('filterProperties', newProperties)
     .set('active', activeObservations(state.get('_map'), newProperties))
+
+  /*
+   * Clear all filter properties
+   */
+  } else if (action.type === 'CLEAR_FILTER_PROPERTIES') {
+    let emptyProperties = Map()
+    return state.set('filterProperties', emptyProperties)
+    .set('active', activeObservations(state.get('_map'), emptyProperties))
+
+  /* default */
   } else return state
 }
 

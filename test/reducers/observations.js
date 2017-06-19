@@ -29,13 +29,26 @@ test('observations reducers', function (t) {
     const state1 = reducer(state0, { type: FILTER, property: { k: 'hearing', v: 'engineer' } })
     t.deepEqual(state1.get('active').toJS(), ['0'], 'filters active ids')
 
-    const state2 = reducer(state1, { type: FILTER, property: 'friendly' })
+    const state2 = reducer(state1, { type: FILTER, property: { k: 'friendly', v: 'meet' } })
     t.equal(state2.get('active').size, 0, 'filters stack')
 
     const state3 = reducer(state2, { type: SYNC, observations: observations.slice(1, 3) })
     t.deepEqual(Object.keys(state3.get('_map')), ['1', '2'], '_map overwritten by sync')
     t.deepEqual(state3.get('all').toJS(), ['1', '2'], 'ids affected by new sync')
     t.equal(state3.get('active').size, 0, 'filters unaffected by new sync')
+    t.end()
+  })
+
+  t.test('setting filters', function (t) {
+    const state0 = reducer(undefined, { type: FILTER, property: { k: 'a', v: true } })
+    const state1 = reducer(state0, { type: FILTER, property: { k: 'b', v: true } })
+    t.deepEqual(state1.get('filterProperties').toJS(), { a: true, b: true }, 'sets initial filters')
+
+    const state2 = reducer(state1, { type: FILTER, property: { k: 'a', v: false } })
+    t.deepEqual(state2.get('filterProperties').toJS(), { a: false, b: true }, 'alters filter with same property')
+
+    const state3 = reducer(state2, { type: FILTER, property: { k: 'a', v: false } })
+    t.deepEqual(state3.get('filterProperties').toJS(), { b: true }, 'toggles filter off')
     t.end()
   })
 
@@ -49,7 +62,7 @@ test('observations reducers', function (t) {
 
   t.test('getFlattenedProperties', function (t) {
     const state0 = reducer(undefined, { type: SYNC, observations })
-    const state1 = reducer(state0, { type: FILTER, property: 'hearing' })
+    const state1 = reducer(state0, { type: FILTER, property: { k: 'hearing', v: 'engineer' } })
     t.deepEqual(getFlattenedProperties(state1), {
       hearing: { engineer: 1 },
       friendly: { meet: 1 },

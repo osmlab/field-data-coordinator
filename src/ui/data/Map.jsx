@@ -6,6 +6,7 @@ const PropTypes = require('prop-types')
 const immutable = require('immutable')
 const extent = require('turf-extent')
 const { withRouter } = require('react-router-dom')
+const { setActiveObservation } = require('../../actions')
 const { getActiveFeatures } = require('../../reducers/observations')
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwZWd5cHQiLCJhIjoiY2l6ZTk5YTNxMjV3czMzdGU5ZXNhNzdraSJ9.HPI_4OulrnpD8qI57P12tg'
@@ -101,6 +102,8 @@ class Map extends React.Component {
     if (typeof target.getAttribute === 'function' && target.getAttribute('data-observation')) {
       const observationId = target.getAttribute('data-href')
       const { history, match } = this.props
+      // persist the active observation to state, in addition to changing the route
+      this.props.dispatch(setActiveObservation(observationId))
       history.push(`${match.url}/observations/${observationId}`)
     }
   }

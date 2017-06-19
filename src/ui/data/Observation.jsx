@@ -12,7 +12,6 @@ class Observation extends React.Component {
         <p>Observation ID: {params.observationId}</p>
         <Map observationId={params.observationId} />
       </div>
-
     )
   }
 }

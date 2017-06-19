@@ -76,6 +76,14 @@ module.exports.default = function (state = initialState, action) {
     .set('active', activeObservations(state.get('_map'), newProperties))
 
   /*
+   * Filter to only one active observation
+   */
+  } else if (action.type === 'SET_ACTIVE_OBSERVATION') {
+    let filter = Map({ id: action.observationId })
+    return state.set('filterProperties', filter)
+    .set('active', activeObservations(state.get('_map'), filter))
+
+  /*
    * Clear all filter properties
    */
   } else if (action.type === 'CLEAR_FILTER_PROPERTIES') {

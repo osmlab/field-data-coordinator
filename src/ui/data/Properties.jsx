@@ -18,6 +18,10 @@ class Properties extends React.Component {
     this.props.dispatch(clearFilterProperties())
   }
 
+  componentWillMount () {
+    this.clearFilterProperties()
+  }
+
   render () {
     const { properties } = this.props
     return (
@@ -25,7 +29,6 @@ class Properties extends React.Component {
         <h2>Survey Attributes</h2>
         <a onClick={this.clearFilterProperties}>Clear</a>
         {Object.keys(properties).map(name => {
-          if (name === 'id') return null
           return this.renderProperty(name, properties[name])
         })}
       </aside>

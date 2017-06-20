@@ -17,8 +17,9 @@ const argv = minimist(process.argv.slice(2))
 const count = Array.isArray(argv._) ? argv._[0] : 50
 
 const possibleKeys = []
-const possibleKeysCount = 2 + Math.floor(Math.random() * 3)
-for (let i = 0; i < possibleKeysCount; ++i, possibleKeys.push(randomWords())) {}
+const possibleValues = []
+const possibleCount = 2 + Math.floor(Math.random() * 3)
+for (let i = 0; i < possibleCount; ++i, possibleKeys.push(randomWords()), possibleValues.push(randomWords())) {}
 
 for (let i = 0; i < count; ++i) {
   const coordinates = randomCoords().split(', ')
@@ -31,7 +32,7 @@ for (let i = 0; i < count; ++i) {
     properties: {}
   }
   possibleKeys.forEach((key) => {
-    payload.properties[key] = randomWords()
+    payload.properties[key] = possibleValues[Math.floor(Math.random() * possibleCount)]
   })
   payload.properties._device_id = 'foo'
   payload.properties._preset_id = 'bar'

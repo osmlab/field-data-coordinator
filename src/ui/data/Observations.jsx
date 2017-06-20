@@ -1,6 +1,6 @@
 'use strict'
 const React = require('react')
-const Map = require('./Map.jsx')
+const ObservationMap = require('./Observation-Map.jsx')
 const Properties = require('./Properties.jsx')
 
 class Observations extends React.Component {
@@ -8,7 +8,7 @@ class Observations extends React.Component {
     return (
       <div className='content'>
         <Properties />
-        <Map />
+        <ObservationMap />
       </div>
     )
   }

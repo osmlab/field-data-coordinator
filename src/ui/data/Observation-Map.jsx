@@ -30,7 +30,7 @@ function tooltip (feature) {
   `
 }
 
-class Map extends React.Component {
+class ObservationMap extends React.Component {
   constructor (props) {
     super(props)
     this.init = this.init.bind(this)
@@ -128,7 +128,7 @@ class Map extends React.Component {
   }
 }
 
-Map.propTypes = {
+ObservationMap.propTypes = {
   // immutable list for speedy comparisons
   activeIds: PropTypes.instanceOf(immutable.List),
   // just a regular geojson FeatureCollection
@@ -142,4 +142,4 @@ const mapStateToProps = state => {
     activeFeatures: getActiveFeatures(state.observations)
   }
 }
-module.exports = withRouter(connect(mapStateToProps)(Map))
+module.exports = withRouter(connect(mapStateToProps)(ObservationMap))

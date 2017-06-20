@@ -9,7 +9,7 @@ const mkdirp = require('mkdirp')
 const { compileSurvey } = require('@mojodna/observe-tools')
 
 const db = require('./lib/db')
-const server = require('./lib/server')
+const Server = require('./lib/server')
 const { bundleSurvey, listSurveys } = require('./lib/surveys')
 const { updateSurveyList } = require('./src/actions')
 
@@ -71,6 +71,8 @@ function setupFileIPCs (main, inChannel, outChannel) {}
 const dbPath = path.join(app.getPath('userData'), 'db')
 mkdirp.sync(dbPath)
 db.start(dbPath)
+
+var server = new Server()
 server.listen()
 
 app.on('ready', init)

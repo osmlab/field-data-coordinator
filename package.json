@@ -67,6 +67,7 @@
     "slugify": "^1.1.0",
     "tar-stream": "^1.5.4",
     "through2": "^2.0.3",
-    "turf-extent": "^1.0.4"
+    "turf-extent": "^1.0.4",
+    "websocket-stream": "^5.0.0"
   }
 }

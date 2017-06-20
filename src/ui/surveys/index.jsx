@@ -34,7 +34,7 @@ class Surveys extends React.Component {
           ? <div>
             <h3>Available Surveys</h3>
             <ul>
-              {surveys.map((filename, id) => <li key={id}>{filename}</li>)}
+              {surveys.map((survey, id) => <li key={id}>{survey.name}</li>)}
             </ul>
           </div>
           : <p>Please import some surveys</p>}

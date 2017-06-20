@@ -1,19 +1,16 @@
 'use strict'
 
-const fs = require('fs')
 const path = require('path')
 
 const async = require('async')
 const { app, BrowserWindow, dialog, ipcMain, Menu } = require('electron')
 const settings = require('electron-settings')
-const eos = require('end-of-stream')
 const mkdirp = require('mkdirp')
 const { compileSurvey } = require('@mojodna/observe-tools')
-const slugify = require('slugify')
-const { pack } = require('tar-stream')
 
 const db = require('./lib/db')
 const server = require('./lib/server')
+const { bundleSurvey, listSurveys } = require('./lib/surveys')
 const { updateSurveyList } = require('./src/actions')
 
 let main
@@ -94,21 +91,7 @@ app.on('activate', function () {
   }
 })
 
-const listSurveys = function (callback) {
-  return fs.readdir(path.join(app.getPath('userData'), 'surveys'), function (
-    err,
-    entries
-  ) {
-    if (err) {
-      return callback(err)
-    }
-
-    // TODO uncompress so we can provide additional information
-    return callback(null, entries)
-  })
-}
-
-const openImportSurveyDialog = (module.exports.openImportSurveyDialog = () =>
+const openImportSurveyDialog = () =>
   dialog.showOpenDialog(
     {
       buttonLabel: 'Import',
@@ -122,34 +105,9 @@ const openImportSurveyDialog = (module.exports.openImportSurveyDialog = () =>
       // TODO emit seems like the wrong method
     },
     app.emit.bind(app, 'importSurvey')
-  ))
+  )
 
 app.on('open-import-survey-dialog', openImportSurveyDialog)
-
-function bundleSurvey (surveyDefinition, callback) {
-  const bundle = pack()
-  const { name, version } = surveyDefinition
-  const filename = `${slugify(name)}-${version}.tgz`
-
-  mkdirp(path.join(app.getPath('userData'), 'surveys'))
-
-  const output = fs.createWriteStream(
-    path.join(app.getPath('userData'), 'surveys', filename)
-  )
-
-  // call the callback when the stream ends, one way or another
-  eos(output, callback)
-  bundle.pipe(output)
-
-  bundle.entry(
-    {
-      name: 'survey.json'
-    },
-    JSON.stringify(surveyDefinition)
-  )
-
-  bundle.finalize()
-}
 
 app.on('importSurvey', function (files) {
   console.log('Importing survey(s)', files)
@@ -178,4 +136,8 @@ app.on('importSurvey', function (files) {
 
 // export the db object so we can remote require it on render threads
 // https://github.com/electron/electron/blob/master/docs/api/remote.md
-module.exports.db = db
+module.exports = {
+  db,
+  listSurveys,
+  openImportSurveyDialog
+}

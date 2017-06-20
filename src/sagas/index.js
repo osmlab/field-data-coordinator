@@ -1,6 +1,8 @@
 'use strict'
+
 const { call, put, takeLatest, all } = require('redux-saga/effects')
-const { listObservations } = require('../drivers/local')
+
+const { listObservations, importSurvey } = require('../drivers/local')
 
 function * getObservations () {
   try {
@@ -11,14 +13,16 @@ function * getObservations () {
   }
 }
 
+function * watchSurveys () {
+  yield takeLatest('IMPORT_SURVEY', importSurvey)
+}
+
 function * watchSync () {
   yield takeLatest('SYNC', getObservations)
 }
 
 function * rootSaga () {
-  yield all([
-    watchSync()
-  ])
+  yield all([watchSurveys(), watchSync()])
 }
 
 module.exports = {

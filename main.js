@@ -1,22 +1,43 @@
 'use strict'
 
 const path = require('path')
+
+const async = require('async')
+const { app, BrowserWindow, dialog, ipcMain, Menu } = require('electron')
+const settings = require('electron-settings')
 const mkdirp = require('mkdirp')
+const { compileSurvey } = require('@mojodna/observe-tools')
+
 const db = require('./lib/db')
 const Server = require('./lib/server')
-const settings = require('electron-settings')
-const electron = require('electron')
-const app = electron.app
-const Menu = electron.Menu
-const BrowserWindow = electron.BrowserWindow
+const { bundleSurvey, listSurveys } = require('./lib/surveys')
+const { updateSurveyList } = require('./src/actions')
 
 let main
+let dispatch = () => console.warn('dispatch not yet connected')
+
 function init () {
   main = createWindow()
   main.on('closed', function () {
     main = null
   })
   setupMenu()
+
+  // wire up communication between threads so actions can be triggered from the main thread
+  ipcMain.on('redux-initialized', ({ sender }) => {
+    dispatch = payload => {
+      sender.send('dispatch', payload)
+    }
+
+    // update the Redux store with the list of available surveys
+    listSurveys((err, surveys) => {
+      if (err) {
+        return console.warn(err.stack)
+      }
+
+      return dispatch(updateSurveyList(surveys))
+    })
+  })
 }
 
 function createWindow () {
@@ -38,11 +59,13 @@ function setupMenu () {
   const template = require('./lib/menu')(app)
   const menu = Menu.buildFromTemplate(template)
   Menu.setApplicationMenu(menu)
+
+  // TODO see Darwin-specific menu configuration here for better Windows
+  // behavior:
+  // https://github.com/electron/electron/blob/master/docs/api/menu.md#main-process
 }
 
-const userDataPath = path.join(app.getPath('userData'), 'org.osm-labs.field-data-coordinator')
-mkdirp.sync(userDataPath)
-const dbPath = path.join(userDataPath, 'db')
+const dbPath = path.join(app.getPath('userData'), 'db')
 mkdirp.sync(dbPath)
 db.start(dbPath)
 
@@ -67,6 +90,53 @@ app.on('activate', function () {
   }
 })
 
+const openImportSurveyDialog = () =>
+  dialog.showOpenDialog(
+    {
+      buttonLabel: 'Import',
+      filters: [
+        {
+          name: 'Survey Definitions',
+          extensions: ['yaml', 'yml']
+        }
+      ],
+      properties: ['openFile']
+      // TODO emit seems like the wrong method
+    },
+    app.emit.bind(app, 'importSurvey')
+  )
+
+app.on('open-import-survey-dialog', openImportSurveyDialog)
+
+app.on('importSurvey', function (files) {
+  console.log('Importing survey(s)', files)
+  return async.map(files, compileSurvey, (err, surveyDefinitions) => {
+    if (err) {
+      console.warn(err.stack)
+    }
+
+    // TODO fetch additional resources like icons, etc.
+
+    return async.forEach(surveyDefinitions, bundleSurvey, err => {
+      if (err) {
+        return console.warn(err.stack)
+      }
+
+      return listSurveys((err, surveys) => {
+        if (err) {
+          return console.warn(err.stack)
+        }
+
+        return dispatch(updateSurveyList(surveys))
+      })
+    })
+  })
+})
+
 // export the db object so we can remote require it on render threads
 // https://github.com/electron/electron/blob/master/docs/api/remote.md
-module.exports.db = db
+module.exports = {
+  db,
+  listSurveys,
+  openImportSurveyDialog
+}

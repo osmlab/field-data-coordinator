@@ -4,14 +4,14 @@
 }
 
 .header {
-  flex: 1 100%;
+  width: 100%;
 }
 
 .sidebar {
   flex: 1 auto;
 }
 
-.main {
+.map {
   flex: 5 0px;
 }
 

@@ -4,8 +4,8 @@ const { connect } = require('react-redux')
 const Checkbox = require('material-ui/Checkbox').default
 const immutable = require('immutable')
 const PropTypes = require('prop-types')
-const { getPropertiesList } = require('../reducers/observations')
-const { toggleFilterProperty } = require('../actions')
+const { getPropertiesList } = require('../../reducers/observations')
+const { toggleFilterProperty } = require('../../actions')
 
 class Sidebar extends React.Component {
   render () {

@@ -16,6 +16,11 @@ li { list-style: none; }
 
 .map {
   flex: 5 0px;
+  height: 70vh;
+}
+
+.selectionmap {
+  height: 100%;
 }
 
 .header__title {
@@ -24,8 +29,4 @@ li { list-style: none; }
 
 .header__active {
   border-bottom: 1px solid black;
-}
-
-.map {
-  height: 70vh;
 }

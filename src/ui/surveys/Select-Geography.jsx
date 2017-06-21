@@ -19,8 +19,8 @@ class SelectGeography extends React.Component {
       active: false,
 
       // container dimensions
-      width: 0,
-      height: 0,
+      mapWidth: 0,
+      mapHeight: 0,
 
       // map bounds
       bounds: []
@@ -61,7 +61,7 @@ class SelectGeography extends React.Component {
           <Modal>
             <div className='selectionmap__parent'>
               <div className='selectionmap' ref={this.init} />
-              <div className='selectionmap__selection' style={this.getDimensions()} />
+              <div className='selectionmap__selection' style={this.getStyle()} />
             </div>
             <RaisedButton primary label='Confirm'
               onTouchTap={this.queryBounds}
@@ -101,7 +101,7 @@ class SelectGeography extends React.Component {
 
   persistContainerDimensions () {
     const dim = this.container.getBoundingClientRect()
-    this.setState({ width: dim.width, height: dim.height })
+    this.setState({ mapWidth: dim.width, mapHeight: dim.height })
   }
 
   persistMapBounds () {
@@ -110,7 +110,7 @@ class SelectGeography extends React.Component {
   }
 
   getDimensions () {
-    const { width: mapWidth, height: mapHeight, bounds } = this.state
+    const { mapWidth, mapHeight, bounds } = this.state
     // calculate viewport area in square meters
     const viewportArea = calculateArea(bboxPolygon(bounds))
     // calculate the length of the edge, given a constant maximum area
@@ -118,14 +118,26 @@ class SelectGeography extends React.Component {
     const ratio = viewportArea < MAX_AREA ? 1
       : Math.sqrt(MAX_AREA) / Math.sqrt(viewportArea)
     const edge = viewportEdge * ratio
-    return {
-      width: edge + 'px',
-      height: edge + 'px'
-    }
+    return { width: edge, height: edge }
+  }
+
+  getStyle () {
+    const { width, height } = this.getDimensions()
+    return { width: width + 'px', height: height + 'px' }
   }
 
   queryBounds () {
-
+    const { mapWidth, mapHeight } = this.state
+    const { width: edge } = this.getDimensions()
+    const north = (mapHeight - edge) / 2
+    const west = (mapWidth - edge) / 2
+    const south = north + edge
+    const east = west + edge
+    const queryBounds = new mapboxgl.LngLatBounds(
+      this.map.unproject([west, south]),
+      this.map.unproject([east, north])
+    )
+    console.log(queryBounds)
   }
 
   handleShortcuts ({ keyCode }) {

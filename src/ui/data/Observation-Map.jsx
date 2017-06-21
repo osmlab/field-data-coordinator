@@ -9,7 +9,6 @@ const { withRouter } = require('react-router-dom')
 const { setActiveObservation } = require('../../actions')
 const { getActiveFeatures } = require('../../reducers/observations')
 
-mapboxgl.accessToken = 'pk.eyJ1IjoibWFwZWd5cHQiLCJhIjoiY2l6ZTk5YTNxMjV3czMzdGU5ZXNhNzdraSJ9.HPI_4OulrnpD8qI57P12tg'
 const SOURCE = 'ACTIVE_OBSERVATIONS'
 
 const markerStyle = {

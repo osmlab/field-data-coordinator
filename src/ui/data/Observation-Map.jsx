@@ -9,7 +9,6 @@ const { withRouter } = require('react-router-dom')
 const { setActiveObservation } = require('../../actions')
 const { getActiveFeatures } = require('../../reducers/observations')
 
-mapboxgl.accessToken = 'pk.eyJ1IjoibWFwZWd5cHQiLCJhIjoiY2l6ZTk5YTNxMjV3czMzdGU5ZXNhNzdraSJ9.HPI_4OulrnpD8qI57P12tg'
 const SOURCE = 'ACTIVE_OBSERVATIONS'
 
 const markerStyle = {
@@ -30,7 +29,7 @@ function tooltip (feature) {
   `
 }
 
-class Map extends React.Component {
+class ObservationMap extends React.Component {
   constructor (props) {
     super(props)
     this.init = this.init.bind(this)
@@ -128,7 +127,7 @@ class Map extends React.Component {
   }
 }
 
-Map.propTypes = {
+ObservationMap.propTypes = {
   // immutable list for speedy comparisons
   activeIds: PropTypes.instanceOf(immutable.List),
   // just a regular geojson FeatureCollection
@@ -142,4 +141,4 @@ const mapStateToProps = state => {
     activeFeatures: getActiveFeatures(state.observations)
   }
 }
-module.exports = withRouter(connect(mapStateToProps)(Map))
+module.exports = withRouter(connect(mapStateToProps)(ObservationMap))

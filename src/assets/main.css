@@ -16,6 +16,24 @@ li { list-style: none; }
 
 .map {
   flex: 5 0px;
+  height: 70vh;
+}
+
+.selectionmap__parent { position: relative; }
+
+.selectionmap,
+.selectionmap__parent {
+  height: 100%;
+  width: 100%;
+}
+
+.selectionmap__selection {
+  border: 1px dashed white;
+  pointer-events: none;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%)
 }
 
 .header__title {
@@ -24,8 +42,4 @@ li { list-style: none; }
 
 .header__active {
   border-bottom: 1px solid black;
-}
-
-.map {
-  height: 70vh;
 }

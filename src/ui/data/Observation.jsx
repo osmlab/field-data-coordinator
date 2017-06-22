@@ -2,7 +2,7 @@
 const React = require('react')
 const { Link } = require('react-router-dom')
 const Metadata = require('./Metadata.jsx')
-const Map = require('./Map.jsx')
+const ObservationMap = require('./Observation-Map.jsx')
 
 class Observation extends React.Component {
   render () {
@@ -14,7 +14,7 @@ class Observation extends React.Component {
         <p><span>Updated: TODO</span> | <span>Author: TODO</span></p>
         <div className='content'>
           <Metadata />
-          <Map observationId={params.observationId} />
+          <ObservationMap observationId={params.observationId} />
         </div>
       </div>
     )

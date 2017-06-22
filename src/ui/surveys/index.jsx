@@ -7,6 +7,8 @@ const { connect } = require('react-redux')
 const ImportSurvey = require('./Import.jsx')
 const { getSurveys } = require('../../selectors')
 
+const SelectGeography = require('./Select-Geography.jsx')
+
 // TODO this doesn't work yet
 dragDrop('#root', {
   onDrop: function (files, pos) {
@@ -40,6 +42,7 @@ class Surveys extends React.Component {
           : <p>Please import some surveys</p>}
         <ImportSurvey />
 
+        <SelectGeography />
       </div>
     )
   }

@@ -29,6 +29,9 @@ store.dispatch(sync())
 ipcRenderer.on('dispatch', (evt, payload) => store.dispatch(payload))
 ipcRenderer.send('redux-initialized')
 
+const mapboxgl = require('mapbox-gl')
+mapboxgl.accessToken = 'pk.eyJ1IjoibWFwZWd5cHQiLCJhIjoiY2l6ZTk5YTNxMjV3czMzdGU5ZXNhNzdraSJ9.HPI_4OulrnpD8qI57P12tg'
+
 ReactDOM.render(
   <MuiThemeProvider>
     <Provider store={store}>

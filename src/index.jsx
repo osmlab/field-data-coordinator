@@ -14,6 +14,7 @@ const { sync } = require('./actions')
 const App = require('./ui/app/index.jsx')
 const Home = require('./ui/home/index.jsx')
 const Data = require('./ui/data/index.jsx')
+const Observation = require('./ui/data/Observation.jsx')
 const Surveys = require('./ui/surveys/index.jsx')
 
 // https://github.com/callemall/material-ui#react-tap-event-plugin
@@ -35,6 +36,7 @@ ReactDOM.render(
         <App>
           <Route path='/home' component={Home} />
           <Route path='/data' component={Data} />
+          <Route path='/data/observations/:observationId' component={Observation} />
           <Route path='/surveys' component={Surveys} />
           <Redirect from='/' to='/home' />
         </App>

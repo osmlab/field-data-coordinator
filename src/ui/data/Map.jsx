@@ -5,6 +5,8 @@ const { connect } = require('react-redux')
 const PropTypes = require('prop-types')
 const immutable = require('immutable')
 const extent = require('turf-extent')
+const { withRouter } = require('react-router-dom')
+const { setActiveObservation } = require('../../actions')
 const { getActiveFeatures } = require('../../reducers/observations')
 
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwZWd5cHQiLCJhIjoiY2l6ZTk5YTNxMjV3czMzdGU5ZXNhNzdraSJ9.HPI_4OulrnpD8qI57P12tg'
@@ -22,7 +24,10 @@ const markerStyle = {
 }
 
 function tooltip (feature) {
-  return `<p>${JSON.stringify(feature.properties)}</p>`
+  return `
+  <p>${JSON.stringify(feature.properties)}</p>
+  <p data-href='${feature.properties.id}' data-observation=1>Link</p>
+  `
 }
 
 class Map extends React.Component {
@@ -31,14 +36,13 @@ class Map extends React.Component {
     this.init = this.init.bind(this)
     this.mousemove = this.mousemove.bind(this)
     this.mouseclick = this.mouseclick.bind(this)
+    this.navigate = this.navigate.bind(this)
   }
 
   componentWillReceiveProps ({ activeIds, activeFeatures }) {
     if (activeIds !== this.props.activeIds) {
-      this.whenReady(() => {
-        this.map.getSource(SOURCE).setData(activeFeatures)
-        this.map.fitBounds(extent(activeFeatures))
-      })
+      this.map.getSource(SOURCE).setData(activeFeatures)
+      this.fit(activeFeatures)
     }
   }
 
@@ -58,12 +62,10 @@ class Map extends React.Component {
     map.addControl(new mapboxgl.NavigationControl())
     map.dragRotate.disable()
     map.touchZoomRotate.disableRotation()
-    this.whenReady(() => {
+    map.once('load', () => {
       const { activeFeatures } = this.props
       map.addSource(SOURCE, { type: 'geojson', data: activeFeatures })
-      if (activeFeatures.features.length) {
-        this.map.fitBounds(extent(activeFeatures))
-      }
+      this.fit(activeFeatures)
       map.addLayer(markerStyle)
       map.on('mousemove', this.mousemove)
       map.on('click', this.mouseclick)
@@ -95,14 +97,33 @@ class Map extends React.Component {
     this.popup.remove()
   }
 
-  whenReady (fn) {
-    if (this.map.loaded()) fn()
-    else this.map.once('load', () => fn.call(this))
+  navigate ({ target }) {
+    // true if it's an observation link
+    if (typeof target.getAttribute === 'function' && target.getAttribute('data-observation')) {
+      const observationId = target.getAttribute('data-href')
+      const { history, match } = this.props
+      // persist the active observation to state, in addition to changing the route
+      this.props.dispatch(setActiveObservation(observationId))
+      history.push(`${match.url}/observations/${observationId}`)
+    }
+  }
+
+  fit (activeFeatures) {
+    const { features } = activeFeatures
+    if (features && features.length) {
+      if (features.length === 1) {
+        this.map.setCenter(features[0].geometry.coordinates)
+        this.open(features[0].geometry.coordinates, features[0])
+      } else {
+        this.map.fitBounds(extent(activeFeatures), { padding: 20 })
+        if (this.popup) this.close()
+      }
+    } else if (this.popup) this.close()
   }
 
   render () {
     return (
-      <div className='map' ref={this.init} />
+      <div className='map' ref={this.init} onClick={this.navigate} />
     )
   }
 }
@@ -111,7 +132,8 @@ Map.propTypes = {
   // immutable list for speedy comparisons
   activeIds: PropTypes.instanceOf(immutable.List),
   // just a regular geojson FeatureCollection
-  activeFeatures: PropTypes.object
+  activeFeatures: PropTypes.object,
+  observationId: PropTypes.string
 }
 
 const mapStateToProps = state => {
@@ -120,4 +142,4 @@ const mapStateToProps = state => {
     activeFeatures: getActiveFeatures(state.observations)
   }
 }
-module.exports = connect(mapStateToProps)(Map)
+module.exports = withRouter(connect(mapStateToProps)(Map))

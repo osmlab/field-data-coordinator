@@ -8,9 +8,9 @@ const initialState = Map({
   // Immutable list of all observation id's contained in the osm p2p db.
   all: List(),
 
-  // Immutable list of property keys, used to filter 'active' observations
-  // from all observations.
-  filterProperties: List(),
+  // Immutable map of property keys and values,
+  // used to filter 'active' observations from all observations.
+  filterProperties: Map(),
 
   // An non-immutable object of normal geojson objects mapped to id.
   // Note this should never be used in a react component.
@@ -30,8 +30,8 @@ function createFilter (filterProperties) {
   if (!filterProperties.size) return () => true
   const filters = filterProperties.toJS()
   return ({properties}) => {
-    for (let i = 0; i < filters.length; ++i) {
-      if (!properties.hasOwnProperty(filters[i])) {
+    for (let name in filters) {
+      if (!properties.hasOwnProperty(name) || properties[name] !== filters[name]) {
         return false
       }
     }
@@ -46,24 +46,58 @@ function activeObservations (_map, filterProperties) {
 }
 
 module.exports.default = function (state = initialState, action) {
+  /*
+   * On sync, replace the internal data representation
+   * and update the currently active observations,
+   * as well as the all-inclusive List of id's
+   */
   if (action.type === 'SYNC_SUCCESS') {
     let _map = newObservationMap(action.observations)
     return state
     .set('_map', _map)
     .set('active', activeObservations(_map, state.get('filterProperties')))
     .set('all', List(Object.keys(_map)))
+
+  /*
+   * Update the filterProperties Map with the given key/value.
+   */
   } else if (action.type === 'TOGGLE_FILTER_PROPERTY') {
-    let { property } = action
-    let currentProperties = state.get('filterProperties')
-    let indexOfProperty = currentProperties.indexOf(property)
-    let newProperties = (indexOfProperty === -1)
-      ? currentProperties.push(property) : currentProperties.remove(indexOfProperty)
+    let { k, v } = action.property
+    let filterProperties = state.get('filterProperties')
+    let existingFilter = filterProperties.get(k)
+    let newProperties
+    if (typeof existingFilter === 'undefined' || existingFilter !== v) {
+      newProperties = filterProperties.set(k, v)
+    } else {
+      newProperties = filterProperties.delete(k)
+    }
     return state
     .set('filterProperties', newProperties)
     .set('active', activeObservations(state.get('_map'), newProperties))
+
+  /*
+   * Filter to only one active observation
+   */
+  } else if (action.type === 'SET_ACTIVE_OBSERVATION') {
+    let filter = Map({ id: action.observationId })
+    return state.set('filterProperties', filter)
+    .set('active', activeObservations(state.get('_map'), filter))
+
+  /*
+   * Clear all filter properties
+   */
+  } else if (action.type === 'CLEAR_FILTER_PROPERTIES') {
+    let emptyProperties = Map()
+    return state.set('filterProperties', emptyProperties)
+    .set('active', activeObservations(state.get('_map'), emptyProperties))
+
+  /* default */
   } else return state
 }
 
+/*
+ * Get a FeatureCollection of all active Observations
+ */
 module.exports.getActiveFeatures = function (state) {
   const all = state.get('_map')
   const activeFeatures = []
@@ -74,14 +108,28 @@ module.exports.getActiveFeatures = function (state) {
   }
 }
 
-module.exports.getPropertiesList = function (state) {
+/*
+ * Get a flattened, non-immutable map of Observation properties
+ * eg.
+ * {
+ *  propertyName: {
+ *    response1: response1_count,
+ *    response2: response2_count
+ *  }
+ * }
+ */
+module.exports.getFlattenedProperties = function (state) {
   const _map = state.get('_map')
-  const result = {}
+  const flattened = {}
   state.get('all').forEach(id => {
     let { properties } = _map[id]
-    for (let key in properties) {
-      result[key] = result[key] ? result[key] + 1 : 1
+    for (let propertyName in properties) {
+      let response = properties[propertyName]
+      flattened[propertyName] = flattened[propertyName] || {}
+      let count = flattened[propertyName][response]
+        ? flattened[propertyName][response] + 1 : 1
+      flattened[propertyName][response] = count
     }
   })
-  return result
+  return flattened
 }

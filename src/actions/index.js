@@ -11,6 +11,13 @@ module.exports.toggleFilterProperty = property => ({
   property
 })
 
+module.exports.clearFilterProperties = () => ({ type: 'CLEAR_FILTER_PROPERTIES' })
+
+module.exports.setActiveObservation = (observationId) => ({
+  type: 'SET_ACTIVE_OBSERVATION',
+  observationId
+})
+
 module.exports.updateSurveyList = surveys => {
   return {
     type: 'RECEIVE_SURVEY_LIST',

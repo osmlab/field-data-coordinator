@@ -1,6 +1,8 @@
 'use strict'
 
 const url = require('url')
+const promisify = require('es6-promisify')
+const request = promisify(require('request'))
 
 const {
   call,
@@ -12,7 +14,8 @@ const {
 
 const {
   listObservations,
-  importSurvey
+  importSurvey,
+  importOsm
 } = require('../drivers/local')
 
 const OSMAPI = 'http://api.openstreetmap.org/api/0.6/'
@@ -26,19 +29,23 @@ function * getObservations () {
   }
 }
 
-function * getOSM ({bounds}) {
+function * getOsm ({bounds}) {
   yield put({ type: 'OSM_QUERY_START' })
-  const query = url.resolve(OSMAPI, `map?bbox=${bounds.join(',')}`)
+  const bbox = bounds.join(',')
+  const query = url.resolve(OSMAPI, `map?bbox=${bbox}`)
+  let response
   try {
-    const xml = yield call(global.fetch, query)
-    yield put({ type: 'OSM_QUERY_SUCCESS', xml })
+    response = yield call(request, query)
+    yield put({ type: 'OSM_QUERY_SUCCESS', bbox })
   } catch (error) {
     yield put({ type: 'OSM_QUERY_FAILED', error })
+    return
   }
+  yield call(importOsm, response)
 }
 
-function * watchOSM () {
-  yield takeEvery('GET_OSM', getOSM)
+function * watchOsm () {
+  yield takeEvery('GET_OSM', getOsm)
 }
 
 function * watchSurveys () {
@@ -50,7 +57,7 @@ function * watchSync () {
 }
 
 function * rootSaga () {
-  yield all([watchSurveys(), watchSync(), watchOSM()])
+  yield all([watchSurveys(), watchSync(), watchOsm()])
 }
 
 module.exports = {

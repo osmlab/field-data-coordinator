@@ -12,7 +12,7 @@ module.exports.updateSurveyList = surveys => {
 }
 
 module.exports.sync = () => ({ type: 'SYNC' })
-module.exports.getOSM = (bounds) => ({ type: 'GET_OSM', bounds })
+module.exports.getOsm = (bounds) => ({ type: 'GET_OSM', bounds })
 
 module.exports.toggleFilterProperty = property => ({
   type: 'TOGGLE_FILTER_PROPERTY',

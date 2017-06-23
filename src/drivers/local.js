@@ -3,7 +3,7 @@
 const remote = require('electron').remote
 const promisify = require('es6-promisify')
 
-const { db: { listObservations }, openImportSurveyDialog } = remote.require(
+const { db: { listObservations, importBulkOsm }, openImportSurveyDialog } = remote.require(
   './main'
 )
 
@@ -12,5 +12,6 @@ const { db: { listObservations }, openImportSurveyDialog } = remote.require(
 
 module.exports = {
   listObservations: promisify(listObservations),
-  importSurvey: promisify(openImportSurveyDialog)
+  importSurvey: promisify(openImportSurveyDialog),
+  importOsm: promisify(importBulkOsm)
 }

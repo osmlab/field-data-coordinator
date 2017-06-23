@@ -5,7 +5,7 @@ const Modal = require('../Modal.jsx')
 const mapboxgl = require('mapbox-gl')
 const bboxPolygon = require('@turf/bbox-polygon')
 const calculateArea = require('@turf/area')
-const { getOSM } = require('../../actions')
+const { getOsm } = require('../../actions')
 const { connect } = require('react-redux')
 
 const INITIAL_ZOOM = 11
@@ -137,7 +137,7 @@ class SelectGeography extends React.Component {
     const east = west + edge
     const sw = this.map.unproject([west, south])
     const ne = this.map.unproject([east, north])
-    this.props.dispatch(getOSM([sw.lng, sw.lat, ne.lng, ne.lat]))
+    this.props.dispatch(getOsm([sw.lng, sw.lat, ne.lng, ne.lat]))
   }
 
   handleShortcuts ({ keyCode }) {

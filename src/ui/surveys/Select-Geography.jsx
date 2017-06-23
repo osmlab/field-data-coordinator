@@ -5,12 +5,14 @@ const Modal = require('../Modal.jsx')
 const mapboxgl = require('mapbox-gl')
 const bboxPolygon = require('@turf/bbox-polygon')
 const calculateArea = require('@turf/area')
+const { getOSM } = require('../../actions')
+const { connect } = require('react-redux')
 
 const INITIAL_ZOOM = 11
 const INITIAL_CENTER = [-73.985428, 40.748817]
 
-// 50 square kilometers
-const MAX_AREA = 50e7
+// 27 square kilometers
+const MAX_AREA = 27 * 27 * 1000
 
 class SelectGeography extends React.Component {
   constructor (props) {
@@ -133,11 +135,9 @@ class SelectGeography extends React.Component {
     const west = (mapWidth - edge) / 2
     const south = north + edge
     const east = west + edge
-    const queryBounds = new mapboxgl.LngLatBounds(
-      this.map.unproject([west, south]),
-      this.map.unproject([east, north])
-    )
-    console.log(queryBounds)
+    const sw = this.map.unproject([west, south])
+    const ne = this.map.unproject([east, north])
+    this.props.dispatch(getOSM([sw.lng, sw.lat, ne.lng, ne.lat]))
   }
 
   handleShortcuts ({ keyCode }) {
@@ -148,4 +148,4 @@ class SelectGeography extends React.Component {
   }
 }
 
-module.exports = SelectGeography
+module.exports = connect()(SelectGeography)

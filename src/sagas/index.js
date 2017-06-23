@@ -1,8 +1,21 @@
 'use strict'
 
-const { call, put, takeLatest, all } = require('redux-saga/effects')
+const url = require('url')
 
-const { listObservations, importSurvey } = require('../drivers/local')
+const {
+  call,
+  put,
+  takeLatest,
+  takeEvery,
+  all
+} = require('redux-saga/effects')
+
+const {
+  listObservations,
+  importSurvey
+} = require('../drivers/local')
+
+const OSMAPI = 'http://api.openstreetmap.org/api/0.6/'
 
 function * getObservations () {
   try {
@@ -11,6 +24,21 @@ function * getObservations () {
   } catch (error) {
     yield put({ type: 'SYNC_FAILED', error })
   }
+}
+
+function * getOSM ({bounds}) {
+  yield put({ type: 'OSM_QUERY_START' })
+  const query = url.resolve(OSMAPI, `map?bbox=${bounds.join(',')}`)
+  try {
+    const xml = yield call(global.fetch, query)
+    yield put({ type: 'OSM_QUERY_SUCCESS', xml })
+  } catch (error) {
+    yield put({ type: 'OSM_QUERY_FAILED', error })
+  }
+}
+
+function * watchOSM () {
+  yield takeEvery('GET_OSM', getOSM)
 }
 
 function * watchSurveys () {
@@ -22,7 +50,7 @@ function * watchSync () {
 }
 
 function * rootSaga () {
-  yield all([watchSurveys(), watchSync()])
+  yield all([watchSurveys(), watchSync(), watchOSM()])
 }
 
 module.exports = {

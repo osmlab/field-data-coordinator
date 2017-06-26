@@ -5,6 +5,7 @@ const Modal = require('../Modal.jsx')
 const mapboxgl = require('mapbox-gl')
 const bboxPolygon = require('@turf/bbox-polygon')
 const calculateArea = require('@turf/area')
+const PropTypes = require('prop-types')
 const { getOsm } = require('../../actions')
 const { connect } = require('react-redux')
 const { querySavedOsm } = require('../../drivers/local')
@@ -25,8 +26,7 @@ class SelectGeography extends React.Component {
       mapWidth: 0,
       mapHeight: 0,
 
-      // map bounds
-      bounds: []
+      mapBounds: []
     }
   }
 
@@ -117,13 +117,13 @@ class SelectGeography extends React.Component {
 
   persistMapBounds () {
     const { _sw, _ne } = this.map.getBounds()
-    this.setState({ bounds: [ _sw.lng, _sw.lat, _ne.lng, _ne.lat ] })
+    this.setState({ mapBounds: [ _sw.lng, _sw.lat, _ne.lng, _ne.lat ] })
   }
 
   getDimensions () {
-    const { mapWidth, mapHeight, bounds } = this.state
+    const { mapWidth, mapHeight, mapBounds } = this.state
     // calculate viewport area in square meters
-    const viewportArea = calculateArea(bboxPolygon(bounds))
+    const viewportArea = calculateArea(bboxPolygon(mapBounds))
     // calculate the length of the edge, given a constant maximum area
     const viewportEdge = Math.min(mapWidth, mapHeight)
     const ratio = viewportArea < MAX_AREA ? 1
@@ -159,16 +159,21 @@ class SelectGeography extends React.Component {
 
   logData () {
     const { bounds } = this.props
-    if (!bounds) console.log('No bounds in redux store')
-    else querySavedOsm([[bounds[1], bounds[3] ], [ bounds[0], bounds[2]]], console.log)
+    if (!bounds) console.log('No data in local osm p2p store')
+    else querySavedOsm([[bounds[1], bounds[3]], [bounds[0], bounds[2]]], console.log)
   }
 }
 
-const mapStateToProps = ({ osm }) => {
-  const bounds = osm.get('bounds')
+SelectGeography.propTypes = {
+  loading: PropTypes.bool,
+  bounds: PropTypes.array
+}
+
+const mapStateToProps = ({ osmBounds, loading }) => {
   return {
-    loading: osm.get('loading'),
-    bounds: bounds.length ? bounds : null
+    loading,
+    bounds: osmBounds.length ? osmBounds : null
   }
 }
+
 module.exports = connect(mapStateToProps, { getOsm })(SelectGeography)

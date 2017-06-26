@@ -24,11 +24,11 @@ function * getObservations () {
 }
 
 function * getOsm ({bounds}) {
-  yield put({ type: 'OSM_QUERY_START', bounds })
+  yield put({ type: 'OSM_QUERY_START' })
   const bbox = bounds.join(',')
   try {
     yield call(importOsm, bbox)
-    yield put({ type: 'OSM_QUERY_SUCCESS' })
+    yield put({ type: 'OSM_QUERY_SUCCESS', bounds })
   } catch (error) {
     yield put({ type: 'OSM_QUERY_FAILED', error })
   }

@@ -1,10 +1,11 @@
 const { ipcRenderer } = require('electron')
 const React = require('react')
 const ReactDOM = require('react-dom')
-const { createStore, applyMiddleware } = require('redux')
+const { createStore, applyMiddleware, compose } = require('redux')
 const { Provider } = require('react-redux')
 const createSagaMiddleware = require('redux-saga').default
 const { HashRouter, Route, Redirect } = require('react-router-dom')
+const persistState = require('redux-localstorage')
 const { MuiThemeProvider } = require('material-ui/styles')
 
 const reducers = require('./reducers')
@@ -21,7 +22,11 @@ const Surveys = require('./ui/surveys/index.jsx')
 require('react-tap-event-plugin')()
 
 const sagaMiddleware = createSagaMiddleware()
-const store = createStore(reducers, applyMiddleware(sagaMiddleware))
+const localstorageMiddleware = persistState('osmBounds')
+const store = createStore(reducers, compose(
+  applyMiddleware(sagaMiddleware),
+  localstorageMiddleware
+))
 sagaMiddleware.run(rootSaga)
 store.dispatch(sync())
 

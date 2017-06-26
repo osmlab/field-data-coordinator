@@ -7,6 +7,7 @@ const bboxPolygon = require('@turf/bbox-polygon')
 const calculateArea = require('@turf/area')
 const { getOsm } = require('../../actions')
 const { connect } = require('react-redux')
+const { querySavedOsm } = require('../../drivers/local')
 
 const INITIAL_ZOOM = 11
 const INITIAL_CENTER = [-73.985428, 40.748817]
@@ -39,6 +40,7 @@ class SelectGeography extends React.Component {
     this.init = this.init.bind(this)
     this.persistMapBounds = this.persistMapBounds.bind(this)
     this.queryBounds = this.queryBounds.bind(this)
+    this.logData = this.logData.bind(this)
   }
 
   componentWillUnmount () {
@@ -60,7 +62,11 @@ class SelectGeography extends React.Component {
           onTouchTap={() => this.setState({ active: true })}
         />
         { loading ? <p>Loading ...</p> : null }
-        { bounds.length ? <p>Current bounds: {bounds.join(', ')}</p> : null }
+        { bounds ? <p>Current bounds: {bounds.join(', ')}</p> : null }
+        <RaisedButton
+          label='Log current data'
+          onTouchTap={this.logData}
+        />
 
         {this.state.active ? (
           <Modal>
@@ -150,13 +156,19 @@ class SelectGeography extends React.Component {
         return this.setState({ active: false })
     }
   }
-}
 
-const mapStateToProps = ({ osm }) => {
-  return {
-    bounds: osm.get('bounds'),
-    loading: osm.get('loading')
+  logData () {
+    const { bounds } = this.props
+    if (!bounds) console.log('No bounds in redux store')
+    else querySavedOsm([[bounds[1], bounds[3] ], [ bounds[0], bounds[2]]], console.log)
   }
 }
 
+const mapStateToProps = ({ osm }) => {
+  const bounds = osm.get('bounds')
+  return {
+    loading: osm.get('loading'),
+    bounds: bounds.length ? bounds : null
+  }
+}
 module.exports = connect(mapStateToProps, { getOsm })(SelectGeography)

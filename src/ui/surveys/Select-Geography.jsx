@@ -52,12 +52,15 @@ class SelectGeography extends React.Component {
   }
 
   render () {
+    const { loading, bounds } = this.props
     return (
       <div>
         <RaisedButton
           label='Select a geographic area'
           onTouchTap={() => this.setState({ active: true })}
         />
+        { loading ? <p>Loading ...</p> : null }
+        { bounds.length ? <p>Current bounds: {bounds.join(', ')}</p> : null }
 
         {this.state.active ? (
           <Modal>
@@ -137,7 +140,8 @@ class SelectGeography extends React.Component {
     const east = west + edge
     const sw = this.map.unproject([west, south])
     const ne = this.map.unproject([east, north])
-    this.props.dispatch(getOsm([sw.lng, sw.lat, ne.lng, ne.lat]))
+    this.props.getOsm([sw.lng, sw.lat, ne.lng, ne.lat])
+    this.setState({ active: false })
   }
 
   handleShortcuts ({ keyCode }) {
@@ -148,4 +152,11 @@ class SelectGeography extends React.Component {
   }
 }
 
-module.exports = connect()(SelectGeography)
+const mapStateToProps = ({ osm }) => {
+  return {
+    bounds: osm.get('bounds'),
+    loading: osm.get('loading')
+  }
+}
+
+module.exports = connect(mapStateToProps, { getOsm })(SelectGeography)

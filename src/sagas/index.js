@@ -1,8 +1,18 @@
 'use strict'
 
-const { call, put, takeLatest, all } = require('redux-saga/effects')
+const {
+  call,
+  put,
+  takeLatest,
+  takeEvery,
+  all
+} = require('redux-saga/effects')
 
-const { listObservations, importSurvey } = require('../drivers/local')
+const {
+  listObservations,
+  importSurvey,
+  importOsm
+} = require('../drivers/local')
 
 function * getObservations () {
   try {
@@ -11,6 +21,21 @@ function * getObservations () {
   } catch (error) {
     yield put({ type: 'SYNC_FAILED', error })
   }
+}
+
+function * getOsm ({bounds}) {
+  yield put({ type: 'OSM_QUERY_START' })
+  const bbox = bounds.join(',')
+  try {
+    yield call(importOsm, bbox)
+    yield put({ type: 'OSM_QUERY_SUCCESS', bounds })
+  } catch (error) {
+    yield put({ type: 'OSM_QUERY_FAILED', error })
+  }
+}
+
+function * watchOsm () {
+  yield takeEvery('GET_OSM', getOsm)
 }
 
 function * watchSurveys () {
@@ -22,7 +47,7 @@ function * watchSync () {
 }
 
 function * rootSaga () {
-  yield all([watchSurveys(), watchSync()])
+  yield all([watchSurveys(), watchSync(), watchOsm()])
 }
 
 module.exports = {

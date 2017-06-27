@@ -5,12 +5,16 @@ const Modal = require('../Modal.jsx')
 const mapboxgl = require('mapbox-gl')
 const bboxPolygon = require('@turf/bbox-polygon')
 const calculateArea = require('@turf/area')
+const PropTypes = require('prop-types')
+const { getOsm } = require('../../actions')
+const { connect } = require('react-redux')
+const { querySavedOsm } = require('../../drivers/local')
 
 const INITIAL_ZOOM = 11
 const INITIAL_CENTER = [-73.985428, 40.748817]
 
-// 50 square kilometers
-const MAX_AREA = 50e7
+// 27 square kilometers
+const MAX_AREA = 27 * 27 * 1000
 
 class SelectGeography extends React.Component {
   constructor (props) {
@@ -22,8 +26,7 @@ class SelectGeography extends React.Component {
       mapWidth: 0,
       mapHeight: 0,
 
-      // map bounds
-      bounds: []
+      mapBounds: []
     }
   }
 
@@ -37,6 +40,7 @@ class SelectGeography extends React.Component {
     this.init = this.init.bind(this)
     this.persistMapBounds = this.persistMapBounds.bind(this)
     this.queryBounds = this.queryBounds.bind(this)
+    this.logData = this.logData.bind(this)
   }
 
   componentWillUnmount () {
@@ -50,11 +54,18 @@ class SelectGeography extends React.Component {
   }
 
   render () {
+    const { loading, bounds } = this.props
     return (
       <div>
         <RaisedButton
           label='Select a geographic area'
           onTouchTap={() => this.setState({ active: true })}
+        />
+        { loading ? <p>Loading ...</p> : null }
+        { bounds ? <p>Current bounds: {bounds.join(', ')}</p> : null }
+        <RaisedButton
+          label='Log current data'
+          onTouchTap={this.logData}
         />
 
         {this.state.active ? (
@@ -106,13 +117,13 @@ class SelectGeography extends React.Component {
 
   persistMapBounds () {
     const { _sw, _ne } = this.map.getBounds()
-    this.setState({ bounds: [ _sw.lng, _sw.lat, _ne.lng, _ne.lat ] })
+    this.setState({ mapBounds: [ _sw.lng, _sw.lat, _ne.lng, _ne.lat ] })
   }
 
   getDimensions () {
-    const { mapWidth, mapHeight, bounds } = this.state
+    const { mapWidth, mapHeight, mapBounds } = this.state
     // calculate viewport area in square meters
-    const viewportArea = calculateArea(bboxPolygon(bounds))
+    const viewportArea = calculateArea(bboxPolygon(mapBounds))
     // calculate the length of the edge, given a constant maximum area
     const viewportEdge = Math.min(mapWidth, mapHeight)
     const ratio = viewportArea < MAX_AREA ? 1
@@ -133,11 +144,10 @@ class SelectGeography extends React.Component {
     const west = (mapWidth - edge) / 2
     const south = north + edge
     const east = west + edge
-    const queryBounds = new mapboxgl.LngLatBounds(
-      this.map.unproject([west, south]),
-      this.map.unproject([east, north])
-    )
-    console.log(queryBounds)
+    const sw = this.map.unproject([west, south])
+    const ne = this.map.unproject([east, north])
+    this.props.getOsm([sw.lng, sw.lat, ne.lng, ne.lat])
+    this.setState({ active: false })
   }
 
   handleShortcuts ({ keyCode }) {
@@ -146,6 +156,24 @@ class SelectGeography extends React.Component {
         return this.setState({ active: false })
     }
   }
+
+  logData () {
+    const { bounds } = this.props
+    if (!bounds) console.log('No data in local osm p2p store')
+    else querySavedOsm([[bounds[1], bounds[3]], [bounds[0], bounds[2]]], console.log)
+  }
 }
 
-module.exports = SelectGeography
+SelectGeography.propTypes = {
+  loading: PropTypes.bool,
+  bounds: PropTypes.array
+}
+
+const mapStateToProps = ({ osmBounds, loading }) => {
+  return {
+    loading,
+    bounds: osmBounds.length ? osmBounds : null
+  }
+}
+
+module.exports = connect(mapStateToProps, { getOsm })(SelectGeography)

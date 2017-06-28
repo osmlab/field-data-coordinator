@@ -13,7 +13,7 @@ const request = require('request')
 const rimraf = require('rimraf')
 const mkdirp = require('mkdirp')
 const { osmapi } = require('../config')
-const once = require('once')
+const deduplicatePlaceholderNodes = require('./dedupe-nodes')
 
 module.exports = {
   start,
@@ -72,7 +72,7 @@ function importBulkOsm (bbox, cb) {
         cb(err)
       } else {
         // Deduplicate nodes that appear in the new OSM.org data *and* the observationsDb.
-        deduplicatePlaceholderNodes(function (err) {
+        deduplicatePlaceholderNodes(observationsDb, osmOrgDb, observationsIndex, function (err) {
           cb(err, `Finished importing ${bbox}`)
         })
       }
@@ -155,54 +155,4 @@ function observationToFeature (obs, id) {
     }
   }
   return feature
-}
-
-// Iterate over all documents, identify those that were placeholder nodes that
-// now have a de-facto version in OSM.org, and remove the old placeholder.
-function deduplicatePlaceholderNodes (cb) {
-  var pending = 0
-  cb = once(cb)
-
-  // Iterate over *all* documents in the OSM.org data
-  var q = osmOrgDb.queryStream([-90, 90, -180, 180])
-  q.on('data', function (doc) {
-    if (doc.type !== 'node') return
-    if (!doc.tags) return
-    if (!doc.tags['osm-p2p-id']) return
-
-    // This document has an 'osm-p2p-id'; look it up in the observationsDb to see if it exists.
-    observationsDb.get(doc.tags['osm-p2p-id'], function (err, docMap) {
-      if (err) return cb(err)
-      var docs = Object.keys(docMap).map(key => docMap[key])
-      docs.forEach(function (obsDoc) {
-        pending++
-        processNode(doc, obsDoc, function (err) {
-          if (--pending === 0 || err) cb(err)
-        })
-      })
-    })
-  })
-
-  function processNode (osmOrgNode, obsNode, done) {
-    // Skip deleted nodes
-    if (obsNode.deleted) return
-
-    done = once(done)
-
-    // Delete the node, and update the observation-link to point to the OSM.org node's ID
-    observationsDb.del(obsNode.id, function (err) {
-      if (err) return done(err)
-      observationsIndex.links(obsNode.id, function (err, links) {
-        if (err) return done(err)
-        var remaining = links.length
-        links.forEach(function (link) {
-          link.link = osmOrgNode.id
-          observationsDb.put(link.id, link, function (err, _) {
-            console.log('_', _)
-            if (--remaining === 0) cb(err)
-          })
-        })
-      })
-    })
-  }
 }

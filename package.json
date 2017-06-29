@@ -11,7 +11,7 @@
     "start": "cross-env NODE_ENV=development electron main.js",
     "test": "./node_modules/.bin/tape 'test/**/*.js'",
     "_postinstall": "electron-rebuild -o leveldown",
-    "rebuild-native": "./bin/rebuild-levedb.js && ./bin/rebuild-mapnik.js",
+    "rebuild-native": "./bin/rebuild-leveldb.js && ./bin/rebuild-mapnik.js",
     "package": "cross-env NODE_ENV=development ./bin/package.js macos"
   },
   "repository": "git@github.com:osmlab/field-data-coordinator.git",

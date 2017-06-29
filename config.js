@@ -6,7 +6,7 @@ module.exports = {
   appName: config.productName,
   appFileName: 'observe-desktop',
   version: config.version,
-  iconPath: path.join(__dirname, 'static'),
+  iconPath: path.join(__dirname, 'static/mapfilter'),
   out: 'release',
   electronVersion: '1.7.3'
 }

@@ -2,7 +2,7 @@ const path = require('path')
 const config = require('./package.json')
 
 module.exports = {
-  dir: path.join(__dirname, 'src'),
+  dir: path.join(__dirname, 'dist'),
   appName: config.productName,
   appFileName: 'observe-desktop',
   version: config.version,

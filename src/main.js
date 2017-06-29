@@ -44,11 +44,9 @@ function createWindow () {
   const opts = Object.assign({}, settings.get('winBounds'))
   const win = new BrowserWindow(opts)
   if (process.env.NODE_ENV === 'development') {
-    win.loadURL(path.join('file://', __dirname, './index.html'))
     win.webContents.openDevTools()
-  } else {
-    win.loadURL(path.join('file://', __dirname, './dist/index.html'))
   }
+  win.loadURL(path.join('file://', __dirname, 'index.html'))
   win.on('close', function () {
     settings.set('winBounds', win.getBounds())
   })

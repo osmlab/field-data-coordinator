@@ -3,7 +3,7 @@ var series = require('run-series')
 var osmdb = require('osm-p2p-mem')
 var obsdb = require('osm-p2p-observations')
 var memdb = require('memdb')
-var dedupe = require('../lib/dedupe-nodes')
+var dedupe = require('../src/lib/dedupe-nodes')
 
 test('OSM.org import with deduplication of a node in both DBs', function (t) {
   // Set up a new test db

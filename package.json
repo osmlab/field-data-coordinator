@@ -7,11 +7,12 @@
   "scripts": {
     "lint": "standard",
     "clean": "gulp clean",
-    "build": "cross-env NODE_ENV=production gulp",
+    "build": "gulp",
     "start": "cross-env NODE_ENV=development electron src/main.js",
+    "start-prod": "electron dist/main.js",
     "appdeps": "cd src && yarn",
     "test": "./node_modules/.bin/tape 'test/**/*.js'",
-    "mac": "cross-env NODE_ENV=production ./bin/package.js macos && ./bin/create-macos-installer.js",
+    "mac": "./bin/package.js macos && ./bin/create-macos-installer.js",
     "postinstall": "npmpd"
   },
   "repository": "git@github.com:osmlab/field-data-coordinator.git",

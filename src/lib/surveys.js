@@ -4,7 +4,7 @@ const fs = require('fs')
 const path = require('path')
 
 const async = require('async')
-const { app } = window.require('electron')
+const { app } = require('electron')
 const eos = require('end-of-stream')
 const JSONStream = require('JSONStream')
 const mkdirp = require('mkdirp')

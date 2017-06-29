@@ -12,9 +12,9 @@ const FILTER = 'TOGGLE_FILTER_PROPERTY'
 test('observations reducers', function (t) {
   t.test('initial state', function (t) {
     const state = reducer(undefined, {})
-    t.ok(state.get('active') instanceof List, 'active is an immutable list')
-    t.ok(state.get('all') instanceof List, 'all is an immutable list')
-    t.ok(state.get('filterProperties') instanceof Map, 'filter properties is an immutable map')
+    t.ok(List.isList(state.get('active')), 'active is an immutable list')
+    t.ok(List.isList(state.get('all')), 'all is an immutable list')
+    t.ok(Map.isMap(state.get('filterProperties')), 'filter properties is an immutable map')
     t.ok(state.get('_map') instanceof Object, '_map is a vanilla js object')
     t.end()
   })

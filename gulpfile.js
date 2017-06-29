@@ -14,10 +14,10 @@ gulp.task('clean', function (cb) {
 
 gulp.task('bundle', function () {
   var b = browserify({
-    entries: './src/index.js',
+    entries: 'src/index.js',
     debug: false,
     node: true,
-    bundleExternal: false,
+    bundleExternal: true,
     transform: [reactify, envify({
       NODE_ENV: 'production'
     })]
@@ -26,17 +26,29 @@ gulp.task('bundle', function () {
   return b.bundle()
   .pipe(source('index.js'))
   .pipe(buffer())
-  .pipe(gulp.dest('./dist/'))
-})
-
-gulp.task('html', function () {
-  return gulp.src('./src/index.html')
   .pipe(gulp.dest('dist'))
 })
 
-gulp.task('assets', function () {
-  return gulp.src('./src/assets/**/*', { 'base': './src' })
+gulp.task('files', function () {
+  const files = [
+    'src/index.html',
+    'src/config.js',
+    'src/package.json',
+    'src/main.js'
+  ]
+  return gulp.src(files)
   .pipe(gulp.dest('dist'))
 })
 
-gulp.task('default', ['html', 'assets', 'bundle'])
+gulp.task('folders', function () {
+  const folders = [
+    'src/assets/**/*',
+    'src/lib/**/*',
+    'src/actions/**/*',
+    'src/node_modules/**/*'
+  ]
+  return gulp.src(folders, { 'base': 'src' })
+  .pipe(gulp.dest('dist'))
+})
+
+gulp.task('default', ['files', 'folders', 'bundle'])

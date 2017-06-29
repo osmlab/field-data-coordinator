@@ -1,4 +1,4 @@
-const { ipcRenderer } = require('electron')
+const { ipcRenderer } = window.require('electron')
 const React = require('react')
 const ReactDOM = require('react-dom')
 const { createStore, applyMiddleware, compose } = require('redux')

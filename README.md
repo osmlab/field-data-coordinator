@@ -17,7 +17,8 @@ To interface with the OSM p2p db, the electron app includes a local driver at `s
 ### Installation
 
 ```
-yarn install
+yarn
+yarn appdeps
 yarn start
 ```
 

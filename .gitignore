@@ -4,3 +4,5 @@ dist/
 build/
 .env
 bin/observations
+release
+test/testdb

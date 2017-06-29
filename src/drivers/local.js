@@ -1,6 +1,5 @@
 'use strict'
-
-const remote = require('electron').remote
+const remote = window.require('electron').remote
 const promisify = require('es6-promisify')
 
 const { db: {

@@ -11,7 +11,7 @@ const { compileSurvey } = require('@mojodna/observe-tools')
 const db = require('./lib/db')
 const Server = require('./lib/server')
 const { bundleSurvey, listSurveys } = require('./lib/surveys')
-const { updateSurveyList } = require('./src/actions')
+const { updateSurveyList } = require('./actions')
 
 let main
 let dispatch = () => console.warn('dispatch not yet connected')
@@ -44,11 +44,9 @@ function createWindow () {
   const opts = Object.assign({}, settings.get('winBounds'))
   const win = new BrowserWindow(opts)
   if (process.env.NODE_ENV === 'development') {
-    win.loadURL(path.join('file://', __dirname, 'src/index.html'))
     win.webContents.openDevTools()
-  } else {
-    win.loadURL(path.join('file://', __dirname, 'dist/index.html'))
   }
+  win.loadURL(path.join('file://', __dirname, 'index.html'))
   win.on('close', function () {
     settings.set('winBounds', win.getBounds())
   })

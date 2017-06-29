@@ -100,8 +100,10 @@ function bboxQuerySavedOsm (query, cb) {
   })
 }
 
-function createObservation (feature, cb) {
-  if (feature.type !== 'Feature') {
+function createObservation (feature, nodeId, cb) {
+  if (!nodeId) {
+    return cb(new Error('Expected nodeId to be set'))
+  } else if (feature.type !== 'Feature') {
     return cb(new Error('Expected GeoJSON feature object'))
   } else if (typeof feature.properties === 'undefined') {
     // TODO check for a specific property or against a schema
@@ -116,8 +118,17 @@ function createObservation (feature, cb) {
     obs.lon = feature.geometry.coordinates[0]
     obs.lat = feature.geometry.coordinates[1]
   }
+  // TODO(noffle): using a non-integer ID may cause trouble down the line!
   var id = feature.id || '' + randomBytes(8).toString('hex')
-  observationsDb.put(id, obs, cb)
+  observationsDb.put(id, obs, function (err) {
+    if (err) return cb(err)
+    var link = {
+      type: 'observation-link',
+      obs: id,
+      link: nodeId
+    }
+    observationsDb.create(link, cb)
+  })
 }
 
 function listObservations (cb) {

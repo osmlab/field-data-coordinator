@@ -63,7 +63,8 @@ function Server (opts) {
   app.put('/observations/create', function (req, res, next) {
     if (!req.body) return res.sendStatus(400)
 
-    return db.createObservation(req.body, function (err) {
+    var fakeId = Math.random().toString().substring(2)
+    return db.createObservation(req.body, fakeId, function (err) {
       if (err) {
         return next(err)
       }

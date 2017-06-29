@@ -12,7 +12,7 @@ const { get } = require('object-path')
 const request = require('request')
 const rimraf = require('rimraf')
 const mkdirp = require('mkdirp')
-const { osmapi } = require('../../config')
+const { osmapi } = require('../config')
 
 module.exports = {
   start,

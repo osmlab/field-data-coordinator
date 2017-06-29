@@ -1,7 +1,8 @@
 const config = require('../config')
 module.exports = {
-  dir: './',
+  dir: config.dir,
   arch: 'x64',
+  asar: true,
   platform: 'darwin',
   icon: config.iconPath + '.icns',
   out: config.out,

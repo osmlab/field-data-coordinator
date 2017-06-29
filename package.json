@@ -7,7 +7,7 @@
   "scripts": {
     "lint": "standard",
     "clean": "gulp clean",
-    "build": "gulp",
+    "build": "cross-env NODE_ENV=production gulp",
     "start": "cross-env NODE_ENV=development electron src/main.js",
     "test": "./node_modules/.bin/tape 'test/**/*.js'",
     "_postinstall": "electron-rebuild -o leveldown",

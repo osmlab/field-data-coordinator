@@ -1,5 +1,6 @@
 {
   "name": "field-data-coordinator",
+  "main": "main.js",
   "productName": "observe-desktop",
   "dependencies": {
     "@mojodna/observe-tools": "^0.0.3",

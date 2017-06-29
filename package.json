@@ -9,6 +9,7 @@
     "clean": "gulp clean",
     "build": "cross-env NODE_ENV=production gulp",
     "start": "cross-env NODE_ENV=development electron src/main.js",
+    "appdeps": "cd src && yarn",
     "test": "./node_modules/.bin/tape 'test/**/*.js'",
     "mac": "cross-env NODE_ENV=production ./bin/package.js macos && ./bin/create-macos-installer.js",
     "postinstall": "npmpd"

@@ -10,9 +10,7 @@
     "build": "cross-env NODE_ENV=production gulp",
     "start": "cross-env NODE_ENV=development electron src/main.js",
     "test": "./node_modules/.bin/tape 'test/**/*.js'",
-    "_postinstall": "electron-rebuild -o leveldown",
-    "rebuild-native": "./bin/rebuild-leveldb.js",
-    "package": "cross-env NODE_ENV=production ./bin/package.js macos && ./bin/create-macos-installer.js"
+    "mac": "cross-env NODE_ENV=production ./bin/package.js macos && ./bin/create-macos-installer.js"
   },
   "repository": "git@github.com:osmlab/field-data-coordinator.git",
   "author": "Derek Lieu <dl@dereklieu.com>",

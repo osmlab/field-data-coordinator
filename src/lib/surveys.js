@@ -42,16 +42,34 @@ function bundleSurvey (surveyDefinition, callback) {
 }
 
 const listSurveys = function (callback) {
-  return fs.readdir(path.join(app.getPath('userData'), 'surveys'), function (
-    err,
-    entries
-  ) {
+  const surveyPath = path.join(app.getPath('userData'), 'surveys')
+
+  return fs.stat(surveyPath, (err, stats) => {
     if (err) {
+      if (err.code === 'ENOENT') {
+        return callback(null, [])
+      }
+
       return callback(err)
     }
 
-    // uncompress so we can provide additional information
-    return async.mapLimit(entries, 10, readSurvey, callback)
+    return fs.readdir(surveyPath, function (
+      err,
+      entries
+    ) {
+      if (err) {
+        return callback(err)
+      }
+
+      // uncompress so we can provide additional information
+      return async.mapLimit(entries, 10, readSurvey, (err, surveys) => {
+        if (err) {
+          return callback(err)
+        }
+
+        return callback(null, surveys.filter(x => x != null))
+      })
+    })
   })
 }
 
@@ -60,32 +78,44 @@ const readSurvey = (filename, callback) => {
     filename += '.tgz'
   }
 
-  callback = once(callback)
-  const extract = tar.extract()
-  eos(extract, callback)
+  filename = path.join(app.getPath('userData'), 'surveys', filename)
 
-  extract.on('entry', (header, stream, next) => {
-    stream.on('end', next)
+  return fs.stat(filename, (err, stats) => {
+    if (err) {
+      if (err.code === 'ENOENT') {
+        return callback()
+      }
 
-    if (header.name === 'survey.json') {
-      stream.pipe(
-        JSONStream.parse().on('data', data =>
-          callback(
-            null,
-            Object.assign(data, {
-              id: path.basename(filename, path.extname(filename))
-            })
+      return callback(err)
+    }
+
+    callback = once(callback)
+    const extract = tar.extract()
+    eos(extract, callback)
+
+    extract.on('entry', (header, stream, next) => {
+      stream.on('end', next)
+
+      if (header.name === 'survey.json') {
+        stream.pipe(
+          JSONStream.parse().on('data', data =>
+            callback(
+              null,
+              Object.assign(data, {
+                id: path.basename(filename, path.extname(filename))
+              })
+            )
           )
         )
-      )
-    } else {
-      stream.resume()
-    }
-  })
+      } else {
+        stream.resume()
+      }
+    })
 
-  fs
-    .createReadStream(path.join(app.getPath('userData'), 'surveys', filename))
-    .pipe(extract)
+    fs
+      .createReadStream(filename)
+      .pipe(extract)
+  })
 }
 
 module.exports = {

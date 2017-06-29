@@ -3,7 +3,7 @@ const config = require('./package.json')
 
 module.exports = {
   osmapi: 'http://api.openstreetmap.org/api/0.6/',
-  appName: 'Observe',
+  appName: config.productName,
   appFileName: 'observe-desktop',
   version: config.version,
   iconPath: path.join(__dirname, 'static'),

@@ -1,14 +1,17 @@
-var appDmg = require('appdmg')
+#!/usr/bin/env node
+'use strict'
+
+var appdmg = require('appdmg')
 var path = require('path')
 var rimraf = require('rimraf')
 var config = require('../config')
 
 var releaseFolder = path.join(__dirname, '..', 'release')
-var buildName = 'Installar_' + config.appName + '_v' + config.version
-var dmgPath = path.join(releaseFolder, buildName + '_macOS.dmg')
+var buildName = 'installer-' + config.appName + '_v' + config.version
+var dmgPath = path.join(releaseFolder, buildName + '.dmg')
 
 function createConfiguration () {
-  var installerFolder = path.join(releaseFolder, 'mapfilter-desktop-darwin-x64')
+  var installerFolder = path.join(releaseFolder, config.appName + '-darwin-x64')
   var appPath = path.join(installerFolder, config.appFileName + '.app')
 
   return {
@@ -35,7 +38,7 @@ function createConfiguration () {
 
 function createInstaller () {
   const config = createConfiguration()
-  const dmg = appDmg(config)
+  const dmg = appdmg(config)
   dmg.once('error', function (err) {
     console.error(err)
     process.exit(1)

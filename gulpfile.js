@@ -17,7 +17,7 @@ gulp.task('bundle', function () {
     entries: './src/index.js',
     debug: false,
     node: true,
-    bundleExternal: false,
+    bundleExternal: true,
     transform: [reactify, envify({
       NODE_ENV: 'production'
     })]

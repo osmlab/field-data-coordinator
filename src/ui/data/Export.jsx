@@ -1,6 +1,5 @@
 'use strict'
 const React = require('react')
-const Button = require('material-ui/RaisedButton').default
 const { connect } = require('react-redux')
 const { getActiveFeatures } = require('../../reducers/observations')
 
@@ -17,15 +16,11 @@ class Export extends React.Component {
   }
 
   render () {
-    const showFullWidth = true
     return (
       <div className='export'>
-        <Button
+        <button
           style={{marginBottom: '10px'}}
-          fullWidth={showFullWidth}
-          primary={showFullWidth}
-          label='Export'
-          onTouchTap={this.exportActive} />
+          onClick={this.exportActive}>Export</button>
       </div>
     )
   }

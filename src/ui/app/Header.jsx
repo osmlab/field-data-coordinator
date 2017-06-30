@@ -1,6 +1,5 @@
 'use strict'
 const React = require('react')
-const FlatButton = require('material-ui/FlatButton').default
 const { Link } = require('react-router-dom')
 const { withRouter } = require('react-router')
 
@@ -27,13 +26,13 @@ class Header extends React.Component {
             <h1 className='header__title'>{t.header.title}</h1>
           </Link>
           <Link to='/data' className={this.activeClass('/data')}>
-            <FlatButton label={t.header.data} />
+            {t.header.data}
           </Link>
           <Link to='/surveys' className={this.activeClass('/surveys')}>
-            <FlatButton label={t.header.survey} />
+            {t.header.survey}
           </Link>
           <Link to='/about' className={this.activeClass('/about')}>
-            <FlatButton label={t.header.about} />
+            {t.header.about}
           </Link>
         </nav>
       </header>

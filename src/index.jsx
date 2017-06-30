@@ -6,7 +6,6 @@ const { Provider } = require('react-redux')
 const createSagaMiddleware = require('redux-saga').default
 const { HashRouter, Route, Redirect } = require('react-router-dom')
 const persistState = require('redux-localstorage')
-const { MuiThemeProvider } = require('material-ui/styles')
 
 const reducers = require('./reducers')
 const { rootSaga } = require('./sagas')
@@ -17,9 +16,6 @@ const Home = require('./ui/home/index.jsx')
 const Data = require('./ui/data/index.jsx')
 const Observation = require('./ui/data/Observation.jsx')
 const Surveys = require('./ui/surveys/index.jsx')
-
-// https://github.com/callemall/material-ui#react-tap-event-plugin
-require('react-tap-event-plugin')()
 
 const sagaMiddleware = createSagaMiddleware()
 const localstorageMiddleware = persistState('osmBounds')
@@ -38,18 +34,15 @@ const mapboxgl = require('mapbox-gl')
 mapboxgl.accessToken = 'pk.eyJ1IjoibWFwZWd5cHQiLCJhIjoiY2l6ZTk5YTNxMjV3czMzdGU5ZXNhNzdraSJ9.HPI_4OulrnpD8qI57P12tg'
 
 ReactDOM.render(
-  <MuiThemeProvider>
-    <Provider store={store}>
-      <HashRouter>
-        <App>
-          <Route path='/home' component={Home} />
-          <Route path='/data' component={Data} />
-          <Route path='/data/observations/:observationId' component={Observation} />
-          <Route path='/surveys' component={Surveys} />
-          <Redirect from='/' to='/home' />
-        </App>
-      </HashRouter>
-    </Provider>
-  </MuiThemeProvider>,
-  document.getElementById('root')
+  <Provider store={store}>
+    <HashRouter>
+      <App>
+        <Route path='/home' component={Home} />
+        <Route path='/data' component={Data} />
+        <Route path='/data/observations/:observationId' component={Observation} />
+        <Route path='/surveys' component={Surveys} />
+        <Redirect from='/' to='/home' />
+      </App>
+    </HashRouter>
+  </Provider>, document.getElementById('root')
 )

@@ -21,8 +21,6 @@ class Export extends React.Component {
     return (
       <div className='export'>
         <Button
-          style={{marginBottom: '10px'}}
-          fullWidth={showFullWidth}
           primary={showFullWidth}
           label='Export'
           onTouchTap={this.exportActive} />

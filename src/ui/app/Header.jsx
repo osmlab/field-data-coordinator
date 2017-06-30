@@ -21,7 +21,7 @@ class Header extends React.Component {
 
   render () {
     return (
-      <header className='header'>
+      <header className='header row'>
         <nav role='navigation'>
           <Link to='/home' className={this.activeClass('/home')}>
             <h1 className='header__title'>{t.header.title}</h1>

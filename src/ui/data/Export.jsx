@@ -16,7 +16,6 @@ class Export extends React.Component {
   }
 
   render () {
-    const showFullWidth = true
     return (
       <div className='export'>
         <button

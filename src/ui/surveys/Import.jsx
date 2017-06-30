@@ -1,6 +1,5 @@
 'use strict'
 
-const RaisedButton = require('material-ui/RaisedButton').default
 const React = require('react')
 const { connect } = require('react-redux')
 
@@ -13,7 +12,7 @@ class Import extends React.Component {
     return (
       <div>
         <h3>Import a new survey</h3>
-        <RaisedButton label='Import' onTouchTap={importSurvey} />
+        <button onClick={importSurvey}>Import</button>
       </div>
     )
   }

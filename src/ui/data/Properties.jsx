@@ -1,7 +1,6 @@
 'use strict'
 const React = require('react')
 const { connect } = require('react-redux')
-const Checkbox = require('material-ui/Checkbox').default
 const immutable = require('immutable')
 const PropTypes = require('prop-types')
 const { getFlattenedProperties } = require('../../reducers/observations')
@@ -43,11 +42,11 @@ class Properties extends React.Component {
         <ul id={`${name}-responses`}>
           {Object.keys(responses).map(response => (
             <li key={response}>
-              <Checkbox
+              <input type='checkbox'
+                id={'checkbox--' + response}
                 checked={activeProperty === response}
-                label={`${response} (${responses[response]})`}
-                onClick={() => this.toggleFilterProperty(name, response)}
-              />
+                onClick={() => this.toggleFilterProperty(name, response)} />
+              <label htmlFor={'checkbox--' + response}>{`${response} (${responses[response]})`}</label>
             </li>
           ))}
         </ul>

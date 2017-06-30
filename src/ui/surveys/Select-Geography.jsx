@@ -1,6 +1,5 @@
 'use strict'
 const React = require('react')
-const RaisedButton = require('material-ui/RaisedButton').default
 const Modal = require('../Modal.jsx')
 const mapboxgl = require('mapbox-gl')
 const bboxPolygon = require('@turf/bbox-polygon')
@@ -57,16 +56,10 @@ class SelectGeography extends React.Component {
     const { loading, bounds } = this.props
     return (
       <div>
-        <RaisedButton
-          label='Select a geographic area'
-          onTouchTap={() => this.setState({ active: true })}
-        />
+        <button onClick={() => this.setState({ active: true })}>Select a geographic area</button>
         { loading ? <p>Loading ...</p> : null }
         { bounds ? <p>Current bounds: {bounds.join(', ')}</p> : null }
-        <RaisedButton
-          label='Log current data'
-          onTouchTap={this.logData}
-        />
+        <button onClick={this.logData}>Log current data</button>
 
         {this.state.active ? (
           <Modal>
@@ -74,12 +67,8 @@ class SelectGeography extends React.Component {
               <div className='selectionmap' ref={this.init} />
               <div className='selectionmap__selection' style={this.getStyle()} />
             </div>
-            <RaisedButton primary label='Confirm'
-              onTouchTap={this.queryBounds}
-            />
-            <RaisedButton secondary label='Cancel'
-              onTouchTap={() => this.setState({ active: false })}
-            />
+            <button onClick={this.queryBounds}>Confirm</button>
+            <button onClick={() => this.setState({ active: false })}>Cancel</button>
           </Modal>
         ) : null}
       </div>

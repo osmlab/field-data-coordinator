@@ -17,9 +17,6 @@ const Data = require('./ui/data/index.jsx')
 const Observation = require('./ui/data/Observation.jsx')
 const Surveys = require('./ui/surveys/index.jsx')
 
-// https://github.com/callemall/material-ui#react-tap-event-plugin
-require('react-tap-event-plugin')()
-
 const sagaMiddleware = createSagaMiddleware()
 const localstorageMiddleware = persistState('osmBounds')
 const store = createStore(reducers, compose(
@@ -47,6 +44,5 @@ ReactDOM.render(
         <Redirect from='/' to='/home' />
       </App>
     </HashRouter>
-  </Provider>
-  document.getElementById('root')
+  </Provider>, document.getElementById('root')
 )

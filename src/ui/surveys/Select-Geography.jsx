@@ -53,12 +53,13 @@ class SelectGeography extends React.Component {
   }
 
   render () {
-    const { loading, bounds } = this.props
+    const { loading, bounds, error } = this.props
     return (
       <div>
         <button onClick={() => this.setState({ active: true })}>Select a geographic area</button>
         { loading ? <p>Loading ...</p> : null }
-        { bounds ? <p>Current bounds: {bounds.join(', ')}</p> : null }
+        { error ? <p>{error}</p> : null}
+        { bounds && !error ? <p>Current bounds: {bounds.join(', ')}</p> : null }
         <button onClick={this.logData}>Log current data</button>
 
         {this.state.active ? (
@@ -158,10 +159,11 @@ SelectGeography.propTypes = {
   bounds: PropTypes.array
 }
 
-const mapStateToProps = ({ osmBounds, loading }) => {
+const mapStateToProps = ({ osmBounds, loading, errors }) => {
   return {
     loading,
-    bounds: osmBounds.length ? osmBounds : null
+    bounds: osmBounds.length ? osmBounds : null,
+    error: errors.get('osmQuery')
   }
 }
 

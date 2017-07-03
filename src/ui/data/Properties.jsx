@@ -25,7 +25,7 @@ class Properties extends React.Component {
     const { properties } = this.props
     return (
       <aside role='complementary' className='sidebar'>
-        <h2>Survey Attributes</h2>
+        <h4>Filter</h4>
         <a onClick={this.clearFilterProperties}>Clear</a>
         {Object.keys(properties).map(name => {
           return this.renderProperty(name, properties[name])
@@ -37,12 +37,13 @@ class Properties extends React.Component {
   renderProperty (name, responses) {
     let activeProperty = this.props.activeProperties.get(name)
     return (
-      <div className='property' key={name}>
-        <label htmlFor={`{name}-responses`}>{name}</label>
-        <ul id={`${name}-responses`}>
+      <fieldset className='property' key={name}>
+        <legend htmlFor={`{name}-responses`}>{name}</legend>
+        <ul className='filters' id={`${name}-responses`}>
           {Object.keys(responses).map(response => (
             <li key={response}>
               <input type='checkbox'
+                className='checkbox'
                 id={'checkbox--' + response}
                 checked={activeProperty === response}
                 onClick={() => this.toggleFilterProperty(name, response)} />
@@ -50,7 +51,7 @@ class Properties extends React.Component {
             </li>
           ))}
         </ul>
-      </div>
+      </fieldset>
     )
   }
 

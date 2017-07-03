@@ -20,21 +20,33 @@ class Header extends React.Component {
 
   render () {
     return (
-      <header className='header row'>
+      <header className='header'>
+        <div className='row'>
         <nav role='navigation'>
-          <Link to='/home' className={this.activeClass('/home')}>
-            <h1 className='header__title'>{t.header.title}</h1>
-          </Link>
-          <Link to='/data' className={this.activeClass('/data')}>
-            {t.header.data}
-          </Link>
-          <Link to='/surveys' className={this.activeClass('/surveys')}>
-            {t.header.survey}
-          </Link>
-          <Link to='/about' className={this.activeClass('/about')}>
-            {t.header.about}
-          </Link>
+          <ul>
+            <li className='navItem'>
+              <Link to='/home' className={this.activeClass('/home')}>
+                <h1 className='header__title'>{t.header.title}</h1>
+              </Link>
+            </li>
+            <li className='navItem'>
+              <Link to='/data' className={this.activeClass('/data')}>
+                {t.header.data}
+              </Link>
+            </li>
+            <li className='navItem'>
+              <Link to='/surveys' className={this.activeClass('/surveys')}>
+                {t.header.survey}
+              </Link>
+            </li>
+            <li className='navItem'>
+              <Link to='/about' className={this.activeClass('/about')}>
+                {t.header.about}
+              </Link>
+            </li>
+          </ul>
         </nav>
+        </div>
       </header>
     )
   }

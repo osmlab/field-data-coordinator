@@ -1,5 +1,4 @@
 'use strict'
-const url = require('url')
 const path = require('path')
 const level = require('level')
 const through = require('through2')
@@ -10,11 +9,10 @@ const osmobs = require('osm-p2p-observations')
 const osmTimestampIndex = require('osm-p2p-timestamp-index')
 const importer = require('osm-p2p-db-importer')
 const { get } = require('object-path')
-const request = require('request')
 const rimraf = require('rimraf')
 const mkdirp = require('mkdirp')
-const { osmapi } = require('../config')
 const deduplicatePlaceholderNodes = require('./dedupe-nodes')
+const getOsmStream = require('./get-osm-stream')
 
 module.exports = {
   start,
@@ -60,6 +58,7 @@ function getObservationTimestampStream (options) {
 function wipeDb (db, path, cb) {
   db.close(err => {
     if (err) return cb(err)
+    else osmOrgDb = null
     rimraf(path, err => {
       if (err) return cb(err)
       mkdirp(path, cb)
@@ -72,49 +71,32 @@ function wipeDb (db, path, cb) {
  * closing and wiping the db beforehand and re-upping it afterwards.
  */
 function importBulkOsm (bbox, cb) {
-  const queryUrl = url.resolve(osmapi, `map?bbox=${bbox}`)
-  const importFn = () => {
-    /* osm.org doesn't set an error code when the request contains too many nodes.
-     * Instead it returns a message in the body. Use a pass-through stream
-     * to check the first line of a response to determine if this occurred.
-     */
-    let first = true
-    const requestStream = request.get(queryUrl).on('error', cb)
-    .pipe(through(function (chunk, enc, next) {
-      if (first) {
-        first = false
-        const message = chunk.toString()
-        if (message.indexOf('You requested too many nodes') >= 0) {
-          next(message)
-        } else next(null, chunk)
-      } next(null, chunk)
-    })).on('error', cb)
-
-    importer(osmOrgDbPath, requestStream, function (err) {
-      osmOrgDb = osmOrgDb || osmdb(osmOrgDbPath)
-      if (err) {
-        console.warn(err)
-        cb(err)
-      } else {
-        // Deduplicate nodes that appear in the new OSM.org data *and* the observationsDb.
-        deduplicatePlaceholderNodes(observationsDb, osmOrgDb, observationsIndex, function (err) {
-          cb(err, `Finished importing ${bbox}`)
+  wipeDb(osmOrgDb.db, osmOrgDbPath, (err) => {
+    if (err) {
+      done(err)
+    } else {
+      getOsmStream(bbox, function (err, stream) {
+        if (err) return done(err)
+        importer(osmOrgDbPath, stream, function (err) {
+          if (err) {
+            done(err)
+          } else {
+            // up the DB before deduping nodes
+            osmOrgDb = osmOrgDb || osmdb(osmOrgDbPath)
+            // Deduplicate nodes that appear in the new OSM.org data *and* the observationsDb.
+            deduplicatePlaceholderNodes(observationsDb, osmOrgDb, observationsIndex, function (err) {
+              done(err, `Finished importing ${bbox}`)
+            })
+          }
         })
-      }
-    })
-  }
+      })
+    }
+  })
 
-  if (!osmOrgDb) importFn()
-  else {
-    wipeDb(osmOrgDb.db, osmOrgDbPath, (err) => {
-      if (err) {
-        console.warn(err)
-        cb(err)
-      } else {
-        osmOrgDb = null
-        importFn()
-      }
-    })
+  function done (err, message) {
+    osmOrgDb = osmOrgDb || osmdb(osmOrgDbPath)
+    if (err) console.warn(err)
+    cb(err, message)
   }
 }
 

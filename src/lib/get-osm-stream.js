@@ -10,10 +10,7 @@ module.exports = function getOsmStream (bbox, cb) {
   request(queryUrl, function (err, response, body) {
     if (err) {
       cb(err)
-    } else if (body.indexOf('You requested too many nodes') === 0) {
-      /* osm.org doesn't set an error code when the request contains too many nodes.
-       * Instead it returns a message in the body.
-       */
+    } else if (response.statusCode >= 400) {
       cb(body)
     } else {
       const stream = new Readable()

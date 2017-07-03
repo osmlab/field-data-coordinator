@@ -74,7 +74,23 @@ function wipeDb (db, path, cb) {
 function importBulkOsm (bbox, cb) {
   const queryUrl = url.resolve(osmapi, `map?bbox=${bbox}`)
   const importFn = () => {
-    importer(osmOrgDbPath, request(queryUrl), function (err) {
+    /* osm.org doesn't set an error code when the request contains too many nodes.
+     * Instead it returns a message in the body. Use a pass-through stream
+     * to check the first line of a response to determine if this occurred.
+     */
+    let first = true
+    const requestStream = request.get(queryUrl).on('error', cb)
+    .pipe(through(function (chunk, enc, next) {
+      if (first) {
+        first = false
+        const message = chunk.toString()
+        if (message.indexOf('You requested too many nodes') >= 0) {
+          next(message)
+        } else next(null, chunk)
+      } next(null, chunk)
+    })).on('error', cb)
+
+    importer(osmOrgDbPath, requestStream, function (err) {
       osmOrgDb = osmOrgDb || osmdb(osmOrgDbPath)
       if (err) {
         console.warn(err)

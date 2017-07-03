@@ -52,8 +52,9 @@ function createObservationsReplicationStream () {
   return observationsDb.log.replicate()
 }
 
-function getObservationTimestampStream () {
-  return observationsTimestampIndex.getDocumentStream()
+function getObservationTimestampStream (options) {
+  const opts = options || {}
+  return observationsTimestampIndex.getDocumentStream(opts)
 }
 
 function wipeDb (db, path, cb) {

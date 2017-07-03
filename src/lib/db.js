@@ -7,6 +7,7 @@ const pump = require('pump')
 const randomBytes = require('randombytes')
 const osmdb = require('osm-p2p')
 const osmobs = require('osm-p2p-observations')
+const osmTimestampIndex = require('osm-p2p-timestamp-index')
 const importer = require('osm-p2p-db-importer')
 const { get } = require('object-path')
 const request = require('request')
@@ -19,6 +20,7 @@ module.exports = {
   start,
   createOsmOrgReplicationStream,
   createObservationsReplicationStream,
+  getObservationTimestampStream,
   createObservation,
   listObservations,
   importBulkOsm,
@@ -29,6 +31,7 @@ let osmOrgDb
 let osmOrgDbPath
 let observationsDb
 let observationsIndex
+let observationsTimestampIndex
 
 function start (rootDir) {
   if (typeof osmOrgDb === 'undefined' && typeof observationsDb === 'undefined' && typeof observationsIndex === 'undefined') {
@@ -37,6 +40,7 @@ function start (rootDir) {
     observationsDb = osmdb(path.join(rootDir, 'observationsDb'))
     var obsdb = level(path.join(rootDir, 'observationsIndex'))
     observationsIndex = osmobs({ db: obsdb, log: observationsDb.log })
+    observationsTimestampIndex = osmTimestampIndex(observationsDb)
   }
 }
 
@@ -46,6 +50,10 @@ function createOsmOrgReplicationStream () {
 
 function createObservationsReplicationStream () {
   return observationsDb.log.replicate()
+}
+
+function getObservationTimestampStream () {
+  return observationsTimestampIndex.getDocumentStream()
 }
 
 function wipeDb (db, path, cb) {

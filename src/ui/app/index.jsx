@@ -9,7 +9,7 @@ module.exports = class App extends React.Component {
     return (
       <div>
         <Header />
-        <main role='main' className='main, row'>
+        <main role='main' className='main'>
           {this.props.children}
         </main>
       </div>

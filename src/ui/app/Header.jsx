@@ -26,21 +26,21 @@ class Header extends React.Component {
           <ul>
             <li className='navItem'>
               <Link to='/home' className={this.activeClass('/home')}>
-                <h1 className='header__title'>{t.header.title}</h1>
+                <h1 className='header__title navItemLink'>{t.header.title}</h1>
               </Link>
             </li>
             <li className='navItem'>
-              <Link to='/data' className={this.activeClass('/data')}>
+              <Link to='/data' className={this.activeClass('/data')}  className='navItemLink'>
                 {t.header.data}
               </Link>
             </li>
             <li className='navItem'>
-              <Link to='/surveys' className={this.activeClass('/surveys')}>
+              <Link to='/surveys' className={this.activeClass('/surveys')} className='navItemLink'>
                 {t.header.survey}
               </Link>
             </li>
             <li className='navItem'>
-              <Link to='/about' className={this.activeClass('/about')}>
+              <Link to='/about' className={this.activeClass('/about')}  className='navItemLink'>
                 {t.header.about}
               </Link>
             </li>

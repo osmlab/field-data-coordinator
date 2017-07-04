@@ -41,7 +41,7 @@ class Properties extends React.Component {
         <legend htmlFor={`{name}-responses`}>{name}</legend>
         <ul className='filters' id={`${name}-responses`}>
           {Object.keys(responses).map(response => (
-            <li key={response}>
+            <li key={response} className='filterWrapper clearfix'>
               <input type='checkbox'
                 className='checkbox'
                 id={'checkbox--' + response}

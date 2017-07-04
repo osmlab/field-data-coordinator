@@ -31,18 +31,20 @@ class Surveys extends React.Component {
 
     // TODO wire up drag-drop to allow surveys to be dragged in
     return (
-      <div>
-        {surveys && surveys.size > 0
-          ? <div>
-            <h3>Available Surveys</h3>
-            <ul>
-              {surveys.map((survey, id) => <li key={id}>{survey.name}</li>)}
-            </ul>
-          </div>
-          : <p>Please import some surveys</p>}
-        <ImportSurvey />
+      <div className='row'>
+        <section className='initialSection'>
+          {surveys && surveys.size > 0
+            ? <div>
+              <h3>Available Surveys</h3>
+              <ul>
+                {surveys.map((survey, id) => <li key={id}>{survey.name}</li>)}
+              </ul>
+            </div>
+            : <p>Please import some surveys</p>}
+          <ImportSurvey />
 
-        <SelectGeography />
+          <SelectGeography />
+        </section>
       </div>
     )
   }

@@ -24,13 +24,13 @@ class Header extends React.Component {
         <div className='row'>
         <nav role='navigation'>
           <ul>
-            <li className='navItem'>
+            <li className='navItem navItemHome'>
               <Link to='/home' className={this.activeClass('/home')}>
                 <h1 className='header__title navItemLink'>{t.header.title}</h1>
               </Link>
             </li>
             <li className='navItem'>
-              <Link to='/data' className={this.activeClass('/data')}  className='navItemLink'>
+              <Link to='/data' className={this.activeClass('/data')} className='navItemLink'>
                 {t.header.data}
               </Link>
             </li>

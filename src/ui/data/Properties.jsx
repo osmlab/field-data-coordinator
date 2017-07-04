@@ -26,7 +26,7 @@ class Properties extends React.Component {
     return (
       <aside role='complementary' className='sidebar'>
         <h4>Filter</h4>
-        <a onClick={this.clearFilterProperties}>Clear</a>
+        <a className='filterClear' onClick={this.clearFilterProperties}>Clear All</a>
         {Object.keys(properties).map(name => {
           return this.renderProperty(name, properties[name])
         })}

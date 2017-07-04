@@ -67,7 +67,7 @@ class SelectGeography extends React.Component {
               <div className='selectionmap' ref={this.init} />
               <div className='selectionmap__selection' style={this.getStyle()} />
             </div>
-            <button onClick={this.queryBounds}>Confirm</button>
+            <button className='button' onClick={this.queryBounds}>Confirm</button>
             <button onClick={() => this.setState({ active: false })}>Cancel</button>
           </Modal>
         ) : null}

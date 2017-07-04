@@ -33,6 +33,7 @@ class Surveys extends React.Component {
     return (
       <div className='row'>
         <section className='initialSection'>
+          <h2>Surveys</h2>
           {surveys && surveys.size > 0
             ? <div>
               <h3>Available Surveys</h3>

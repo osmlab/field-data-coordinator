@@ -10,7 +10,7 @@ module.exports = class Data extends React.Component {
     const { match } = this.props
     return (
       <div className='dataWrapper'>
-        <div className='sidebarSidebar'></div>
+        <div className='sidebarSidebar' />
         <div className='row'>
           <Route path={`${match.url}/observation/:observationId`} component={Observation} />
           <Route exact path={match.url} component={Observations} />

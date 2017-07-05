@@ -15,37 +15,37 @@ const t = {
 class Header extends React.Component {
   activeClass (match) {
     const { pathname } = this.props.location
-    return pathname.slice(0, match.length) === match ? 'header__active' : null
+    return pathname.slice(0, match.length) === match ? 'navItemLink header__active' : 'navItemLink'
   }
 
   render () {
     return (
       <header className='header'>
         <div className='row'>
-        <nav role='navigation'>
-          <ul>
-            <li className='navItem navItemHome'>
-              <Link to='/home' className={this.activeClass('/home')}>
-                <h1 className='header__title navItemLink'>{t.header.title}</h1>
-              </Link>
-            </li>
-            <li className='navItem'>
-              <Link to='/data' className={this.activeClass('/data')} className='navItemLink'>
-                {t.header.data}
-              </Link>
-            </li>
-            <li className='navItem'>
-              <Link to='/surveys' className={this.activeClass('/surveys')} className='navItemLink'>
-                {t.header.survey}
-              </Link>
-            </li>
-            <li className='navItem'>
-              <Link to='/about' className={this.activeClass('/about')}  className='navItemLink'>
-                {t.header.about}
-              </Link>
-            </li>
-          </ul>
-        </nav>
+          <nav role='navigation'>
+            <ul>
+              <li className='navItem navItemHome'>
+                <Link to='/home' className={this.activeClass('/home')}>
+                  <h1 className='header__title navItemLink'>{t.header.title}</h1>
+                </Link>
+              </li>
+              <li className='navItem'>
+                <Link to='/data' className={this.activeClass('/data')}>
+                  {t.header.data}
+                </Link>
+              </li>
+              <li className='navItem'>
+                <Link to='/surveys' className={this.activeClass('/surveys')}>
+                  {t.header.survey}
+                </Link>
+              </li>
+              <li className='navItem'>
+                <Link to='/about' className={this.activeClass('/about')}>
+                  {t.header.about}
+                </Link>
+              </li>
+            </ul>
+          </nav>
         </div>
       </header>
     )

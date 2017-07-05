@@ -17,6 +17,10 @@ const INITIAL_CENTER = [-73.985428, 40.748817]
 // 27 square kilometers
 const MAX_AREA = 27 * 27 * 1000
 
+const selectedMapOptions = {
+  interactive: false
+}
+
 class SelectGeography extends React.Component {
   constructor (props) {
     super(props)
@@ -56,7 +60,8 @@ class SelectGeography extends React.Component {
     return (
       <div>
         { loading ? <p>Loading ...</p> : null }
-        { bounds ? <p>Current bounds: {bounds.join(', ')}</p> : null }
+        { bounds && !loading ? this.renderCurrentSelection(center) : null }
+        { !bounds && !loading ? <p>No area selected</p> : null }
         <button onClick={() => this.setState({ active: true })}>Select a geographic area</button>
         <button onClick={this.logData}>Log current data</button>
 
@@ -76,6 +81,24 @@ class SelectGeography extends React.Component {
             <button onClick={() => this.setState({ active: false })}>Cancel</button>
           </Modal>
         ) : null}
+      </div>
+    )
+  }
+
+  renderCurrentSelection (center) {
+    const { bounds } = this.props
+    return (
+      <div className='selected'>
+        <p>Current Selection</p>
+        <Map
+          options={selectedMapOptions}
+          containerClass='selected__map'
+          zoom={INITIAL_ZOOM}
+          center={center}
+          onInit={(map) => map.fitBounds(bounds)}
+        />
+        <p>Coordinates: {bounds.map(b => b.toFixed(5)).join(', ')}</p>
+        <p>Area: {(calculateArea(bboxPolygon(bounds)) / 1000).toFixed(2)} km<sup>2</sup></p>
       </div>
     )
   }

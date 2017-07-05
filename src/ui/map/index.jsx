@@ -18,13 +18,15 @@ class Map extends React.Component {
 
   init (container) {
     if (!container) return
-    const { zoom, center } = this.props
-    const map = this.map = new mapboxgl.Map({
+    const { zoom, center, options } = this.props
+    let opts = {
       style: 'mapbox://styles/mapbox/satellite-v9',
       container,
       zoom,
       center
-    })
+    }
+    if (options) opts = Object.assign(opts, options)
+    const map = this.map = new mapboxgl.Map(opts)
 
     map.addControl(new mapboxgl.NavigationControl())
     map.dragRotate.disable()
@@ -48,6 +50,7 @@ class Map extends React.Component {
 }
 
 Map.propTypes = {
+  options: PropTypes.object,
   containerClass: PropTypes.string,
   zoom: PropTypes.number,
   center: PropTypes.array,

@@ -1,22 +1,24 @@
 'use strict'
 const url = require('url')
-const request = require('request')
-const Readable = require('stream').Readable
+const http = require('http')
 const { osmapi } = require('../config')
 
 // Query the osm api using a bounding box string, returns a readable stream
 module.exports = function getOsmStream (bbox, cb) {
   const queryUrl = url.resolve(osmapi, `map?bbox=${bbox}`)
-  request(queryUrl, function (err, response, body) {
-    if (err) {
-      cb(err)
-    } else if (response.statusCode >= 400) {
-      cb(body)
+  http.get(queryUrl, (res) => {
+    const { statusCode } = res
+    if (statusCode >= 400) {
+      var body = ''
+      res.on('data', (chunk) => {
+        body += chunk
+      })
+      res.on('end', () => {
+        if (body.length) cb(new Error(body))
+        else cb(new Error(`Failed http request to ${osmapi} with status code ${statusCode}`))
+      })
     } else {
-      const stream = new Readable()
-      stream.push(body)
-      stream.push(null)
-      cb(null, stream)
+      cb(null, res)
     }
   })
 }

@@ -39,7 +39,6 @@
     "redux": "^3.6.0",
     "redux-localstorage": "^0.4.1",
     "redux-saga": "^0.15.3",
-    "request": "^2.81.0",
     "rimraf": "^2.6.1",
     "slugify": "^1.1.0",
     "tar-stream": "^1.5.4",

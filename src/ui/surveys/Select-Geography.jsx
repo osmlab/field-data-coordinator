@@ -3,8 +3,10 @@ const React = require('react')
 const Modal = require('../Modal.jsx')
 const bboxPolygon = require('@turf/bbox-polygon')
 const calculateArea = require('@turf/area')
+const centroid = require('@turf/centroid')
 const PropTypes = require('prop-types')
 const Map = require('../map')
+const objectPath = require('object-path')
 const { getOsm } = require('../../actions')
 const { connect } = require('react-redux')
 const { querySavedOsm } = require('../../drivers/local')
@@ -48,6 +50,9 @@ class SelectGeography extends React.Component {
 
   render () {
     const { loading, bounds } = this.props
+    const center = !bounds ? INITIAL_CENTER
+    : objectPath.get(centroid(bboxPolygon(bounds)), 'geometry.coordinates', INITIAL_CENTER)
+
     return (
       <div>
         { loading ? <p>Loading ...</p> : null }
@@ -60,7 +65,7 @@ class SelectGeography extends React.Component {
             <div className='selectionmap__parent' ref={this.persistContainerElement}>
               <Map
                 zoom={INITIAL_ZOOM}
-                center={INITIAL_CENTER}
+                center={center}
                 onLoad={this.onMapLoad}
                 onUnmount={this.onMapUnmount}
                 containerClass={'selectionmap'}

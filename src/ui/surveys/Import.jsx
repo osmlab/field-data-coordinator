@@ -11,8 +11,9 @@ class Import extends React.Component {
 
     return (
       <div>
-        <h3>Import a new survey</h3>
-        <button onClick={importSurvey}>Import</button>
+        <h4>Add a new survey</h4>
+        <button onClick={importSurvey}>Import Existing Survey</button>
+        <button onClick={importSurvey}>Build a New Survey</button>
       </div>
     )
   }

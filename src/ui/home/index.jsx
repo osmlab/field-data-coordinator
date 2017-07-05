@@ -4,7 +4,7 @@ const React = require('react')
 module.exports = class App extends React.Component {
   render () {
     return (
-      <div>Hello World!</div>
+      <div>Field Data Coordinator</div>
     )
   }
 }

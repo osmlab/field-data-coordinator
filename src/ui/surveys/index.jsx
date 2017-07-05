@@ -7,7 +7,6 @@ const { connect } = require('react-redux')
 const ImportSurvey = require('./Import.jsx')
 const { getSurveys } = require('../../selectors')
 
-const SelectGeography = require('./Select-Geography.jsx')
 
 // TODO this doesn't work yet
 dragDrop('#root', {
@@ -41,10 +40,8 @@ class Surveys extends React.Component {
                 {surveys.map((survey, id) => <li key={id}>{survey.name}</li>)}
               </ul>
             </div>
-            : <p>Please import some surveys</p>}
-          <ImportSurvey />
-
-          <SelectGeography />
+            :}
+            <ImportSurvey />
         </section>
       </div>
     )

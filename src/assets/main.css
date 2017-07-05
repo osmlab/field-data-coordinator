@@ -51,6 +51,10 @@ li { list-style: none; }
 
 .navItem {
   display: inline-block;
+}
+
+.navItem a {
+  display: inline-block;
   padding: 1.4em .5em 1em;
   margin: 0 1em;
   font-size: .85em;
@@ -62,11 +66,15 @@ li { list-style: none; }
   -moz-transition: all 0.3s;
 }
 
-.navItem:hover {
+.navItem a:hover {
   border-bottom: 2px solid #fff;
 }
 
-.navItemHome:hover {
+.navItem .header__active {
+  border-bottom: 2px solid #fff;
+}
+
+.navItemHome a:hover, .navItemHome .header__active {
   border-bottom: 2px solid #6579FC;
 }
 
@@ -141,13 +149,9 @@ section {
   display: inline-block;
 }
 
-.header__active {
-  border-bottom: 1px solid black;
-}
-
 h1, h2, h3, h4, h5 { color: #575456; }
 h1 { font-size: 1.3em; }
-h2 { font-size: 1.8em; }
+h2 { font-size: 1.8em; margin-bottom: 1em;}
 h3 { font-size: 1.4em; }
 h4 { font-size: 1.2em; margin-bottom: .5em;}
 
@@ -240,4 +244,14 @@ fieldset {
   display: inline-block;
   margin: 0 .2em;
   padding: .5em .8em;
+}
+
+.surveyNew {
+  border: 1px solid #F0ECEC;
+  -webkit-border-radius: 4px;
+  -moz-border-radius: 4px;
+  border-radius: 4px;
+  padding: 1.5em 1.8em 2em;
+  margin-bottom: 2em;
+  width: 700px;
 }

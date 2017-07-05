@@ -58,6 +58,7 @@ class SelectGeography extends React.Component {
       <div>
         <button onClick={() => this.setState({ active: true })}>Select a geographic area</button>
         { loading ? <p>Loading ...</p> : null }
+        <h3>Your current survey</h3>
         { bounds ? <p>Current bounds: {bounds.join(', ')}</p> : null }
         <button onClick={this.logData}>Log current data</button>
 

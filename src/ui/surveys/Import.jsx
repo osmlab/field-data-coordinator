@@ -5,15 +5,21 @@ const { connect } = require('react-redux')
 
 const { importSurvey } = require('../../actions')
 
+const SelectGeography = require('./Select-Geography.jsx')
+
 class Import extends React.Component {
   render () {
     const { importSurvey } = this.props
 
     return (
       <div>
-        <h4>Add a new survey</h4>
-        <button onClick={importSurvey}>Import Existing Survey</button>
-        <button onClick={importSurvey}>Build a New Survey</button>
+        <div className='surveyNew'>
+          <h4>Add new survey details</h4>
+          <button className='button buttonGroup' onClick={importSurvey}>Import Existing Survey</button>
+        </div>
+        <div>
+          <SelectGeography />
+        </div>
       </div>
     )
   }

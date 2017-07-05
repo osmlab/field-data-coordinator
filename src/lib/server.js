@@ -119,10 +119,13 @@ function Server (opts) {
   })
 
   app.ws('/replicate/osm', function (ws) {
-    var stream = websocketStreamify(ws)
-    handleWebsocketStream(stream, db.createOsmOrgReplicationStream(), err => {
-      if (err) console.error('replication error', err)
-    })
+    ws = websocketStreamify(ws)
+    var stream = db.getOsmOrgXmlStream()
+    if (!stream) {
+      ws.end()
+    } else {
+      stream.pipe(ws)
+    }
   })
 
   // Replication endpoint to a specific osm-p2p-db

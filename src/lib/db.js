@@ -31,6 +31,8 @@ let observationsDb
 let observationsIndex
 let observationsTimestampIndex
 
+let timestampIndexReady = false
+
 function start (rootDir) {
   if (typeof osmOrgDb === 'undefined' && typeof observationsDb === 'undefined' && typeof observationsIndex === 'undefined') {
     osmOrgDbPath = path.join(rootDir, 'osmOrgDb')
@@ -39,6 +41,9 @@ function start (rootDir) {
     var obsdb = level(path.join(rootDir, 'observationsIndex'))
     observationsIndex = osmobs({ db: obsdb, log: observationsDb.log })
     observationsTimestampIndex = osmTimestampIndex(observationsDb)
+    observationsTimestampIndex.ready(() => {
+      timestampIndexReady = true
+    })
   }
 }
 
@@ -59,7 +64,11 @@ function getObservationTimestampStream (options, cb) {
     done = cb
     opts = options
   }
-  observationsTimestampIndex.ready(() => done(null, observationsTimestampIndex.getDocumentStream(opts)))
+  if (timestampIndexReady) {
+    done(null, observationsTimestampIndex.getDocumentStream(opts))
+  } else {
+    observationsTimestampIndex.ready(() => done(null, observationsTimestampIndex.getDocumentStream(opts)))
+  }
 }
 
 function wipeDb (db, path, cb) {

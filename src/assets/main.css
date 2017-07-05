@@ -137,6 +137,12 @@ section {
   transform: translate(-50%, -50%)
 }
 
+.selected__map {
+  width: 400px;
+  height: 400px;
+}
+.selected__map .mapboxgl-ctrl { display: none; }
+
 .header__title {
   display: inline-block;
 }

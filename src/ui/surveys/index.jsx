@@ -33,6 +33,12 @@ class Surveys extends React.Component {
     return (
       <div className='row'>
         <section className='initialSection'>
+          <div className='surveyInputs'>
+            <ImportSurvey />
+            <SelectGeography />
+          </div>
+        </section>
+        <section>
           <h2>Surveys</h2>
           {surveys && surveys.size > 0 ? (
             <div>
@@ -43,12 +49,6 @@ class Surveys extends React.Component {
             </div>
             ) : null
           }
-          <div className='surveyInputs'>
-            <ImportSurvey />
-            <SelectGeography />
-          </div>
-        </section>
-        <section>
           <CurrentSelection />
         </section>
       </div>

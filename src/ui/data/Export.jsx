@@ -19,8 +19,8 @@ class Export extends React.Component {
     return (
       <div className='export'>
         <button
-          style={{marginBottom: '10px'}}
-          onClick={this.exportActive}>Export</button>
+          className='button'
+          onClick={this.exportActive}>Export Selected Data</button>
       </div>
     )
   }

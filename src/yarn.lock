@@ -54,13 +54,28 @@
   dependencies:
     "@turf/helpers" "^4.4.0"
 
+"@turf/centroid@^4.5.2":
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/@turf/centroid/-/centroid-4.5.2.tgz#3637ee131d6d984e627cbb79213ab63dd0bd6c14"
+  dependencies:
+    "@turf/helpers" "^4.5.2"
+    "@turf/meta" "^4.5.2"
+
 "@turf/helpers@^4.4.0":
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@turf/helpers/-/helpers-4.4.0.tgz#c83112f7fbe6ed183c7c0c2f776481b94d1cbd01"
 
+"@turf/helpers@^4.5.2":
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/@turf/helpers/-/helpers-4.5.2.tgz#6fc6772a7b301f277b49732925c354c7fb85d1df"
+
 "@turf/meta@^4.4.0":
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/@turf/meta/-/meta-4.4.0.tgz#4fa25d4cc0525bd4cdbaf4ff68a6f8ae81f1975f"
+
+"@turf/meta@^4.5.2":
+  version "4.5.2"
+  resolved "https://registry.yarnpkg.com/@turf/meta/-/meta-4.5.2.tgz#8450fc442d2a59494251a5a52ae520017e2dcf0d"
 
 JSONStream@^1.3.1:
   version "1.3.1"

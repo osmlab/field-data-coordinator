@@ -8,6 +8,7 @@ const osmdb = require('osm-p2p')
 const osmobs = require('osm-p2p-observations')
 const osmTimestampIndex = require('osm-p2p-timestamp-index')
 const importer = require('osm-p2p-db-importer')
+const osmGeojsonStream = require('osm-p2p-geojson')
 const { get } = require('object-path')
 const rimraf = require('rimraf')
 const mkdirp = require('mkdirp')
@@ -125,9 +126,12 @@ function importBulkOsm (bbox, cb) {
 }
 
 function bboxQuerySavedOsm (query, cb) {
-  osmOrgDb.query(query, (err, results) => {
+  osmOrgDb.query(query, (err, docs) => {
     if (err) cb(err)
-    cb(null, results)
+    osmGeojsonStream(osmOrgDb, { docs, objectMode: true }, function (err, geojson) {
+      if (err) cb(err)
+      cb(null, geojson)
+    })
   })
 }
 

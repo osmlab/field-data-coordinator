@@ -8,6 +8,7 @@ const extent = require('turf-extent')
 const { withRouter } = require('react-router-dom')
 const { setActiveObservation } = require('../../actions')
 const { getActiveFeatures } = require('../../reducers/observations')
+const { styleUrl } = require('../../config')
 
 const SOURCE = 'ACTIVE_OBSERVATIONS'
 
@@ -56,7 +57,7 @@ class ObservationMap extends React.Component {
     if (!el) return
     const map = this.map = new mapboxgl.Map({
       container: el,
-      style: 'mapbox://styles/mapbox/satellite-v9'
+      style: styleUrl
     })
     map.addControl(new mapboxgl.NavigationControl())
     map.dragRotate.disable()

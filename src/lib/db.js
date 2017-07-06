@@ -128,7 +128,7 @@ function importBulkOsm (bbox, cb) {
 function bboxQuerySavedOsm (query, cb) {
   osmOrgDb.query(query, (err, docs) => {
     if (err) cb(err)
-    osmGeojsonStream(osmOrgDb, { docs, objectMode: true }, function (err, geojson) {
+    osmGeojsonStream.obj(osmOrgDb, { docs }, function (err, geojson) {
       if (err) cb(err)
       cb(null, geojson)
     })

@@ -2,6 +2,7 @@
 const React = require('react')
 const mapboxgl = require('mapbox-gl')
 const PropTypes = require('prop-types')
+const { styleUrl } = require('../../config')
 
 const INITIAL_ZOOM = 11
 const INITIAL_CENTER = [-73.985428, 40.748817]
@@ -23,7 +24,7 @@ class Map extends React.Component {
     if (!container) return
     const { zoom, center, options } = this.props
     let opts = {
-      style: 'mapbox://styles/mapbox/satellite-v9',
+      style: styleUrl,
       zoom: zoom || INITIAL_ZOOM,
       center: center || INITIAL_CENTER,
       container

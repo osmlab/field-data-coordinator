@@ -78,7 +78,7 @@ li { list-style: none; }
   border-bottom: 2px solid #6579FC;
 }
 
-.navItem:first-of-type {
+.navItem:first-of-type a {
   margin-left: 0;
   padding-left: 0;
 }
@@ -146,10 +146,17 @@ section {
 }
 
 .selected__map {
-  width: 400px;
-  height: 400px;
+  width: 150px;
+  height: 150px;
+  margin-bottom: .5em;
+  float: left;
+  margin-right: 1.5em;
 }
 .selected__map .mapboxgl-ctrl { display: none; }
+
+.selected {
+  float: left;
+}
 
 .header__title {
   display: inline-block;
@@ -157,9 +164,30 @@ section {
 
 h1, h2, h3, h4, h5 { color: #575456; }
 h1 { font-size: 1.3em; }
-h2 { font-size: 1.8em; margin-bottom: 1em;}
-h3 { font-size: 1.4em; }
-h4 { font-size: 1.2em; margin-bottom: .5em;}
+h2 { font-size: 2em; margin-bottom: 1em;}
+h3 { font-size: 1.4em; margin-bottom: 1em;}
+h4 { font-size: 1em; margin-bottom: .2em;}
+
+.withDescription {
+  margin-bottom: .2em;
+}
+
+.description {
+  font-style: italic;
+  font-size: .85em;
+  margin-bottom: 1.5em;
+  line-height: 1.6em;
+  color: #8D8D8D;
+}
+
+.metadataWrapper {
+  min-width: 400px;
+}
+
+.metadata {
+  font-size: .85em;
+  color: #8D8D8D;
+}
 
 .button {
   -webkit-border-radius: 4px;
@@ -255,11 +283,14 @@ fieldset {
 .surveyInputs {
   border: 1px solid #F0ECEC;
   border-radius: 4px;
-
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-
+  margin-bottom: 3em;
   padding: 1.5em 1.8em 2em;
   width: 600px;
+  position: relative;
+}
+
+.surveyInputGeo {
+  position: absolute;
+  bottom: 2em;
+  left: 18.5em;
 }

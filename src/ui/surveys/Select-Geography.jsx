@@ -46,8 +46,7 @@ class SelectGeography extends React.Component {
     : objectPath.get(centroid(bboxPolygon(bounds)), 'geometry.coordinates', null)
 
     return (
-      <div className='surveyInput'>
-        <h4>Import data from OSM</h4>
+      <div className='surveyInput surveyInputGeo'>
         <button className='button buttonGroup' onClick={() => this.setState({ active: true })}>Select an area to import</button>
         {this.state.active ? (
           <Modal>

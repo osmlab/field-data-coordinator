@@ -33,23 +33,24 @@ class Surveys extends React.Component {
     return (
       <div className='row'>
         <section className='initialSection'>
+          <h2>Surveys</h2>
           <div className='surveyInputs'>
             <ImportSurvey />
             <SelectGeography />
           </div>
-        </section>
-        <section>
-          <h2>Surveys</h2>
           {surveys && surveys.size > 0 ? (
-            <div>
-              <h3>Available Surveys</h3>
-              <ul>
-                {surveys.map((survey, id) => <li key={id}>{survey.name}</li>)}
-              </ul>
+            <div className='clearfix'>
+              <h3>Current Survey</h3>
+              <div>
+                <CurrentSelection />
+                <div className='importedSurvey'>
+                  <h5>Imported Survey</h5>
+                  {surveys.map((survey, id) => <p className="metadata" key={id}>{survey.name}</p>)}
+                </div>
+              </div>
             </div>
             ) : null
           }
-          <CurrentSelection />
         </section>
       </div>
     )

@@ -137,7 +137,7 @@ section {
 }
 
 .selectionmap__selection {
-  border: 1px dashed white;
+  border: 1px dashed black;
   pointer-events: none;
   position: absolute;
   left: 50%;

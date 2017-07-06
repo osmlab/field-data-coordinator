@@ -11,7 +11,6 @@ const selectedMapOptions = {
   interactive: false
 }
 
-// TODO decouple the select button from the current selection
 class CurrentSelection extends React.Component {
   render () {
     const { loading, bounds, error } = this.props

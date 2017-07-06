@@ -43,8 +43,10 @@ class Surveys extends React.Component {
             </div>
             ) : null
           }
-          <ImportSurvey />
-          <SelectGeography />
+          <div className='surveyInputs'>
+            <ImportSurvey />
+            <SelectGeography />
+          </div>
         </section>
         <section>
           <CurrentSelection />

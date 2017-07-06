@@ -10,11 +10,9 @@ class Import extends React.Component {
     const { importSurvey } = this.props
 
     return (
-      <div>
-        <div className='surveyNew'>
-          <h4>Add new survey details</h4>
-          <button className='button buttonGroup' onClick={importSurvey}>Import Existing Survey</button>
-        </div>
+      <div className='surveyInput'>
+        <h4>Add new survey details</h4>
+        <button className='button buttonGroup' onClick={importSurvey}>Import Existing Survey</button>
       </div>
     )
   }

@@ -29,19 +29,15 @@ class SelectGeography extends React.Component {
   }
 
   componentWillMount () {
-    this.handleShortcuts = this.handleShortcuts.bind(this)
-    document.addEventListener('keydown', this.handleShortcuts)
-
     this.persistContainerElement = this.persistContainerElement.bind(this)
     this.persistContainerDimensions = this.persistContainerDimensions.bind(this)
-    window.addEventListener('resize', this.persistContainerDimensions)
-
     this.onMapLoad = this.onMapLoad.bind(this)
+    this.handleShortcuts = this.handleShortcuts.bind(this)
+    document.addEventListener('keydown', this.handleShortcuts)
   }
 
   componentWillUnmount () {
     document.removeEventListener('keydown', this.handleShortcuts)
-    window.removeEventListener('resize', this.persistContainerDimensions)
   }
 
   render () {
@@ -50,8 +46,9 @@ class SelectGeography extends React.Component {
     : objectPath.get(centroid(bboxPolygon(bounds)), 'geometry.coordinates', null)
 
     return (
-      <div>
-        <button onClick={() => this.setState({ active: true })}>Select a geographic area</button>
+      <div className='surveyInput'>
+        <h4>Import data from OSM</h4>
+        <button className='button buttonGroup' onClick={() => this.setState({ active: true })}>Select an area to import</button>
         {this.state.active ? (
           <Modal>
             <div className='selectionmap__parent' ref={this.persistContainerElement}>
@@ -75,11 +72,13 @@ class SelectGeography extends React.Component {
     this.queryBounds = this.queryBounds.bind(this, map)
     this.persistMapBounds = this.persistMapBounds.bind(this, map)
     map.on('moveend', this.persistMapBounds)
+    window.addEventListener('resize', this.persistContainerDimensions)
     this.persistMapBounds()
   }
 
   onMapUnmount (map) {
     map.off('moveend', this.persistMapBounds)
+    window.removeEventListener('resize', this.persistContainerDimensions)
   }
 
   persistContainerElement (el) {

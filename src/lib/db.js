@@ -1,5 +1,4 @@
 'use strict'
-const url = require('url')
 const path = require('path')
 const level = require('level')
 const through = require('through2')
@@ -7,18 +6,19 @@ const pump = require('pump')
 const randomBytes = require('randombytes')
 const osmdb = require('osm-p2p')
 const osmobs = require('osm-p2p-observations')
+const osmTimestampIndex = require('osm-p2p-timestamp-index')
 const importer = require('osm-p2p-db-importer')
 const { get } = require('object-path')
-const request = require('request')
 const rimraf = require('rimraf')
 const mkdirp = require('mkdirp')
-const { osmapi } = require('../config')
 const deduplicatePlaceholderNodes = require('./dedupe-nodes')
+const getOsmStream = require('./get-osm-stream')
 
 module.exports = {
   start,
   createOsmOrgReplicationStream,
   createObservationsReplicationStream,
+  getObservationTimestampStream,
   createObservation,
   listObservations,
   importBulkOsm,
@@ -29,6 +29,7 @@ let osmOrgDb
 let osmOrgDbPath
 let observationsDb
 let observationsIndex
+let observationsTimestampIndex
 
 function start (rootDir) {
   if (typeof osmOrgDb === 'undefined' && typeof observationsDb === 'undefined' && typeof observationsIndex === 'undefined') {
@@ -37,6 +38,7 @@ function start (rootDir) {
     observationsDb = osmdb(path.join(rootDir, 'observationsDb'))
     var obsdb = level(path.join(rootDir, 'observationsIndex'))
     observationsIndex = osmobs({ db: obsdb, log: observationsDb.log })
+    observationsTimestampIndex = osmTimestampIndex(observationsDb)
   }
 }
 
@@ -48,9 +50,22 @@ function createObservationsReplicationStream () {
   return observationsDb.log.replicate()
 }
 
+function getObservationTimestampStream (options, cb) {
+  var done, opts
+  if (typeof cb === 'undefined') {
+    done = options
+    opts = {}
+  } else {
+    done = cb
+    opts = options
+  }
+  observationsTimestampIndex.ready(() => done(null, observationsTimestampIndex.getDocumentStream(opts)))
+}
+
 function wipeDb (db, path, cb) {
   db.close(err => {
     if (err) return cb(err)
+    else osmOrgDb = null
     rimraf(path, err => {
       if (err) return cb(err)
       mkdirp(path, cb)
@@ -63,33 +78,32 @@ function wipeDb (db, path, cb) {
  * closing and wiping the db beforehand and re-upping it afterwards.
  */
 function importBulkOsm (bbox, cb) {
-  const queryUrl = url.resolve(osmapi, `map?bbox=${bbox}`)
-  const importFn = () => {
-    importer(osmOrgDbPath, request(queryUrl), function (err) {
-      osmOrgDb = osmOrgDb || osmdb(osmOrgDbPath)
-      if (err) {
-        console.warn(err)
-        cb(err)
-      } else {
-        // Deduplicate nodes that appear in the new OSM.org data *and* the observationsDb.
-        deduplicatePlaceholderNodes(observationsDb, osmOrgDb, observationsIndex, function (err) {
-          cb(err, `Finished importing ${bbox}`)
+  wipeDb(osmOrgDb.db, osmOrgDbPath, (err) => {
+    if (err) {
+      done(err)
+    } else {
+      getOsmStream(bbox, function (err, stream) {
+        if (err) return done(err)
+        importer(osmOrgDbPath, stream, function (err) {
+          if (err) {
+            done(err)
+          } else {
+            // up the DB before deduping nodes
+            osmOrgDb = osmOrgDb || osmdb(osmOrgDbPath)
+            // Deduplicate nodes that appear in the new OSM.org data *and* the observationsDb.
+            deduplicatePlaceholderNodes(observationsDb, osmOrgDb, observationsIndex, function (err) {
+              done(err, `Finished importing ${bbox}`)
+            })
+          }
         })
-      }
-    })
-  }
+      })
+    }
+  })
 
-  if (!osmOrgDb) importFn()
-  else {
-    wipeDb(osmOrgDb.db, osmOrgDbPath, (err) => {
-      if (err) {
-        console.warn(err)
-        cb(err)
-      } else {
-        osmOrgDb = null
-        importFn()
-      }
-    })
+  function done (err, message) {
+    osmOrgDb = osmOrgDb || osmdb(osmOrgDbPath)
+    if (err) console.warn(err)
+    cb(err, message)
   }
 }
 

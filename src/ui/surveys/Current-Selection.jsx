@@ -14,13 +14,14 @@ const selectedMapOptions = {
 // TODO decouple the select button from the current selection
 class CurrentSelection extends React.Component {
   render () {
-    const { loading, bounds } = this.props
+    const { loading, bounds, error } = this.props
     const center = !bounds ? null
     : objectPath.get(centroid(bboxPolygon(bounds)), 'geometry.coordinates', null)
     return (
       <div>
         { loading ? <p>Loading ...</p> : null }
-        { bounds && !loading ? this.renderCurrentSelection(center) : null }
+        { error ? <p>{error}</p> : null}
+        { bounds && !loading && !error ? this.renderCurrentSelection(center) : null }
         { !bounds && !loading ? <p>No area selected</p> : null }
       </div>
     )
@@ -46,10 +47,11 @@ class CurrentSelection extends React.Component {
   }
 }
 
-const mapStateToProps = ({ osmBounds, loading }) => {
+const mapStateToProps = ({ osmBounds, loading, errors }) => {
   return {
     loading,
-    bounds: osmBounds.length ? osmBounds : null
+    bounds: osmBounds.length ? osmBounds : null,
+    error: errors.get('osmQuery')
   }
 }
 

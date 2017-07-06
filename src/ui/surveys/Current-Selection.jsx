@@ -6,12 +6,18 @@ const calculateArea = require('@turf/area')
 const centroid = require('@turf/centroid')
 const objectPath = require('object-path')
 const Map = require('../map')
+const { querySavedOsm } = require('../../drivers/local')
 
 const selectedMapOptions = {
   interactive: false
 }
 
 class CurrentSelection extends React.Component {
+  constructor (props) {
+    super(props)
+    this.onMapLoad = this.onMapLoad.bind(this)
+  }
+
   render () {
     const { loading, bounds, error } = this.props
     const center = !bounds ? null
@@ -35,6 +41,7 @@ class CurrentSelection extends React.Component {
           containerClass='selected__map'
           center={center}
           onInit={(map) => map.fitBounds(bounds)}
+          onLoad={this.onMapLoad}
         />
         <div className='metadataWrapper'>
           <h4>Geographic Area</h4>
@@ -43,6 +50,18 @@ class CurrentSelection extends React.Component {
         </div>
       </div>
     )
+  }
+
+  onMapLoad (map) {
+    const { bounds } = this.props
+    if (!bounds) return
+    querySavedOsm([[bounds[1], bounds[3]], [bounds[0], bounds[2]]], function (err, geojson) {
+      if (err) return console.warn(err)
+      map.addSource('osm', {
+        type: 'geojson',
+        data: geojson
+      })
+    })
   }
 }
 

@@ -1,13 +1,12 @@
 'use strict'
 const React = require('react')
 const { connect } = require('react-redux')
+const { exportXml, exportJson, exportGeojson } = require('../../drivers/local')
 
 class Export extends React.Component {
   constructor (props) {
     super(props)
-    this.exportXml = this.exportXml.bind(this)
-    this.exportJson = this.exportJson.bind(this)
-    this.exportGeojson = this.exportGeojson.bind(this)
+    this.getActive = this.getActive.bind(this)
     this.toggleOptions = this.toggleOptions.bind(this)
     this.state = {
       showOptions: false
@@ -31,15 +30,6 @@ class Export extends React.Component {
     return this.props.activeIds.toJS()
   }
 
-  exportXml () {
-  }
-
-  exportJson () {
-  }
-
-  exportGeojson () {
-  }
-
   render () {
     return (
       <div className='export'>
@@ -49,9 +39,9 @@ class Export extends React.Component {
             onClick={this.toggleOptions}>Export Selected Data</button>
           { this.state.showOptions ? (
             <ul className='dropdownOptions'>
-              <li className='dropdownOption' onClick={this.exportXml}>XML</li>
-              <li className='dropdownOption' onClick={this.exportJson}>JSON</li>
-              <li className='dropdownOption' onClick={this.exportGeojson}>GeoJSON</li>
+              <li className='dropdownOption' onClick={() => exportXml(this.getActive())}>XML</li>
+              <li className='dropdownOption' onClick={() => exportJson(this.getActive())}>JSON</li>
+              <li className='dropdownOption' onClick={() => exportGeojson(this.getActive())}>GeoJSON</li>
             </ul>
           ) : null }
         </div>

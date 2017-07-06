@@ -45,7 +45,7 @@ class Surveys extends React.Component {
                 <CurrentSelection />
                 <div className='importedSurvey'>
                   <h5>Imported Survey</h5>
-                  {surveys.map((survey, id) => <p className="metadata" key={id}>{survey.name}</p>)}
+                  {surveys.map((survey, id) => <p className='metadata' key={id}>{survey.name}</p>)}
                 </div>
               </div>
             </div>

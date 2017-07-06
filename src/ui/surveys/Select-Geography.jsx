@@ -24,7 +24,8 @@ class SelectGeography extends React.Component {
       mapWidth: 0,
       mapHeight: 0,
 
-      mapBounds: []
+      mapBounds: [],
+      mapZoom: null
     }
   }
 
@@ -62,6 +63,7 @@ class SelectGeography extends React.Component {
                 onLoad={this.onMapLoad}
                 onUnmount={this.onMapUnmount}
                 containerClass={'selectionmap'}
+                zoom={this.state.mapZoom}
               />
               <div className='selectionmap__selection' style={this.getStyle()} />
             </div>
@@ -101,7 +103,8 @@ class SelectGeography extends React.Component {
   persistMapBounds () {
     if (!this.map) return
     const { _sw, _ne } = this.map.getBounds()
-    this.setState({ mapBounds: [ _sw.lng, _sw.lat, _ne.lng, _ne.lat ] })
+    const zoom = this.map.getZoom()
+    this.setState({ mapBounds: [ _sw.lng, _sw.lat, _ne.lng, _ne.lat ], mapZoom: zoom })
   }
 
   getDimensions () {

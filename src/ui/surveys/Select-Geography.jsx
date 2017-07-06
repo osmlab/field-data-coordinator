@@ -1,16 +1,15 @@
 'use strict'
 const React = require('react')
 const Modal = require('../Modal.jsx')
-const mapboxgl = require('mapbox-gl')
 const bboxPolygon = require('@turf/bbox-polygon')
 const calculateArea = require('@turf/area')
+const centroid = require('@turf/centroid')
 const PropTypes = require('prop-types')
+const Map = require('../map')
+const objectPath = require('object-path')
 const { getOsm } = require('../../actions')
 const { connect } = require('react-redux')
 const { querySavedOsm } = require('../../drivers/local')
-
-const INITIAL_ZOOM = 11
-const INITIAL_CENTER = [-73.985428, 40.748817]
 
 // 27 square kilometers
 const MAX_AREA = 27 * 27 * 1000
@@ -33,39 +32,35 @@ class SelectGeography extends React.Component {
     this.handleShortcuts = this.handleShortcuts.bind(this)
     document.addEventListener('keydown', this.handleShortcuts)
 
+    this.persistContainerElement = this.persistContainerElement.bind(this)
     this.persistContainerDimensions = this.persistContainerDimensions.bind(this)
     window.addEventListener('resize', this.persistContainerDimensions)
 
-    this.init = this.init.bind(this)
-    this.persistMapBounds = this.persistMapBounds.bind(this)
-    this.queryBounds = this.queryBounds.bind(this)
-    this.logData = this.logData.bind(this)
+    this.onMapLoad = this.onMapLoad.bind(this)
   }
 
   componentWillUnmount () {
     document.removeEventListener('keydown', this.handleShortcuts)
     window.removeEventListener('resize', this.persistContainerDimensions)
-    if (this.map) {
-      this.map.off('moveend', this.persistMapBounds)
-      this.map.remove()
-      this.map = null
-    }
   }
 
   render () {
-    const { loading, bounds } = this.props
+    const { bounds } = this.props
+    const center = !bounds ? null
+    : objectPath.get(centroid(bboxPolygon(bounds)), 'geometry.coordinates', null)
+
     return (
       <div>
         <button onClick={() => this.setState({ active: true })}>Select a geographic area</button>
-        { loading ? <p>Loading ...</p> : null }
-        <h3>Your current survey</h3>
-        { bounds ? <p>Current bounds: {bounds.join(', ')}</p> : null }
-        <button onClick={this.logData}>Log current data</button>
-
         {this.state.active ? (
           <Modal>
-            <div className='selectionmap__parent'>
-              <div className='selectionmap' ref={this.init} />
+            <div className='selectionmap__parent' ref={this.persistContainerElement}>
+              <Map
+                center={center}
+                onLoad={this.onMapLoad}
+                onUnmount={this.onMapUnmount}
+                containerClass={'selectionmap'}
+              />
               <div className='selectionmap__selection' style={this.getStyle()} />
             </div>
             <button className='button' onClick={this.queryBounds}>Confirm</button>
@@ -76,23 +71,19 @@ class SelectGeography extends React.Component {
     )
   }
 
-  init (el) {
+  onMapLoad (map) {
+    this.queryBounds = this.queryBounds.bind(this, map)
+    this.persistMapBounds = this.persistMapBounds.bind(this, map)
+    map.on('moveend', this.persistMapBounds)
+    this.persistMapBounds()
+  }
+
+  onMapUnmount (map) {
+    map.off('moveend', this.persistMapBounds)
+  }
+
+  persistContainerElement (el) {
     if (!el) return
-    const map = this.map = new mapboxgl.Map({
-      container: el,
-      style: 'mapbox://styles/mapbox/satellite-v9',
-      zoom: INITIAL_ZOOM,
-      center: INITIAL_CENTER
-    })
-    map.addControl(new mapboxgl.NavigationControl())
-    map.dragRotate.disable()
-    map.touchZoomRotate.disableRotation()
-
-    map.once('load', () => {
-      map.on('moveend', this.persistMapBounds)
-      this.persistMapBounds()
-    })
-
     // Store a reference to the parent element in order
     // to read the container dimensions on page resize.
     this.container = el
@@ -105,8 +96,8 @@ class SelectGeography extends React.Component {
     this.setState({ mapWidth: dim.width, mapHeight: dim.height })
   }
 
-  persistMapBounds () {
-    const { _sw, _ne } = this.map.getBounds()
+  persistMapBounds (map) {
+    const { _sw, _ne } = map.getBounds()
     this.setState({ mapBounds: [ _sw.lng, _sw.lat, _ne.lng, _ne.lat ] })
   }
 
@@ -127,15 +118,15 @@ class SelectGeography extends React.Component {
     return { width: width + 'px', height: height + 'px' }
   }
 
-  queryBounds () {
+  queryBounds (map) {
     const { mapWidth, mapHeight } = this.state
     const { width: edge } = this.getDimensions()
     const north = (mapHeight - edge) / 2
     const west = (mapWidth - edge) / 2
     const south = north + edge
     const east = west + edge
-    const sw = this.map.unproject([west, south])
-    const ne = this.map.unproject([east, north])
+    const sw = map.unproject([west, south])
+    const ne = map.unproject([east, north])
     this.props.getOsm([sw.lng, sw.lat, ne.lng, ne.lat])
     this.setState({ active: false })
   }
@@ -155,13 +146,11 @@ class SelectGeography extends React.Component {
 }
 
 SelectGeography.propTypes = {
-  loading: PropTypes.bool,
   bounds: PropTypes.array
 }
 
-const mapStateToProps = ({ osmBounds, loading }) => {
+const mapStateToProps = ({ osmBounds }) => {
   return {
-    loading,
     bounds: osmBounds.length ? osmBounds : null
   }
 }

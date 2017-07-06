@@ -5,8 +5,9 @@ const React = require('react')
 const { connect } = require('react-redux')
 
 const ImportSurvey = require('./Import.jsx')
+const SelectGeography = require('./Select-Geography.jsx')
+const CurrentSelection = require('./Current-Selection.jsx')
 const { getSurveys } = require('../../selectors')
-
 
 // TODO this doesn't work yet
 dragDrop('#root', {
@@ -33,15 +34,20 @@ class Surveys extends React.Component {
       <div className='row'>
         <section className='initialSection'>
           <h2>Surveys</h2>
-          {surveys && surveys.size > 0
-            ? <div>
+          {surveys && surveys.size > 0 ? (
+            <div>
               <h3>Available Surveys</h3>
               <ul>
                 {surveys.map((survey, id) => <li key={id}>{survey.name}</li>)}
               </ul>
             </div>
-            :}
-            <ImportSurvey />
+            ) : null
+          }
+          <ImportSurvey />
+          <SelectGeography />
+        </section>
+        <section>
+          <CurrentSelection />
         </section>
       </div>
     )

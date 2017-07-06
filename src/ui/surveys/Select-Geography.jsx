@@ -53,14 +53,15 @@ class SelectGeography extends React.Component {
   }
 
   render () {
-    const { loading, bounds } = this.props
+    const { loading, bounds, error } = this.props
     const center = !bounds ? INITIAL_CENTER
     : objectPath.get(centroid(bboxPolygon(bounds)), 'geometry.coordinates', INITIAL_CENTER)
 
     return (
       <div>
         { loading ? <p>Loading ...</p> : null }
-        { bounds && !loading ? this.renderCurrentSelection(center) : null }
+        { error ? <p>{error}</p> : null}
+        { bounds && !loading && !error ? this.renderCurrentSelection(center) : null }
         { !bounds && !loading ? <p>No area selected</p> : null }
         <button onClick={() => this.setState({ active: true })}>Select a geographic area</button>
         <button onClick={this.logData}>Log current data</button>
@@ -182,10 +183,11 @@ SelectGeography.propTypes = {
   bounds: PropTypes.array
 }
 
-const mapStateToProps = ({ osmBounds, loading }) => {
+const mapStateToProps = ({ osmBounds, loading, errors }) => {
   return {
     loading,
-    bounds: osmBounds.length ? osmBounds : null
+    bounds: osmBounds.length ? osmBounds : null,
+    error: errors.get('osmQuery')
   }
 }
 

@@ -29,15 +29,21 @@ class SelectGeography extends React.Component {
   }
 
   componentWillMount () {
+    this.queryBounds = this.queryBounds.bind(this)
     this.persistContainerElement = this.persistContainerElement.bind(this)
+    this.persistMapBounds = this.persistMapBounds.bind(this)
     this.persistContainerDimensions = this.persistContainerDimensions.bind(this)
+    window.addEventListener('resize', this.persistContainerDimensions)
+
     this.onMapLoad = this.onMapLoad.bind(this)
+    this.onMapUnmount = this.onMapUnmount.bind(this)
     this.handleShortcuts = this.handleShortcuts.bind(this)
     document.addEventListener('keydown', this.handleShortcuts)
   }
 
   componentWillUnmount () {
     document.removeEventListener('keydown', this.handleShortcuts)
+    window.removeEventListener('resize', this.persistContainerDimensions)
   }
 
   render () {
@@ -68,16 +74,14 @@ class SelectGeography extends React.Component {
   }
 
   onMapLoad (map) {
-    this.queryBounds = this.queryBounds.bind(this, map)
-    this.persistMapBounds = this.persistMapBounds.bind(this, map)
+    this.map = map
     map.on('moveend', this.persistMapBounds)
-    window.addEventListener('resize', this.persistContainerDimensions)
     this.persistMapBounds()
   }
 
   onMapUnmount (map) {
+    this.map = null
     map.off('moveend', this.persistMapBounds)
-    window.removeEventListener('resize', this.persistContainerDimensions)
   }
 
   persistContainerElement (el) {
@@ -94,8 +98,9 @@ class SelectGeography extends React.Component {
     this.setState({ mapWidth: dim.width, mapHeight: dim.height })
   }
 
-  persistMapBounds (map) {
-    const { _sw, _ne } = map.getBounds()
+  persistMapBounds () {
+    if (!this.map) return
+    const { _sw, _ne } = this.map.getBounds()
     this.setState({ mapBounds: [ _sw.lng, _sw.lat, _ne.lng, _ne.lat ] })
   }
 
@@ -116,15 +121,15 @@ class SelectGeography extends React.Component {
     return { width: width + 'px', height: height + 'px' }
   }
 
-  queryBounds (map) {
+  queryBounds () {
     const { mapWidth, mapHeight } = this.state
     const { width: edge } = this.getDimensions()
     const north = (mapHeight - edge) / 2
     const west = (mapWidth - edge) / 2
     const south = north + edge
     const east = west + edge
-    const sw = map.unproject([west, south])
-    const ne = map.unproject([east, north])
+    const sw = this.map.unproject([west, south])
+    const ne = this.map.unproject([east, north])
     this.props.getOsm([sw.lng, sw.lat, ne.lng, ne.lat])
     this.setState({ active: false })
   }

@@ -11,15 +11,8 @@ const { getOsm } = require('../../actions')
 const { connect } = require('react-redux')
 const { querySavedOsm } = require('../../drivers/local')
 
-const INITIAL_ZOOM = 11
-const INITIAL_CENTER = [-73.985428, 40.748817]
-
 // 27 square kilometers
 const MAX_AREA = 27 * 27 * 1000
-
-const selectedMapOptions = {
-  interactive: false
-}
 
 class SelectGeography extends React.Component {
   constructor (props) {
@@ -36,41 +29,29 @@ class SelectGeography extends React.Component {
   }
 
   componentWillMount () {
-    this.handleShortcuts = this.handleShortcuts.bind(this)
-    document.addEventListener('keydown', this.handleShortcuts)
-
     this.persistContainerElement = this.persistContainerElement.bind(this)
     this.persistContainerDimensions = this.persistContainerDimensions.bind(this)
-    window.addEventListener('resize', this.persistContainerDimensions)
-
     this.onMapLoad = this.onMapLoad.bind(this)
-    this.logData = this.logData.bind(this)
+    this.handleShortcuts = this.handleShortcuts.bind(this)
+    document.addEventListener('keydown', this.handleShortcuts)
   }
 
   componentWillUnmount () {
     document.removeEventListener('keydown', this.handleShortcuts)
-    window.removeEventListener('resize', this.persistContainerDimensions)
   }
 
   render () {
-    const { loading, bounds, error } = this.props
-    const center = !bounds ? INITIAL_CENTER
-    : objectPath.get(centroid(bboxPolygon(bounds)), 'geometry.coordinates', INITIAL_CENTER)
+    const { bounds } = this.props
+    const center = !bounds ? null
+    : objectPath.get(centroid(bboxPolygon(bounds)), 'geometry.coordinates', null)
 
     return (
-      <div>
-        { loading ? <p>Loading ...</p> : null }
-        { error ? <p>{error}</p> : null}
-        { bounds && !loading && !error ? this.renderCurrentSelection(center) : null }
-        { !bounds && !loading ? <p>No area selected</p> : null }
-        <button onClick={() => this.setState({ active: true })}>Select a geographic area</button>
-        <button onClick={this.logData}>Log current data</button>
-
+      <div className='surveyInput surveyInputGeo'>
+        <button className='button buttonGroup' onClick={() => this.setState({ active: true })}>Select an area to import</button>
         {this.state.active ? (
           <Modal>
             <div className='selectionmap__parent' ref={this.persistContainerElement}>
               <Map
-                zoom={INITIAL_ZOOM}
                 center={center}
                 onLoad={this.onMapLoad}
                 onUnmount={this.onMapUnmount}
@@ -86,33 +67,17 @@ class SelectGeography extends React.Component {
     )
   }
 
-  renderCurrentSelection (center) {
-    const { bounds } = this.props
-    return (
-      <div className='selected'>
-        <p>Current Selection</p>
-        <Map
-          options={selectedMapOptions}
-          containerClass='selected__map'
-          zoom={INITIAL_ZOOM}
-          center={center}
-          onInit={(map) => map.fitBounds(bounds)}
-        />
-        <p>Coordinates: {bounds.map(b => b.toFixed(5)).join(', ')}</p>
-        <p>Area: {(calculateArea(bboxPolygon(bounds)) / 1000).toFixed(2)} km<sup>2</sup></p>
-      </div>
-    )
-  }
-
   onMapLoad (map) {
     this.queryBounds = this.queryBounds.bind(this, map)
     this.persistMapBounds = this.persistMapBounds.bind(this, map)
     map.on('moveend', this.persistMapBounds)
+    window.addEventListener('resize', this.persistContainerDimensions)
     this.persistMapBounds()
   }
 
   onMapUnmount (map) {
     map.off('moveend', this.persistMapBounds)
+    window.removeEventListener('resize', this.persistContainerDimensions)
   }
 
   persistContainerElement (el) {
@@ -179,15 +144,12 @@ class SelectGeography extends React.Component {
 }
 
 SelectGeography.propTypes = {
-  loading: PropTypes.bool,
   bounds: PropTypes.array
 }
 
-const mapStateToProps = ({ osmBounds, loading, errors }) => {
+const mapStateToProps = ({ osmBounds }) => {
   return {
-    loading,
-    bounds: osmBounds.length ? osmBounds : null,
-    error: errors.get('osmQuery')
+    bounds: osmBounds.length ? osmBounds : null
   }
 }
 

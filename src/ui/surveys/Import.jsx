@@ -10,10 +10,10 @@ class Import extends React.Component {
     const { importSurvey } = this.props
 
     return (
-      <div>
-        <h4>Add a new survey</h4>
-        <button onClick={importSurvey}>Import Existing Survey</button>
-        <button onClick={importSurvey}>Build a New Survey</button>
+      <div className='surveyInput'>
+        <h3 className='withDescription'>Add new survey details</h3>
+        <p className='description'>Description of how to add things. Find more information about how to make a survey file here.</p>
+        <button className='button buttonGroup' onClick={importSurvey}>Import Existing Survey</button>
       </div>
     )
   }

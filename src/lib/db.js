@@ -99,7 +99,7 @@ function importBulkOsm (bbox, cb) {
 
         // Write local OSM.org XML data to disk
         let xmlFilePath = path.join(dbRootDir, 'current.xml')
-        req.pipe(fs.createWriteStream(xmlFilePath))
+        stream.pipe(fs.createWriteStream(xmlFilePath))
 
         importer(osmOrgDbPath, stream, function (err) {
           if (err) {

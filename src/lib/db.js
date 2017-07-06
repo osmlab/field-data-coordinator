@@ -13,6 +13,7 @@ const rimraf = require('rimraf')
 const mkdirp = require('mkdirp')
 const deduplicatePlaceholderNodes = require('./dedupe-nodes')
 const getOsmStream = require('./get-osm-stream')
+const fs = require('fs')
 
 module.exports = {
   start,
@@ -22,7 +23,8 @@ module.exports = {
   createObservation,
   listObservations,
   importBulkOsm,
-  bboxQuerySavedOsm
+  bboxQuerySavedOsm,
+  getLocalOsmOrgXmlStream
 }
 
 let osmOrgDb
@@ -30,8 +32,10 @@ let osmOrgDbPath
 let observationsDb
 let observationsIndex
 let observationsTimestampIndex
+let dbRootDir
 
 function start (rootDir) {
+  dbRootDir = rootDir
   if (typeof osmOrgDb === 'undefined' && typeof observationsDb === 'undefined' && typeof observationsIndex === 'undefined') {
     osmOrgDbPath = path.join(rootDir, 'osmOrgDb')
     osmOrgDb = osmdb(osmOrgDbPath)
@@ -73,6 +77,14 @@ function wipeDb (db, path, cb) {
   })
 }
 
+function getLocalOsmOrgXmlStream () {
+  let xmlFilePath = path.join(dbRootDir, 'current.xml')
+  if (!fs.existsSync(xmlFilePath)) {
+    return null
+  }
+  return fs.createReadStream(xmlFilePath)
+}
+
 /* Perform an http query to osm.org using the bounding box endpoint.
  * With the response stream, bulk import into the local osm-p2p db,
  * closing and wiping the db beforehand and re-upping it afterwards.
@@ -84,6 +96,11 @@ function importBulkOsm (bbox, cb) {
     } else {
       getOsmStream(bbox, function (err, stream) {
         if (err) return done(err)
+
+        // Write local OSM.org XML data to disk
+        let xmlFilePath = path.join(dbRootDir, 'current.xml')
+        stream.pipe(fs.createWriteStream(xmlFilePath))
+
         importer(osmOrgDbPath, stream, function (err) {
           if (err) {
             done(err)

@@ -135,7 +135,7 @@ app.on('importSurvey', function (files) {
 const openExportXmlDialog = (observationIds) => {
   dialog.showSaveDialog(
     {
-      buttonLabel: 'Export XML',
+      buttonLabel: 'Export XML Changeset',
       defaultPath: 'observations.xml'
     },
     (filename) => exportObservations.xml(observationIds, filename)
@@ -145,7 +145,7 @@ const openExportXmlDialog = (observationIds) => {
 const openExportJsonDialog = (observationIds) => {
   dialog.showSaveDialog(
     {
-      buttonLabel: 'Export JSON',
+      buttonLabel: 'Export JSON Changeset',
       defaultPath: 'observations.json'
     },
     (filename) => exportObservations.json(observationIds, filename)

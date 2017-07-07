@@ -114,7 +114,7 @@ abstract-leveldown@~2.4.0:
   dependencies:
     xtend "~4.0.0"
 
-accepts@~1.3.3:
+accepts@^1.3.3, accepts@~1.3.3:
   version "1.3.3"
   resolved "https://registry.yarnpkg.com/accepts/-/accepts-1.3.3.tgz#c3ca7434938648c3e0d9c1e328dd68b622c284ca"
   dependencies:
@@ -460,6 +460,13 @@ collect-stream@^1.1.1, collect-stream@^1.2.1:
     concat-stream "^1.2.0"
     once "^1.3.0"
 
+collect-transform-stream@0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/collect-transform-stream/-/collect-transform-stream-0.0.2.tgz#bc522e636285bba6f371289ff9f3c6725e36674d"
+  dependencies:
+    once "^1.4.0"
+    through2 "^2.0.3"
+
 combined-stream@^1.0.5, combined-stream@~1.0.5:
   version "1.0.5"
   resolved "https://registry.yarnpkg.com/combined-stream/-/combined-stream-1.0.5.tgz#938370a57b4a51dea2c77c15d5c5fdf895164009"
@@ -510,7 +517,7 @@ content-disposition@0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/content-disposition/-/content-disposition-0.5.2.tgz#0cf68bb9ddf5f2be7961c3a85178cb85dba78cb4"
 
-content-type@~1.0.2:
+content-type@^1.0.2, content-type@~1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/content-type/-/content-type-1.0.2.tgz#b7d113aee7a8dd27bd21133c4dc2529df1721eed"
 
@@ -970,6 +977,12 @@ fresh@0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/fresh/-/fresh-0.5.0.tgz#f474ca5e6a9246d6fd8e0953cfa9b9c805afa78e"
 
+from2-array@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/from2-array/-/from2-array-0.0.4.tgz#eafc16b65f6e2719bcd57fdc1869005ac1332cd6"
+  dependencies:
+    from2 "^2.0.3"
+
 from2@^1.3.0:
   version "1.3.0"
   resolved "https://registry.yarnpkg.com/from2/-/from2-1.3.0.tgz#88413baaa5f9a597cfde9221d86986cd3c061dfd"
@@ -977,7 +990,7 @@ from2@^1.3.0:
     inherits "~2.0.1"
     readable-stream "~1.1.10"
 
-from2@^2.1.0, from2@^2.3.0:
+from2@^2.0.3, from2@^2.1.0, from2@^2.3.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/from2/-/from2-2.3.0.tgz#8bfb5502bde4a4d36cfdeea007fcca21d7e382af"
   dependencies:
@@ -1625,7 +1638,7 @@ lodash.uniqby@^4.7.0:
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/lodash.uniqby/-/lodash.uniqby-4.7.0.tgz#d99c07a669e9e6d24e1362dfe266c67616af1302"
 
-lodash@^4.14.0, lodash@^4.2.0, lodash@^4.2.1:
+lodash@^4.14.0, lodash@^4.17.4, lodash@^4.2.0, lodash@^4.2.1:
   version "4.17.4"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.4.tgz#78203a4d1c328ae1d86dca6460e369b57f4055ae"
 
@@ -1879,6 +1892,12 @@ oauth-sign@~0.8.1:
   version "0.8.2"
   resolved "https://registry.yarnpkg.com/oauth-sign/-/oauth-sign-0.8.2.tgz#46a6ab7f0aead8deae9ec0565780b7d4efeb9d43"
 
+obj2osm@^2.0.0, obj2osm@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/obj2osm/-/obj2osm-2.0.1.tgz#2ea39606dff8fe2efbac1e1d8e295fc604149af0"
+  dependencies:
+    through2 "^2.0.0"
+
 object-assign@^4.0.1, object-assign@^4.1.0, object-assign@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/object-assign/-/object-assign-4.1.1.tgz#2109adc7965887cfc05cbbd442cac8bfbb360863"
@@ -1898,6 +1917,17 @@ object-keys@~0.4.0:
 object-path@^0.11.4:
   version "0.11.4"
   resolved "https://registry.yarnpkg.com/object-path/-/object-path-0.11.4.tgz#370ae752fbf37de3ea70a861c23bba8915691949"
+
+observe-export@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/observe-export/-/observe-export-1.0.0.tgz#ef336352641f0b21928662ed484837cc5aa0251d"
+  dependencies:
+    collect-stream "^1.2.1"
+    from2-array "0.0.4"
+    lodash "^4.17.4"
+    obj2osm "^2.0.1"
+    once "^1.4.0"
+    osm-p2p-server "^2.1.5"
 
 on-finished@~2.3.0:
   version "2.3.0"
@@ -1978,6 +2008,10 @@ osm-p2p-db@^4.0.0:
     to2 "^1.0.0"
     xtend "^4.0.1"
 
+osm-p2p-defork@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/osm-p2p-defork/-/osm-p2p-defork-1.0.0.tgz#b9bf9a43418d0338c9ef509465a1a27bb67a1355"
+
 osm-p2p-geojson@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/osm-p2p-geojson/-/osm-p2p-geojson-3.0.1.tgz#180cceb0376aa2b7d70f87868820a76754fa24fb"
@@ -2009,6 +2043,35 @@ osm-p2p-observations@^2.0.0:
     read-only-stream "^2.0.0"
     subleveldown "^2.1.0"
     through2 "^2.0.1"
+    xtend "^4.0.1"
+
+osm-p2p-server@^2.1.5:
+  version "2.1.5"
+  resolved "https://registry.yarnpkg.com/osm-p2p-server/-/osm-p2p-server-2.1.5.tgz#6c41e39170ad9f89cc5d0969bb07aae074678a4b"
+  dependencies:
+    JSONStream "^1.1.4"
+    accepts "^1.3.3"
+    base-convertor "^1.1.0"
+    collect-stream "^1.1.1"
+    collect-transform-stream "0.0.2"
+    content-type "^1.0.2"
+    debug "^2.2.0"
+    from2-array "0.0.4"
+    inherits "^2.0.1"
+    minimist "^1.2.0"
+    obj2osm "^2.0.0"
+    once "^1.3.3"
+    osm-p2p-defork "^1.0.0"
+    osm2json "^2.1.0"
+    pumpify "^1.3.5"
+    query-string "^4.2.2"
+    randombytes "^2.0.2"
+    read-only-stream "^2.0.0"
+    readable-stream "^2.1.4"
+    routes "^2.1.0"
+    statuses "^1.3.0"
+    through2 "^2.0.1"
+    through2-map "^3.0.0"
     xtend "^4.0.1"
 
 osm-p2p-timestamp-index@^1.0.0:
@@ -2242,6 +2305,13 @@ qs@6.4.0, qs@~6.4.0:
   version "6.4.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.4.0.tgz#13e26d28ad6b0ffaa91312cd3bf708ed351e7233"
 
+query-string@^4.2.2:
+  version "4.3.4"
+  resolved "https://registry.yarnpkg.com/query-string/-/query-string-4.3.4.tgz#bbb693b9ca915c232515b228b1a02b609043dbeb"
+  dependencies:
+    object-assign "^4.1.0"
+    strict-uri-encode "^1.0.0"
+
 quickselect@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/quickselect/-/quickselect-1.0.0.tgz#02630818f9aae4ecab26f0103f98d061c17c58f3"
@@ -2265,7 +2335,7 @@ randombytes@2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/randombytes/-/randombytes-2.0.1.tgz#18f4a9ba0dd07bdb1580bc9156091fcf90eabc6f"
 
-randombytes@^2.0.3, randombytes@^2.0.4:
+randombytes@^2.0.2, randombytes@^2.0.3, randombytes@^2.0.4:
   version "2.0.5"
   resolved "https://registry.yarnpkg.com/randombytes/-/randombytes-2.0.5.tgz#dc009a246b8d09a177b4b7a0ae77bc570f4b1b79"
   dependencies:
@@ -2477,6 +2547,10 @@ rimraf@2, rimraf@^2.5.1, rimraf@^2.6.1:
   dependencies:
     glob "^7.0.5"
 
+routes@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/routes/-/routes-2.1.0.tgz#475571192a48f99b6c065dd926bb75e8ae83e8a2"
+
 run-parallel@^1.0.0, run-parallel@^1.1.6:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/run-parallel/-/run-parallel-1.1.6.tgz#29003c9a2163e01e2d2dfc90575f2c6c1d61a039"
@@ -2628,7 +2702,7 @@ static-module@^1.1.0:
     static-eval "~0.2.0"
     through2 "~0.4.1"
 
-"statuses@>= 1.3.1 < 2", statuses@~1.3.1:
+"statuses@>= 1.3.1 < 2", statuses@^1.3.0, statuses@~1.3.1:
   version "1.3.1"
   resolved "https://registry.yarnpkg.com/statuses/-/statuses-1.3.1.tgz#faf51b9eb74aaef3b3acf4ad5f61abf24cb7b93e"
 
@@ -2648,6 +2722,10 @@ stream-to-pull-stream@^1.7.1:
   dependencies:
     looper "^3.0.0"
     pull-stream "^3.2.3"
+
+strict-uri-encode@^1.0.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/strict-uri-encode/-/strict-uri-encode-1.1.0.tgz#279b225df1d582b1f54e65addd4352e18faa0713"
 
 string-width@^1.0.0, string-width@^1.0.1, string-width@^1.0.2:
   version "1.0.2"
@@ -2746,6 +2824,13 @@ tar@^2.2.1:
     fstream "^1.0.2"
     inherits "2"
 
+through2-map@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/through2-map/-/through2-map-3.0.0.tgz#a6c3026ce63b4898a997d540506b66ffd970f271"
+  dependencies:
+    through2 "~2.0.0"
+    xtend "^4.0.0"
+
 through2@^0.6.3:
   version "0.6.5"
   resolved "https://registry.yarnpkg.com/through2/-/through2-0.6.5.tgz#41ab9c67b29d57209071410e1d7a7a968cd3ad48"
@@ -2753,7 +2838,7 @@ through2@^0.6.3:
     readable-stream ">=1.0.33-1 <1.1.0-0"
     xtend ">=4.0.0 <4.1.0-0"
 
-through2@^2.0.0, through2@^2.0.1, through2@^2.0.3:
+through2@^2.0.0, through2@^2.0.1, through2@^2.0.3, through2@~2.0.0:
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/through2/-/through2-2.0.3.tgz#0004569b37c7c74ba39c43f3ced78d1ad94140be"
   dependencies:

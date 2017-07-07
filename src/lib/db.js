@@ -75,16 +75,16 @@ function getObservationTimestampStream (options, cb) {
   observationsTimestampIndex.ready(() => done(null, observationsTimestampIndex.getDocumentStream(opts)))
 }
 
-function exportObservationsAsObjects (observationOsmIds, cb) {
-  observationsExporter.osmObjects(observationOsmIds, cb)
+function exportObservationsAsObjects () {
+  observationsExporter.osmObjects.apply(observationsExporter, arguments)
 }
 
-function exportObservationsAsChange (observationOsmIds, cb) {
-  observationsExporter.osmChange(observationOsmIds, cb)
+function exportObservationsAsChange () {
+  observationsExporter.osmChange.apply(observationsExporter, arguments)
 }
 
-function exportObservationsAsChangeXml (observationOsmIds, cb) {
-  observationsExporter.osmChangeXml(observationOsmIds, cb)
+function exportObservationsAsChangeXml () {
+  observationsExporter.osmChangeXml.apply(observationsExporter, arguments)
 }
 
 function wipeDb (db, path, cb) {

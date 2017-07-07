@@ -35,7 +35,7 @@ function * getOsm ({bounds}) {
     yield call(persist, osmMetaFilename, {
       bounds,
       timestamp,
-      uuid: `${timestamp}__${bounds.join(',')}__${randombytes(8).toString('hex')}`
+      uuid: `${timestamp}__${bbox}__${randombytes(8).toString('hex')}`
     })
     yield put({ type: 'OSM_QUERY_SUCCESS', bounds })
   } catch (error) {

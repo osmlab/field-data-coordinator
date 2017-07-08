@@ -1,5 +1,7 @@
 'use strict'
-
+const promisify = require('es6-promisify')
+const persist = promisify(require('electron-json-storage').set)
+const randombytes = require('randombytes')
 const {
   call,
   put,
@@ -13,6 +15,7 @@ const {
   importSurvey,
   importOsm
 } = require('../drivers/local')
+const { osmMetaFilename } = require('../config')
 
 function * getObservations () {
   try {
@@ -28,6 +31,12 @@ function * getOsm ({bounds}) {
   const bbox = bounds.join(',')
   try {
     yield call(importOsm, bbox)
+    const timestamp = new Date().toISOString()
+    yield call(persist, osmMetaFilename, {
+      bounds,
+      timestamp,
+      uuid: `${timestamp}__${bbox}__${randombytes(8).toString('hex')}`
+    })
     yield put({ type: 'OSM_QUERY_SUCCESS', bounds })
   } catch (error) {
     yield put({ type: 'OSM_QUERY_FAILED', error })

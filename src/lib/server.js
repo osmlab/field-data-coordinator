@@ -9,9 +9,11 @@ const expressWs = require('express-ws')
 const websocketStreamify = require('websocket-stream')
 const Bonjour = require('bonjour')
 const eos = require('end-of-stream')
+const storage = require('electron-json-storage')
 
 const db = require('./db')
 const { listSurveys, readSurvey } = require('./surveys')
+const { osmMetaFilename } = require('../config')
 
 function Server (opts) {
   if (!(this instanceof Server)) return new Server(opts)
@@ -109,6 +111,18 @@ function Server (opts) {
         req.params.id + '.tgz'
       )
     )
+  })
+
+  app.get('/osm/meta', function (req, res, next) {
+    storage.get(osmMetaFilename, (err, meta) => {
+      if (err) {
+        return next(err)
+      } else if (!meta.hasOwnProperty('uuid')) {
+        return res.sendStatus(404)
+      } else {
+        return res.json(meta)
+      }
+    })
   })
 
   app.ws('/replicate/observations', function (ws) {

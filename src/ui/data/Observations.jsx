@@ -1,12 +1,20 @@
 'use strict'
 const React = require('react')
-const { Link } = require('react-router-dom')
 const ObservationMap = require('./Observation-Map.jsx')
+const ObservationTable = require('./Observation-Table.jsx')
 const Properties = require('./Properties.jsx')
 const Export = require('./Export.jsx')
 
 class Observations extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      activeView: 'map'
+    }
+  }
+
   render () {
+    const { activeView } = this.state
     return (
       <div className='content'>
         <Properties />
@@ -17,13 +25,19 @@ class Observations extends React.Component {
           </div>
           <ul className='navTabs'>
             <li className='navTabsElement'>
-              <Link to='' className=''>Map</Link>
+              <span
+                className={activeView === 'map' ? 'active' : null}
+                onClick={() => this.setState({ activeView: 'map' })}
+                >Map</span>
             </li>
             <li className='navTabsElement'>
-              <Link to='' className=''>Table</Link>
+              <span
+                className={activeView === 'table' ? 'active' : null}
+                onClick={() => this.setState({ activeView: 'table' })}
+                >Table</span>
             </li>
           </ul>
-          <ObservationMap />
+          { activeView === 'map' ? <ObservationMap /> : <ObservationTable /> }
         </div>
       </div>
     )

@@ -3,7 +3,7 @@ const React = require('react')
 const { connect } = require('react-redux')
 const immutable = require('immutable')
 const PropTypes = require('prop-types')
-const { getFlattenedProperties } = require('../../reducers/observations')
+const { getFlattenedProperties } = require('../../selectors')
 const { toggleFilterProperty, clearFilterProperties } = require('../../actions')
 
 class Properties extends React.Component {
@@ -73,7 +73,7 @@ Properties.propTypes = {
 const mapStateToProps = state => {
   return {
     observations: state.observations.get('all'),
-    properties: getFlattenedProperties(state.observations),
+    properties: getFlattenedProperties(state),
     activeProperties: state.observations.get('filterProperties')
   }
 }

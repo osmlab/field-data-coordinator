@@ -1,8 +1,5 @@
 'use strict'
 const React = require('react')
-const { connect } = require('react-redux')
-const { getActiveFeatures } = require('../../reducers/observations')
-
 class Metadata extends React.Component {
   render () {
     return (
@@ -14,9 +11,4 @@ class Metadata extends React.Component {
     )
   }
 }
-
-const mapStateToProps = state => ({
-  activeFeatures: getActiveFeatures(state.observations)
-})
-
-module.exports = connect(mapStateToProps)(Metadata)
+module.exports = Metadata

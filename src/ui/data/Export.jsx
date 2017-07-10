@@ -1,7 +1,6 @@
 'use strict'
 const React = require('react')
 const { connect } = require('react-redux')
-const { getActiveFeatures } = require('../../reducers/observations')
 
 class Export extends React.Component {
   constructor (props) {
@@ -10,9 +9,8 @@ class Export extends React.Component {
   }
 
   exportActive () {
-    const { activeIds, activeFeatures } = this.props
+    const { activeIds } = this.props
     console.log(activeIds.toJS())
-    console.log(activeFeatures)
   }
 
   render () {
@@ -27,7 +25,6 @@ class Export extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  activeIds: state.observations.get('active'),
-  activeFeatures: getActiveFeatures(state.observations)
+  activeIds: state.observations.get('active')
 })
 module.exports = connect(mapStateToProps)(Export)

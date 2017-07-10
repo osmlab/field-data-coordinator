@@ -45,7 +45,7 @@ function activeObservations (_map, filterProperties) {
   return List(activeIds)
 }
 
-module.exports.default = function (state = initialState, action) {
+module.exports = function (state = initialState, action) {
   /*
    * On sync, replace the internal data representation
    * and update the currently active observations,

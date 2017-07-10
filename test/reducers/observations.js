@@ -1,8 +1,7 @@
 'use strict'
 const test = require('tape')
-const observationsReducer = require('../../src/reducers/observations')
-const reducer = observationsReducer.default
-const { getActiveFeatures, getFlattenedProperties } = observationsReducer
+const reducer = require('../../src/reducers/observations')
+const { getActiveFeatures, getFlattenedProperties } = require('../../src/selectors')
 const { List, Map } = require('immutable')
 const observations = require('../fixtures/observations.json')
 
@@ -54,16 +53,16 @@ test('observations reducers', function (t) {
 
   t.test('getActiveFeatures', function (t) {
     const state0 = reducer(undefined, { type: SYNC, observations })
-    t.deepEqual(getActiveFeatures(state0).features, observations, 'returns all active features when no filter')
+    t.deepEqual(getActiveFeatures({ observations: state0 }).features, observations, 'returns all active features when no filter')
     const state1 = reducer(state0, { type: FILTER, property: { k: 'hearing', v: 'engineer' } })
-    t.deepEqual(getActiveFeatures(state1).features, [observations[0]], 'returns filtered features with filter')
+    t.deepEqual(getActiveFeatures({ observations: state1 }).features, [observations[0]], 'returns filtered features with filter')
     t.end()
   })
 
   t.test('getFlattenedProperties', function (t) {
     const state0 = reducer(undefined, { type: SYNC, observations })
     const state1 = reducer(state0, { type: FILTER, property: { k: 'hearing', v: 'engineer' } })
-    t.deepEqual(getFlattenedProperties(state1), {
+    t.deepEqual(getFlattenedProperties({ observations: state1 }), {
       hearing: { engineer: 1 },
       friendly: { meet: 1 },
       numeral: { mouth: 1 }

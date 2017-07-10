@@ -1,5 +1,4 @@
 var test = require('tape')
-var series = require('run-series')
 var osmdb = require('osm-p2p-mem')
 var obsdb = require('osm-p2p-observations')
 var memdb = require('memdb')
@@ -55,7 +54,6 @@ test('get observations by node', function (t) {
 test('get observations by survey id, device id', function (t) {
   // Set up a new test db
   var observationsDb = osmdb()
-  var observationsIndex = obsdb({ db: memdb(), log: observationsDb.log })
 
   var docs = {
     A: {

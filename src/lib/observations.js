@@ -33,7 +33,7 @@ function getObservationsBySurveyId (surveyId, observationsDb, cb) {
   filterAllDocuments(observationsDb, match, cb)
 
   function match (doc) {
-    return doc.tags && doc.tags.surveyId && doc.tags.surveyId == surveyId
+    return doc.tags && doc.tags.surveyId && doc.tags.surveyId.toString() === surveyId.toString()
   }
 }
 
@@ -41,7 +41,7 @@ function getObservationsByDeviceId (deviceId, observationsDb, cb) {
   filterAllDocuments(observationsDb, match, cb)
 
   function match (doc) {
-    return doc.tags && doc.tags.deviceId && doc.tags.deviceId == deviceId
+    return doc.tags && doc.tags.deviceId && doc.tags.deviceId.toString() === deviceId.toString()
   }
 }
 

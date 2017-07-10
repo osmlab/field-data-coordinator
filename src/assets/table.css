@@ -1,0 +1,5 @@
+.tableScrollContainer {
+  max-width: 600px;
+  overflow: scroll;
+
+}

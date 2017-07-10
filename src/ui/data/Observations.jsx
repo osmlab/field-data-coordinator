@@ -24,17 +24,13 @@ class Observations extends React.Component {
             <Export />
           </div>
           <ul className='navTabs'>
-            <li className='navTabsElement'>
-              <span
-                className={activeView === 'map' ? 'active' : null}
-                onClick={() => this.setState({ activeView: 'map' })}
-                >Map</span>
+            <li className={'navTabsElement ' + (activeView === 'map' ? 'active' : '')}
+              onClick={() => this.setState({ activeView: 'map' })}>
+              <span>Map</span>
             </li>
-            <li className='navTabsElement'>
-              <span
-                className={activeView === 'table' ? 'active' : null}
-                onClick={() => this.setState({ activeView: 'table' })}
-                >Table</span>
+            <li className={'navTabsElement ' + (activeView === 'table' ? 'active' : '')}
+              onClick={() => this.setState({ activeView: 'table' })}>
+              <span>Table</span>
             </li>
           </ul>
           { activeView === 'map' ? <ObservationMap /> : <ObservationTable /> }

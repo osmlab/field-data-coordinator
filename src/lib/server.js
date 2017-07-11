@@ -134,7 +134,7 @@ function Server (opts) {
 
   app.ws('/replicate/osm', function (ws) {
     ws = websocketStreamify(ws)
-    var stream = db.getOsmOrgXmlStream()
+    var stream = db.getLocalOsmOrgXmlStream()
     if (!stream) {
       ws.end()
     } else {

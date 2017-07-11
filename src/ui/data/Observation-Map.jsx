@@ -57,7 +57,8 @@ class ObservationMap extends React.Component {
     if (!el) return
     const map = this.map = new mapboxgl.Map({
       container: el,
-      style: styleUrl
+      style: styleUrl,
+      zoom: 1
     })
     map.addControl(new mapboxgl.NavigationControl())
     map.dragRotate.disable()
@@ -115,7 +116,10 @@ class ObservationMap extends React.Component {
         this.map.setCenter(features[0].geometry.coordinates)
         this.open(features[0].geometry.coordinates, features[0])
       } else {
-        this.map.fitBounds(extent(activeFeatures), { padding: 20 })
+        this.map.fitBounds(extent(activeFeatures), {
+          padding: 20,
+          maxZoom: 1
+        })
         if (this.popup) this.close()
       }
     } else if (this.popup) this.close()

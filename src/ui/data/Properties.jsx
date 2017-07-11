@@ -4,6 +4,8 @@ const { connect } = require('react-redux')
 const immutable = require('immutable')
 const PropTypes = require('prop-types')
 const { getFlattenedProperties } = require('../../selectors')
+const DatePicker = require('react-datepicker').default
+const moment = require('moment')
 const { toggleFilterProperty, clearFilterProperties } = require('../../actions')
 
 class Properties extends React.Component {
@@ -11,6 +13,11 @@ class Properties extends React.Component {
     super(props)
     this.toggleFilterProperty = this.toggleFilterProperty.bind(this)
     this.clearFilterProperties = this.clearFilterProperties.bind(this)
+    const timestamps = this.getSortedTimestamps()
+    this.state = {
+      startDate: timestamps[0],
+      endDate: timestamps[timestamps.length - 1]
+    }
   }
 
   clearFilterProperties () {
@@ -21,13 +28,22 @@ class Properties extends React.Component {
     this.clearFilterProperties()
   }
 
+  getSortedTimestamps () {
+    const { properties } = this.props
+    if (!properties._timestamp) return []
+    return Object.keys(properties._timestamp).map(t => parseInt(t, 10)).sort()
+  }
+
   render () {
     const { properties } = this.props
+    const timestamps = this.getSortedTimestamps()
     return (
       <aside role='complementary' className='sidebar'>
         <h4>Filter</h4>
         <a className='filterClear' onClick={this.clearFilterProperties}>Clear All</a>
+        {timestamps.length ? this.renderTimeRange(timestamps) : null}
         {Object.keys(properties).map(name => {
+          if (name === '_timestamp') return null
           return this.renderProperty(name, properties[name])
         })}
       </aside>
@@ -52,6 +68,26 @@ class Properties extends React.Component {
           ))}
         </ul>
       </fieldset>
+    )
+  }
+
+  renderTimeRange (timestamps) {
+    const { startDate, endDate } = this.state
+    return (
+      <div className='timeRanges'>
+        Start: <DatePicker
+          minDate={moment(timestamps[0])}
+          maxDate={moment(timestamps[timestamps.length - 1])}
+          selected={moment(startDate)}
+          selectsStart
+        />
+        End: <DatePicker
+          minDate={moment(timestamps[0])}
+          maxDate={moment(timestamps[timestamps.length - 1])}
+          selected={moment(endDate)}
+          selectsEnd
+        />
+      </div>
     )
   }
 

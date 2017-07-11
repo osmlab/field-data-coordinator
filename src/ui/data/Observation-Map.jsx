@@ -23,13 +23,6 @@ const markerStyle = {
   filter: ['==', '$type', 'Point']
 }
 
-function tooltip (feature) {
-  return `
-  <p>${JSON.stringify(feature.properties)}</p>
-  <p data-href='${feature.properties.id}' data-observation=1>Link</p>
-  `
-}
-
 class ObservationMap extends React.Component {
   constructor (props) {
     super(props)
@@ -37,6 +30,10 @@ class ObservationMap extends React.Component {
     this.mousemove = this.mousemove.bind(this)
     this.mouseclick = this.mouseclick.bind(this)
     this.navigate = this.navigate.bind(this)
+    const isSingleObservation = props.hasOwnProperty('observationId')
+    this.state = {
+      singleObservation: isSingleObservation
+    }
   }
 
   componentWillReceiveProps ({ activeIds, activeFeatures }) {
@@ -90,12 +87,27 @@ class ObservationMap extends React.Component {
       closeOnClick: true
     })
     .setLngLat(lngLat)
-    .setHTML(tooltip(feature))
+    .setHTML(this.tooltip(feature))
     .addTo(this.map)
   }
 
   close () {
     this.popup.remove()
+  }
+
+  tooltip (feature) {
+    const { properties } = feature
+    const { singleObservation } = this.state
+    return `
+    <p>ID: ${properties.id}</p>
+    <p>Device ID: ${properties._device_id}</p>
+    <p>Survey: ${properties._preset_id}</p>
+    ${singleObservation ? '' : `
+      <p data-href='${feature.properties.id}'
+      class='clickable'
+      data-observation=1>Link</p>
+      `}
+    `
   }
 
   navigate ({ target }) {
@@ -104,7 +116,7 @@ class ObservationMap extends React.Component {
       const observationId = target.getAttribute('data-href')
       const { history, match } = this.props
       // persist the active observation to state, in addition to changing the route
-      this.props.dispatch(setActiveObservation(observationId))
+      this.props.setActiveObservation(observationId)
       history.push(`${match.url}/observations/${observationId}`)
     }
   }
@@ -146,4 +158,4 @@ const mapStateToProps = state => {
     activeFeatures: getActiveFeatures(state)
   }
 }
-module.exports = withRouter(connect(mapStateToProps)(ObservationMap))
+module.exports = withRouter(connect(mapStateToProps, { setActiveObservation })(ObservationMap))

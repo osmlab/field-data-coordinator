@@ -79,7 +79,7 @@ class ObservationMap extends React.Component {
 
   mouseclick (e) {
     const features = this.map.queryRenderedFeatures(e.point, { layer: [SOURCE] })
-    if (features.length) this.open(e.lngLat, features[0])
+    if (features.length && features[0].properties.hasOwnProperty('id')) this.open(e.lngLat, features[0])
   }
 
   open (lngLat, feature) {

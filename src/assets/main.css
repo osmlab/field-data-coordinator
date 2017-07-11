@@ -313,3 +313,7 @@ fieldset {
 .timeRanges {
   margin: 0 0 1em;
 }
+
+.clickable {
+  cursor: pointer;
+}

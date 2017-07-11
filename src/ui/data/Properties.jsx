@@ -8,17 +8,21 @@ const DatePicker = require('react-datepicker').default
 const moment = require('moment')
 const { toggleFilterProperty, clearFilterProperties, setObservationTimeRange } = require('../../actions')
 
+const excludedProperties = ['id', '_timestamp', '_device_id', '_preset_id']
+
 class Properties extends React.Component {
   constructor (props) {
     super(props)
     this.toggleFilterProperty = this.toggleFilterProperty.bind(this)
     this.clearFilterProperties = this.clearFilterProperties.bind(this)
+    this.togglePropertiesPane = this.togglePropertiesPane.bind(this)
     this.setStartDate = this.setStartDate.bind(this)
     this.setEndDate = this.setEndDate.bind(this)
     const timestamps = this.getSortedTimestamps()
     this.state = {
       startDate: timestamps[0],
-      endDate: timestamps[timestamps.length - 1]
+      endDate: timestamps[timestamps.length - 1],
+      showProperties: false
     }
   }
 
@@ -55,16 +59,21 @@ class Properties extends React.Component {
 
   render () {
     const { properties } = this.props
+    const { showProperties } = this.state
     const timestamps = this.getSortedTimestamps()
     return (
       <aside role='complementary' className='sidebar'>
         <h4>Filter</h4>
         <a className='filterClear' onClick={this.clearFilterProperties}>Clear All</a>
         {timestamps.length ? this.renderTimeRange(timestamps) : null}
-        {Object.keys(properties).map(name => {
-          if (name === '_timestamp') return null
+        {['_device_id', '_preset_id'].map(name => {
           return this.renderProperty(name, properties[name])
         })}
+        <h5 className='clickable' onClick={this.togglePropertiesPane}>All properties { showProperties ? '[hide]' : '[show]' }</h5>
+        { showProperties ? Object.keys(properties).map(name => {
+          if (excludedProperties.indexOf(name) >= 0) return null
+          return this.renderProperty(name, properties[name])
+        }) : null }
       </aside>
     )
   }
@@ -124,6 +133,10 @@ class Properties extends React.Component {
 
   toggleFilterProperty (name, response) {
     this.props.toggleFilterProperty({ k: name, v: response })
+  }
+
+  togglePropertiesPane () {
+    this.setState({ showProperties: !this.state.showProperties })
   }
 }
 

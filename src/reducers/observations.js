@@ -12,6 +12,10 @@ const initialState = Map({
   // used to filter 'active' observations from all observations.
   filterProperties: Map(),
 
+  // Immutable list containing two values, representing
+  // start (0 index) and end date (1 index)
+  dateRange: List(),
+
   // An non-immutable object of normal geojson objects mapped to id.
   // Note this should never be used in a react component.
   // Use a helper like `getActiveFeatures` instead.
@@ -39,9 +43,18 @@ function createFilter (filterProperties) {
   }
 }
 
-function activeObservations (_map, filterProperties) {
+function createDateFilter (dateRange) {
+  if (!dateRange.size) return () => true
+  return ({properties}) => {
+    let timestamp = parseInt(properties._timestamp, 10)
+    return dateRange.first() <= timestamp && timestamp <= dateRange.last()
+  }
+}
+
+function activeObservations (_map, filterProperties, dateRange) {
   const filterFn = createFilter(filterProperties)
-  const activeIds = Object.keys(_map).filter(key => filterFn(_map[key]))
+  const timeRangeFilterFn = createDateFilter(dateRange)
+  const activeIds = Object.keys(_map).filter(key => filterFn(_map[key]) && timeRangeFilterFn(_map[key]))
   return List(activeIds)
 }
 
@@ -55,7 +68,7 @@ module.exports = function (state = initialState, action) {
     let _map = newObservationMap(action.observations)
     return state
     .set('_map', _map)
-    .set('active', activeObservations(_map, state.get('filterProperties')))
+    .set('active', activeObservations(_map, state.get('filterProperties'), state.get('dateRange')))
     .set('all', List(Object.keys(_map)))
 
   /*
@@ -73,7 +86,7 @@ module.exports = function (state = initialState, action) {
     }
     return state
     .set('filterProperties', newProperties)
-    .set('active', activeObservations(state.get('_map'), newProperties))
+    .set('active', activeObservations(state.get('_map'), newProperties, state.get('dateRange')))
 
   /*
    * Filter to only one active observation
@@ -81,15 +94,25 @@ module.exports = function (state = initialState, action) {
   } else if (action.type === 'SET_ACTIVE_OBSERVATION') {
     let filter = Map({ id: action.observationId })
     return state.set('filterProperties', filter)
-    .set('active', activeObservations(state.get('_map'), filter))
+    .set('active', activeObservations(state.get('_map'), filter, state.get('dateRange')))
 
   /*
    * Clear all filter properties
    */
   } else if (action.type === 'CLEAR_FILTER_PROPERTIES') {
     let emptyProperties = Map()
+    let emptyDateRange = List()
     return state.set('filterProperties', emptyProperties)
-    .set('active', activeObservations(state.get('_map'), emptyProperties))
+    .set('dateRange', emptyDateRange)
+    .set('active', activeObservations(state.get('_map'), emptyProperties, emptyDateRange))
+
+  /*
+   * Set a time range filter
+   */
+  } else if (action.type === 'SET_OBSERVATION_TIME_RANGE') {
+    let newDateRange = List(action.range)
+    return state.set('dateRange', newDateRange)
+    .set('active', activeObservations(state.get('_map'), state.get('filterProperties'), newDateRange))
 
   /* default */
   } else return state

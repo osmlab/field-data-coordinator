@@ -2,7 +2,7 @@
 
 const { combineReducers } = require('redux')
 
-const observations = require('./observations').default
+const observations = require('./observations')
 const surveys = require('./surveys')
 const osmBounds = require('./osm-bounds')
 const loading = require('./loading')

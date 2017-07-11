@@ -7,7 +7,7 @@ const immutable = require('immutable')
 const extent = require('turf-extent')
 const { withRouter } = require('react-router-dom')
 const { setActiveObservation } = require('../../actions')
-const { getActiveFeatures } = require('../../reducers/observations')
+const { getActiveFeatures } = require('../../selectors')
 const { styleUrl } = require('../../config')
 
 const SOURCE = 'ACTIVE_OBSERVATIONS'
@@ -139,7 +139,7 @@ ObservationMap.propTypes = {
 const mapStateToProps = state => {
   return {
     activeIds: state.observations.get('active'),
-    activeFeatures: getActiveFeatures(state.observations)
+    activeFeatures: getActiveFeatures(state)
   }
 }
 module.exports = withRouter(connect(mapStateToProps)(ObservationMap))

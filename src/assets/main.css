@@ -275,9 +275,14 @@ fieldset {
 }
 
 .navTabsElement {
+  cursor: pointer;
   display: inline-block;
   margin: 0 .2em;
   padding: .5em .8em;
+}
+
+.navTabsElement.active {
+  border-bottom: 1px solid #333333;
 }
 
 .surveyInputs {

@@ -9,6 +9,7 @@ const osmobs = require('osm-p2p-observations')
 const osmTimestampIndex = require('osm-p2p-timestamp-index')
 const importer = require('osm-p2p-db-importer')
 const osmGeojsonStream = require('osm-p2p-geojson')
+const ObserveExport = require('observe-export')
 const { get } = require('object-path')
 const rimraf = require('rimraf')
 const mkdirp = require('mkdirp')
@@ -25,7 +26,12 @@ module.exports = {
   listObservations,
   importBulkOsm,
   bboxQuerySavedOsm,
-  getLocalOsmOrgXmlStream
+  getLocalOsmOrgXmlStream,
+  exportObservations: {
+    objects: exportObservationsAsObjects,
+    change: exportObservationsAsChange,
+    changeXml: exportObservationsAsChangeXml
+  }
 }
 
 let osmOrgDb
@@ -33,6 +39,7 @@ let osmOrgDbPath
 let observationsDb
 let observationsIndex
 let observationsTimestampIndex
+let observationsExporter
 let dbRootDir
 
 function start (rootDir) {
@@ -44,6 +51,7 @@ function start (rootDir) {
     var obsdb = level(path.join(rootDir, 'observationsIndex'))
     observationsIndex = osmobs({ db: obsdb, log: observationsDb.log })
     observationsTimestampIndex = osmTimestampIndex(observationsDb)
+    observationsExporter = new ObserveExport(osmOrgDb, observationsDb, observationsIndex)
   }
 }
 
@@ -65,6 +73,18 @@ function getObservationTimestampStream (options, cb) {
     opts = options
   }
   observationsTimestampIndex.ready(() => done(null, observationsTimestampIndex.getDocumentStream(opts)))
+}
+
+function exportObservationsAsObjects () {
+  observationsExporter.osmObjects.apply(observationsExporter, arguments)
+}
+
+function exportObservationsAsChange () {
+  observationsExporter.osmChange.apply(observationsExporter, arguments)
+}
+
+function exportObservationsAsChangeXml () {
+  observationsExporter.osmChangeXml.apply(observationsExporter, arguments)
 }
 
 function wipeDb (db, path, cb) {

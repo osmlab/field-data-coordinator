@@ -3,11 +3,12 @@ const fs = require('fs')
 const createPoint = require('turf-point')
 const createFeatureCollection = require('turf-featurecollection')
 const json2csv = require('json2csv')
+const shpwrite = require('shp-write')
 const flat = require('flat')
 const { exportObservations } = require('./db')
 
 const getObservationsAsGeojson = (observationIds, cb) => {
-  exportObservations.objects(observationIds, {linkedNodes: true}, function (err, data) {
+  exportObservations.objects(observationIds, {linkedNodes: true}, (err, data) => {
     if (err) cb(err)
     else {
       const features = data.map(d => {
@@ -19,6 +20,19 @@ const getObservationsAsGeojson = (observationIds, cb) => {
       cb(null, createFeatureCollection(features))
     }
   })
+}
+
+const writeFn = (filename) => {
+  return (err, data) => {
+    if (err) console.warn(err)
+    else {
+      console.log('Writing', filename)
+      const stream = fs.createWriteStream(filename)
+      const out = typeof data === 'string' ? data : JSON.stringify(data)
+      stream.write(out)
+      stream.end()
+    }
+  }
 }
 
 // Canceling the dialog calls the function with a falsy filename.
@@ -39,8 +53,8 @@ module.exports.geojson = (observationIds, filename) => {
 
 module.exports.csv = (observationIds, filename) => {
   if (!filename) return
-  exportObservations.objects(observationIds, {linkedNodes: true}, function (err, data) {
-    if (err) console.warn('error')
+  exportObservations.objects(observationIds, {linkedNodes: true}, (err, data) => {
+    if (err) console.warn(err)
     else {
       const fields = {}
       const flattenedRows = []
@@ -51,8 +65,8 @@ module.exports.csv = (observationIds, filename) => {
       })
       try {
         var csvString = json2csv({ data: flattenedRows, fields: Object.keys(fields) })
-      } catch (e) {
-        return console.warn(e)
+      } catch (err) {
+        return console.warn(err)
       }
       console.log(csvString)
       writeFn(filename)(null, csvString)
@@ -62,20 +76,14 @@ module.exports.csv = (observationIds, filename) => {
 
 module.exports.shp = (observationIds, filename) => {
   if (!filename) return
-  exportObservations.objects(observationIds, {linkedNodes: true}, function (err, data) {
-
-  })
-}
-
-function writeFn (filename) {
-  return function (err, data) {
+  if (filename.slice(filename.length - 4, 0) !== '.zip') {
+    filename += '.zip'
+  }
+  getObservationsAsGeojson(observationIds, (err, geojson) => {
     if (err) console.warn(err)
     else {
-      console.log('Writing', filename)
-      const stream = fs.createWriteStream(filename)
-      const out = typeof data === 'string' ? data : JSON.stringify(data)
-      stream.write(out)
-      stream.end()
+      const shpArrayBuffer = shpwrite.zip(geojson)
+      writeFn(filename)(null, shpArrayBuffer)
     }
-  }
+  })
 }

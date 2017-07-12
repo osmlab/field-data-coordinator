@@ -19,6 +19,11 @@ module.exports.toggleFilterProperty = property => ({
   property
 })
 
+module.exports.setObservationTimeRange = range => ({
+  type: 'SET_OBSERVATION_TIME_RANGE',
+  range
+})
+
 module.exports.clearFilterProperties = () => ({ type: 'CLEAR_FILTER_PROPERTIES' })
 
 module.exports.setActiveObservation = (observationId) => ({

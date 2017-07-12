@@ -67,11 +67,11 @@ class Properties extends React.Component {
         <a className='filterClear clickable' onClick={this.clearFilterProperties}>Clear All</a>
         {timestamps.length ? this.renderTimeRange(timestamps) : null}
         {['_device_id', '_preset_id'].map(name => {
-          return this.renderProperty(name, properties[name])
+          return properties[name] ? this.renderProperty(name, properties[name]) : null
         })}
         <h5 className='clickable' onClick={this.togglePropertiesPane}>All properties { showProperties ? '[hide]' : '[show]' }</h5>
         { showProperties ? Object.keys(properties).map(name => {
-          if (excludedProperties.indexOf(name) >= 0) return null
+          if (!properties[name] || excludedProperties.indexOf(name) >= 0) return null
           return this.renderProperty(name, properties[name])
         }) : null }
       </aside>

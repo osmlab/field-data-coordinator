@@ -162,6 +162,16 @@ const openExportGeojsonDialog = (observationIds) => {
   )
 }
 
+const openExportCsvDialog = (observationIds) => {
+  dialog.showSaveDialog(
+    {
+      buttonLabel: 'Export CSV',
+      defaultPath: 'observations.csv'
+    },
+    (filename) => exportObservations.csv(observationIds, filename)
+  )
+}
+
 // export the db object so we can remote require it on render threads
 // https://github.com/electron/electron/blob/master/docs/api/remote.md
 module.exports = {
@@ -170,5 +180,6 @@ module.exports = {
   openImportSurveyDialog,
   openExportXmlDialog,
   openExportJsonDialog,
-  openExportGeojsonDialog
+  openExportGeojsonDialog,
+  openExportCsvDialog
 }

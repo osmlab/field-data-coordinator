@@ -48,6 +48,7 @@
     "redux-localstorage": "^0.4.1",
     "redux-saga": "^0.15.3",
     "rimraf": "^2.6.1",
+    "shp-write": "^0.3.2",
     "slugify": "^1.1.0",
     "tar-stream": "^1.5.4",
     "through2": "^2.0.3",

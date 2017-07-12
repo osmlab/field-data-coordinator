@@ -12,7 +12,8 @@ const {
   openExportXmlDialog,
   openExportJsonDialog,
   openExportGeojsonDialog,
-  openExportCsvDialog
+  openExportCsvDialog,
+  openExportShapefileDialog
 } = remote.require('./main')
 
 // Use these drivers to interface with a local osm p2p instance.
@@ -28,5 +29,6 @@ module.exports = {
   exportXml: openExportXmlDialog,
   exportJson: openExportJsonDialog,
   exportGeojson: openExportGeojsonDialog,
-  exportCsv: openExportCsvDialog
+  exportCsv: openExportCsvDialog,
+  exportShp: openExportShapefileDialog
 }

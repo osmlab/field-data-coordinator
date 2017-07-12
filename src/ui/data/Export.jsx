@@ -5,7 +5,8 @@ const {
   exportXml,
   exportJson,
   exportGeojson,
-  exportCsv
+  exportCsv,
+  exportShp
 } = require('../../drivers/local')
 
 class Export extends React.Component {
@@ -48,6 +49,7 @@ class Export extends React.Component {
               <li className='dropdownOption' onClick={() => exportJson(this.getActive())}>JSON</li>
               <li className='dropdownOption' onClick={() => exportGeojson(this.getActive())}>GeoJSON</li>
               <li className='dropdownOption' onClick={() => exportCsv(this.getActive())}>CSV</li>
+              <li className='dropdownOption' onClick={() => exportShp(this.getActive())}>Shapefile</li>
             </ul>
           ) : null }
         </div>

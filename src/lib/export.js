@@ -6,6 +6,21 @@ const json2csv = require('json2csv')
 const flat = require('flat')
 const { exportObservations } = require('./db')
 
+const getObservationsAsGeojson = (observationIds, cb) => {
+  exportObservations.objects(observationIds, {linkedNodes: true}, function (err, data) {
+    if (err) cb(err)
+    else {
+      const features = data.map(d => {
+        const point = createPoint([d.lon, d.lat], d.tags)
+        point.id = d.id
+        point.version = d.version
+        return point
+      })
+      cb(null, createFeatureCollection(features))
+    }
+  })
+}
+
 // Canceling the dialog calls the function with a falsy filename.
 module.exports.xml = (observationIds, filename) => {
   if (!filename) return
@@ -19,19 +34,7 @@ module.exports.json = (observationIds, filename) => {
 
 module.exports.geojson = (observationIds, filename) => {
   if (!filename) return
-  const write = writeFn(filename)
-  exportObservations.objects(observationIds, {linkedNodes: true}, function (err, data) {
-    if (err) console.warn('error')
-    else {
-      const features = data.map(d => {
-        const point = createPoint([d.lon, d.lat], d.tags)
-        point.id = d.id
-        point.version = d.version
-        return point
-      })
-      write(null, createFeatureCollection(features))
-    }
-  })
+  getObservationsAsGeojson(observationIds, writeFn(filename))
 }
 
 module.exports.csv = (observationIds, filename) => {
@@ -54,6 +57,13 @@ module.exports.csv = (observationIds, filename) => {
       console.log(csvString)
       writeFn(filename)(null, csvString)
     }
+  })
+}
+
+module.exports.shp = (observationIds, filename) => {
+  if (!filename) return
+  exportObservations.objects(observationIds, {linkedNodes: true}, function (err, data) {
+
   })
 }
 

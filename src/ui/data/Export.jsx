@@ -1,7 +1,13 @@
 'use strict'
 const React = require('react')
 const { connect } = require('react-redux')
-const { exportXml, exportJson, exportGeojson } = require('../../drivers/local')
+const {
+  exportXml,
+  exportJson,
+  exportGeojson,
+  exportCsv,
+  exportShp
+} = require('../../drivers/local')
 
 class Export extends React.Component {
   constructor (props) {
@@ -42,6 +48,8 @@ class Export extends React.Component {
               <li className='dropdownOption' onClick={() => exportXml(this.getActive())}>XML</li>
               <li className='dropdownOption' onClick={() => exportJson(this.getActive())}>JSON</li>
               <li className='dropdownOption' onClick={() => exportGeojson(this.getActive())}>GeoJSON</li>
+              <li className='dropdownOption' onClick={() => exportCsv(this.getActive())}>CSV</li>
+              <li className='dropdownOption' onClick={() => exportShp(this.getActive())}>Shapefile</li>
             </ul>
           ) : null }
         </div>

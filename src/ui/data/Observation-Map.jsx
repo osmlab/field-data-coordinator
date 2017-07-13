@@ -58,7 +58,7 @@ class ObservationMap extends React.Component {
       zoom: 1
     })
     map.addControl(new mapboxgl.NavigationControl())
-    map.addControl(new mapboxgl.GeolocateControl());
+    map.addControl(new mapboxgl.GeolocateControl())
     map.dragRotate.disable()
     map.touchZoomRotate.disableRotation()
     map.once('load', () => {

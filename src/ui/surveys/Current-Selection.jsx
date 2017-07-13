@@ -44,7 +44,7 @@ class CurrentSelection extends React.Component {
           onLoad={this.onMapLoad}
         />
         <div className='metadataWrapper'>
-          <h4>Geographic Area</h4>
+          <h4>Imported Geographic Area</h4>
           <p className='metadata'>Coordinates: {bounds.map(b => b.toFixed(5)).join(', ')}</p>
           <p className='metadata'>Area: {(calculateArea(bboxPolygon(bounds)) / 1000).toFixed(2)} km<sup>2</sup></p>
         </div>

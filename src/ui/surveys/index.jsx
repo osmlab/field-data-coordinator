@@ -40,17 +40,14 @@ class Surveys extends React.Component {
           </div>
           {surveys && surveys.size > 0 ? (
             <div className='clearfix'>
-              <h3>Current Survey</h3>
-              <div>
-                <CurrentSelection />
-                <div className='importedSurvey'>
-                  <h5>Imported Survey</h5>
-                  {surveys.map((survey, id) => <p className='metadata' key={id}>{survey.name}</p>)}
-                </div>
+              <div className='importedSurvey'>
+                <h5>Imported Survey</h5>
+                {surveys.map((survey, id) => <p className='metadata' key={id}>{survey.name}</p>)}
               </div>
             </div>
             ) : null
           }
+          <CurrentSelection />
         </section>
       </div>
     )

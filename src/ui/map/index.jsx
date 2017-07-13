@@ -33,6 +33,7 @@ class Map extends React.Component {
     const map = this.map = new mapboxgl.Map(opts)
 
     map.addControl(new mapboxgl.NavigationControl())
+    map.addControl(new mapboxgl.GeolocateControl());
     map.dragRotate.disable()
     map.touchZoomRotate.disableRotation()
 

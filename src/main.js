@@ -176,7 +176,7 @@ const openExportShapefileDialog = (observationIds) => {
   dialog.showSaveDialog(
     {
       buttonLabel: 'Export Shapefile',
-      defaultPath: 'observations'
+      defaultPath: 'observations.zip'
     },
     (filename) => exportObservations.shp(observationIds, filename)
   )

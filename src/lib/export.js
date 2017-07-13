@@ -76,14 +76,16 @@ module.exports.csv = (observationIds, filename) => {
 
 module.exports.shp = (observationIds, filename) => {
   if (!filename) return
-  if (filename.slice(filename.length - 4, 0) !== '.zip') {
+  if (filename.substr(filename.length - 4) !== '.zip') {
     filename += '.zip'
   }
   getObservationsAsGeojson(observationIds, (err, geojson) => {
     if (err) console.warn(err)
     else {
       const shpArrayBuffer = shpwrite.zip(geojson)
-      writeFn(filename)(null, shpArrayBuffer)
+      fs.writeFileSync(filename, Buffer.from(shpArrayBuffer), {
+        encoding: 'binary'
+      })
     }
   })
 }

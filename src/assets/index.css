@@ -40,6 +40,13 @@
 .page__body {
   background-color: #FBFAFA;
   overflow: hidden;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  position: relative;
+}
+
+.body__content {
+  padding-bottom: 2rem;
 }
 
 .data__card {
@@ -51,22 +58,51 @@
 
 .data__meta {
   padding: 1.25rem;
+  font-size: 0.75rem;
 }
 
 .data__title {
   font-size: 1rem;
-  margin-bottom: 0; 
+  margin-bottom: 0.25rem; 
 }
 
 .data__item {
   display: inline-block;
   padding-right: 0.75rem;
   margin-right: 0.75rem;
-  border-right: solid 1px #948D94;
-  font-size: 0.75rem;
+  border-right: solid 1px #8D8D8D;
   text-transform: uppercase;
 }
 
 .data__item:last-child {
+  border-right: none;
+}
+
+.data__list {
+  margin: 1rem 0;
+}
+
+dl, ul {
+  overflow: hidden;
+  line-height: 0.75rem;
+}
+
+dt, dd {
+  float: left;
+  font-size: 0.75rem;
+}
+
+dt {
+  text-transform: uppercase;
+}
+
+dd {
+  padding-left: 0.25rem;
+  padding-right: 0.5rem;
+  margin-right: 0.5rem;
+  border-right: solid 1px #948D94;
+}
+
+dd:last-child {
   border-right: none;
 }

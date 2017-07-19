@@ -328,3 +328,11 @@ fieldset {
 .primary--link:hover {
   opacity: 0.7;
 }
+
+.page--link {
+  font-size: 0.675rem;
+  line-height: 0.875rem;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, 0);
+}

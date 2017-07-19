@@ -45,9 +45,17 @@ module.exports = class App extends React.Component {
                   <li className='data__item'>49° N 100° E</li>
                   <li className='data__item'>Category</li>
                 </ul>
+                <dl>
+                  <dt>Author:</dt>
+                  <dd>Author Name</dd>
+                  <dt>Date:</dt>
+                  <dd>2/26/17</dd>
+                </dl>
+                <p className='data_item'>80% complete</p>
               </div>
             </div>
           </div>
+          <a className='page--link primary--link'>View All Data Points</a>
         </section>
       </div>
     )

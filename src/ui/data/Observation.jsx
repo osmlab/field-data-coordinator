@@ -10,7 +10,7 @@ class Observation extends React.Component {
     return (
       <div className='row'>
         <div className='observation__header'>
-        	<Link className='link--primary' to='/data'>Back to all observations</Link>
+          <Link className='link--primary' to='/data'>Back to all observations</Link>
           <h2 className='observation__title'>Observation ID: {params.observationId}</h2>
           <ul className='data__list'>
             <li className='data__item'>49° N 100° E</li>

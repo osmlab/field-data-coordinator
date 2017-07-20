@@ -116,6 +116,13 @@ section {
   border-right: 1px solid #F0ECEC;
 }
 
+.sidebar--observations {
+  flex: .02 auto;
+  z-index: 2;
+  border-top: 1px solid #F0ECEC;
+  margin-right: 2rem;
+}
+
 .sidebarSidebar {
   background-color: #F3F3F3;
   width: 10em;
@@ -319,20 +326,31 @@ fieldset {
   cursor: pointer;
 }
 
-.primary--link {
+.link--primary {
   text-transform: uppercase;
   border-bottom: solid 1px #00BFA5;
   color: #00BFA5;
+  font-size: 0.75rem;
+  font-weight: 300;
 }
 
-.primary--link:hover {
+.link--primary:hover {
   opacity: 0.7;
 }
 
-.page--link {
+.link--page {
   font-size: 0.675rem;
-  line-height: 0.875rem;
+  line-height: 0.75rem;
   left: 50%;
   position: absolute;
   transform: translate(-50%, 0);
+}
+
+.link--edit {
+  margin-left: 0.5rem;
+}
+
+.meta__group {
+  padding: 1rem 1rem 2rem 0;
+  max-width: 18rem;
 }

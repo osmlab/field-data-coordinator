@@ -1,0 +1,24 @@
+.data__subtitle {
+	text-transform: uppercase;
+  font-size: 0.875rem;
+}
+
+.data__tag {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 300;
+}
+
+.data__tag-def {
+  font-size: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.data__tag-def:last-child {
+  margin-bottom: 0rem;
+}
+
+.meta__prose {
+  margin-bottom: 1rem;
+  font-size: 0.75rem;
+}

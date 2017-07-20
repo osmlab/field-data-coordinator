@@ -1,5 +1,14 @@
 .tableScrollContainer {
   max-width: 600px;
   overflow: scroll;
+}
 
+th {
+  text-align: left;
+}
+
+td, th {
+	padding: 0.5rem;
+  font-size: 0.75rem;
+  border-bottom: 1px solid #F0ECEC;
 }

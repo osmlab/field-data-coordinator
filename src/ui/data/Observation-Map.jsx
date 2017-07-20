@@ -97,17 +97,27 @@ class ObservationMap extends React.Component {
   }
 
   tooltip (feature) {
-    const { properties } = feature
     const { singleObservation } = this.state
     return `
-    <p>ID: ${properties.id}</p>
-    <p>Device ID: ${properties._device_id}</p>
-    <p>Survey: ${properties._preset_id}</p>
-    ${singleObservation ? '' : `
+    <div class='data__meta'>
+      <h2 class='data__title'>Name of Observation Point</h2>
+      <ul class='data__list'>
+        <li class='data__item'>49° N 100° E</li>
+        <li class='data__item'>Category</li>
+      </ul>
+      <dl class='meta-card__list'>
+        <dt class='meta-card__title'>Author:</dt>
+        <dd class='meta-card__def'>Author Name</dd>
+        <dt class='meta-card__title'>Date:</dt>
+        <dd class='meta-card__def'>2/26/17</dd>
+      </dl>
+      <p class='data_item'>80% complete</p>
+      ${singleObservation ? '' : `
       <p data-href='${feature.properties.id}'
       class='clickable'
       data-observation=1>Link</p>
       `}
+    </div>
     `
   }
 

@@ -16,7 +16,7 @@ class Metadata extends React.Component {
         <div className='meta__group'>
           <h2 className='data__subtitle'>Notes</h2>
           <p className='meta__prose'>Add anything that is happening at this point in time that you think is valuable to record.</p>
-          <a className='link--primary'>+ Add a New Note</a>
+          <a className='link--add'>+ Add a New Note</a>
         </div>
         <div className='meta__group'>
           <h2 className='data__subtitle'>Tags <span><a className='link--primary link--edit'>Edit</a></span></h2>
@@ -24,7 +24,7 @@ class Metadata extends React.Component {
             <li>Natural/Oil Spill</li>
             <li>Hazard</li>
           </ul>
-          <a className='link--primary'> + Add a New Tag</a>
+          <a className='link--add'> + Add a New Tag</a>
         </div>
       </aside>
     )

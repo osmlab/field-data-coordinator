@@ -28,6 +28,7 @@ body {
 a {
   text-decoration: none;
   color: #575456;
+  cursor: pointer;
 }
 
 ul { padding: 0; margin: 0;}
@@ -113,6 +114,13 @@ section {
   margin-right: 2em;
   z-index: 2;
   border-right: 1px solid #F0ECEC;
+}
+
+.sidebar--observations {
+  flex: .02 auto;
+  z-index: 2;
+  border-top: 1px solid #F0ECEC;
+  margin-right: 2rem;
 }
 
 .sidebarSidebar {
@@ -316,4 +324,33 @@ fieldset {
 
 .clickable {
   cursor: pointer;
+}
+
+.link--primary {
+  text-transform: uppercase;
+  border-bottom: solid 1px #00BFA5;
+  color: #00BFA5;
+  font-size: 0.75rem;
+  font-weight: 300;
+}
+
+.link--primary:hover {
+  opacity: 0.7;
+}
+
+.link--page {
+  font-size: 0.675rem;
+  line-height: 0.75rem;
+  left: 50%;
+  position: absolute;
+  transform: translate(-50%, 0);
+}
+
+.link--edit {
+  margin-left: 0.5rem;
+}
+
+.meta__group {
+  padding: 1rem 1rem 2rem 0;
+  max-width: 18rem;
 }

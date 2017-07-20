@@ -1,0 +1,115 @@
+.section__title {
+  text-align: center;
+  padding-bottom: 2rem;
+  padding-top: 2rem;
+}
+
+.page__header {
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  overflow: hidden;
+}
+
+.header__content {
+  float: left;
+  margin: auto 0;
+}
+
+.header__card {
+	width: 20%;
+  float: left;
+  padding-right: 2rem;
+}
+
+.card__title {
+  font-size: 1rem;
+}
+
+.card__prose {
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+  min-height: 7rem;
+}
+
+.card__link {
+  position: relative;
+  bottom: 0;
+  font-size: 0.675rem;
+}
+
+.page__body {
+  background-color: #FBFAFA;
+  overflow: hidden;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  position: relative;
+}
+
+.body__content {
+  padding-bottom: 2rem;
+}
+
+.data__card {
+  margin: auto 0;
+  width: 40%;
+  background-color: #FFF;
+  box-shadow: 1px 1px 10px 1px #eeeeee;
+}
+
+.data__meta {
+  padding: 1.25rem;
+  font-size: 0.75rem;
+}
+
+.data__title {
+  font-size: 1rem;
+  margin-bottom: 0.25rem; 
+  line-height: 0.75rem;
+}
+
+.data__item {
+  display: inline-block;
+  padding-right: 0.75rem;
+  margin-right: 0.75rem;
+  border-right: solid 1px #8D8D8D;
+  text-transform: uppercase;
+  line-height: 0.75rem;
+}
+
+.data__item:last-child {
+  border-right: none;
+}
+
+.data__list {
+  margin: 0.5rem 0;
+  line-height: 0.75rem;
+}
+
+dl, ul {
+  overflow: hidden;
+}
+
+.meta-card__list {
+  line-height: 0.75rem;
+  margin-top: 1rem;
+}
+
+.meta-card__title, .meta-card__def {
+  float: left;
+  font-size: 0.75rem;
+}
+
+.meta-card__title {
+  text-transform: uppercase;
+}
+
+.meta-card__def {
+  padding-left: 0.25rem;
+  padding-right: 0.5rem;
+  margin-right: 0.5rem;
+  border-right: solid 1px #948D94;
+}
+
+.meta-card__def:last-child {
+  border-right: none;
+}

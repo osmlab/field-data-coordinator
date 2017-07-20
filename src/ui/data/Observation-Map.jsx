@@ -97,6 +97,7 @@ class ObservationMap extends React.Component {
   }
 
   tooltip (feature) {
+    const { singleObservation } = this.state
     return `
     <div class='data__meta'>
       <h2 class='data__title'>Name of Observation Point</h2>
@@ -111,6 +112,11 @@ class ObservationMap extends React.Component {
         <dd class='meta-card__def'>2/26/17</dd>
       </dl>
       <p class='data_item'>80% complete</p>
+      ${singleObservation ? '' : `
+      <p data-href='${feature.properties.id}'
+      class='clickable'
+      data-observation=1>Link</p>
+      `}
     </div>
     `
   }

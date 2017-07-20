@@ -1,6 +1,7 @@
 .data__subtitle {
 	text-transform: uppercase;
   font-size: 0.875rem;
+  margin-bottom: 0.5rem;
 }
 
 .data__tag {

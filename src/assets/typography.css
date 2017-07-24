@@ -23,3 +23,14 @@
   margin-bottom: 1rem;
   font-size: 0.75rem;
 }
+
+.subtitle {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  font-weight: 300;
+  padding-bottom: 0.5rem;
+  margin-bottom: 1rem;
+  border-bottom: solid 1px #F0ECEC;
+  width: 650px;
+  color: #8D8D8D;
+}

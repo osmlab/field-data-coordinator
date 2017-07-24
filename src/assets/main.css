@@ -18,7 +18,7 @@
 }
 
 body {
-  color: #716674;
+  color: #8D8D8D;
   font-size: .88em;
   line-height: 18pt;
   font-family: ;
@@ -302,6 +302,12 @@ fieldset {
   position: relative;
 }
 
+.importedSurvey {
+  border-radius: 4px;
+  margin-bottom: 3em;
+  padding: 1rem 0; 
+}
+
 .surveyInputGeo {
   position: absolute;
   bottom: 2em;
@@ -334,6 +340,14 @@ fieldset {
   font-weight: 300;
 }
 
+.link--secondary {
+  color: #8D8D8D;
+  font-size: 0.75rem;
+  font-weight: 300;  
+  text-transform: uppercase;
+  border-bottom: solid 1px #8D8D8D;
+}
+
 .link--add {
   text-transform: uppercase;
   color: #00BFA5;
@@ -354,6 +368,10 @@ fieldset {
 }
 
 .link--edit {
+  margin-left: 0.5rem;
+}
+
+.link--delete {
   margin-left: 0.5rem;
 }
 

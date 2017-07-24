@@ -36,17 +36,25 @@ class Surveys extends React.Component {
           <h2>Surveys</h2>
           <div className='surveyInputs'>
             <ImportSurvey />
-            <SelectGeography />
           </div>
           {surveys && surveys.size > 0 ? (
             <div className='clearfix'>
+              <h4 className='subtitle'>Imported Surveys</h4>
               <div className='importedSurvey'>
-                <h5>Imported Survey</h5>
-                {surveys.map((survey, id) => <p className='metadata' key={id}>{survey.name}</p>)}
+                {surveys.map((survey, id) => <h4 key={id}>{survey.name}</h4>)}
+                <p className='data__tag'>Bohol, Phillipines </p>
+                <p><span className='data__tag'>Added:</span> 3/22/17</p>
+                <div className='link--group'>
+                  <a className='link--primary'>Edit</a>
+                  <a className='link--primary link--delete'>Delete</a>
+                </div>
               </div>
             </div>
-            ) : null
+          ) : null
           }
+          <div className='surveyInputs'>
+            <SelectGeography />
+          </div>
           <CurrentSelection />
         </section>
       </div>

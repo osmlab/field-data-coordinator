@@ -50,7 +50,7 @@ module.exports = class App extends React.Component {
                   <dt className='meta-card__title'>Date:</dt>
                   <dd className='meta-card__def'>2/26/17</dd>
                 </dl>
-                <p className='data_item'>80% complete</p>
+                <p>80% complete</p>
               </div>
             </div>
           </div>

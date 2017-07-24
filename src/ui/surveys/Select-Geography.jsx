@@ -53,7 +53,9 @@ class SelectGeography extends React.Component {
     : objectPath.get(centroid(bboxPolygon(bounds)), 'geometry.coordinates', null)
 
     return (
-      <div className='surveyInput surveyInputGeo'>
+      <div className='surveyInput'>
+        <h3 className='withDescription'>Select a new geography</h3>
+        <p className='description'>Description of how to add things. Find more information about how to make a survey file here.</p>
         <button className='button buttonGroup' onClick={() => this.setState({ active: true })}>Select an area to import</button>
         {this.state.active ? (
           <Modal>

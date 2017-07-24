@@ -36,6 +36,7 @@ class CurrentSelection extends React.Component {
     const { bounds } = this.props
     return (
       <div className='selected'>
+        <h4 className='subtitle'>Imported Geographic Area</h4>
         <Map
           options={selectedMapOptions}
           containerClass='selected__map'

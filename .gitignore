@@ -6,3 +6,4 @@ build/
 bin/observations
 release
 test/testdb
+yarn-error.log

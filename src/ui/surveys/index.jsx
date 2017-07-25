@@ -3,11 +3,13 @@
 const dragDrop = require('drag-drop')
 const React = require('react')
 const { connect } = require('react-redux')
+const objectPath = require('object-path')
 
 const ImportSurvey = require('./Import.jsx')
 const SelectGeography = require('./Select-Geography.jsx')
 const CurrentSelection = require('./Current-Selection.jsx')
 const { getSurveys } = require('../../selectors')
+const { displayCase } = require('../format')
 
 // TODO this doesn't work yet
 dragDrop('#root', {
@@ -26,6 +28,26 @@ dragDrop('#root', {
 })
 
 class Surveys extends React.Component {
+  renderSurvey (survey, id) {
+    const meta = objectPath.get(survey, 'meta', {})
+    return (
+      <div key={id}>
+        <h4>{survey.name}</h4>
+        <p>{survey.description}</p>
+        {Object.keys(meta).map(key => <p key={key}>
+          <span className='data__tag'>{displayCase(key)}: </span>
+          {displayCase(meta[key])}
+        </p>
+        )}
+        <p><span className='data__tag'>Version:</span> {survey.version}</p>
+        <div className='link--group'>
+          <a className='link--primary link--edit'>Edit</a>
+          <a className='link--primary link--delete'>Delete</a>
+        </div>
+      </div>
+    )
+  }
+
   render () {
     const { surveys } = this.props
 
@@ -41,13 +63,7 @@ class Surveys extends React.Component {
             <div className='clearfix'>
               <h4 className='subtitle'>Imported Surveys</h4>
               <div className='importedSurvey'>
-                {surveys.map((survey, id) => <h4 key={id}>{survey.name}</h4>)}
-                <p className='data__tag'>Bohol, Phillipines </p>
-                <p><span className='data__tag'>Added:</span> 3/22/17</p>
-                <div className='link--group'>
-                  <a className='link--primary'>Edit</a>
-                  <a className='link--primary link--delete'>Delete</a>
-                </div>
+                {surveys.map(this.renderSurvey)}
               </div>
             </div>
           ) : null

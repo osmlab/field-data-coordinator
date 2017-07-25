@@ -31,7 +31,7 @@ class Surveys extends React.Component {
   renderSurvey (survey, id) {
     const meta = objectPath.get(survey, 'meta', {})
     return (
-      <div key={id}>
+      <div key={id} className='surveyMeta'>
         <h4>{survey.name}</h4>
         <p>{survey.description}</p>
         {Object.keys(meta).map(key => <p key={key}>

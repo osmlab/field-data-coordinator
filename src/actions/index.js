@@ -10,6 +10,7 @@ module.exports.updateSurveyList = surveys => {
     surveys
   }
 }
+module.exports.removeSurvey = id => ({ type: 'REMOVE_SURVEY', id })
 
 module.exports.sync = () => ({ type: 'SYNC' })
 module.exports.getOsm = (bounds) => ({ type: 'GET_OSM', bounds })

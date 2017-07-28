@@ -1,8 +1,14 @@
 'use strict'
 const React = require('react')
+const { connect } = require('react-redux')
+const { getRecentObservations } = require('../../selectors')
+const PropTypes = require('prop-types')
 
-module.exports = class App extends React.Component {
+const NUM_OBSERVATIONS_TO_SHOW = 5
+
+class App extends React.Component {
   render () {
+    console.log(this.props.observations)
     return (
       <div>
         <section className='page__header row'>
@@ -60,3 +66,14 @@ module.exports = class App extends React.Component {
     )
   }
 }
+
+App.propTypes = {
+  observations: PropTypes.array
+}
+
+const mapStateToProps = state => {
+  return {
+    observations: getRecentObservations(NUM_OBSERVATIONS_TO_SHOW)(state)
+  }
+}
+module.exports = connect(mapStateToProps)(App)

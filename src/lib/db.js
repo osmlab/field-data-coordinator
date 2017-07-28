@@ -21,7 +21,7 @@ module.exports = {
   start,
   createOsmOrgReplicationStream,
   createObservationsReplicationStream,
-  getObservationTimestampStream,
+  listSequentialObservations,
   createObservation,
   listObservations,
   importBulkOsm,
@@ -73,6 +73,16 @@ function getObservationTimestampStream (options, cb) {
     opts = options
   }
   observationsTimestampIndex.ready(() => done(null, observationsTimestampIndex.getDocumentStream(opts)))
+}
+
+function listSequentialObservations (cb) {
+  const ids = []
+  getObservationTimestampStream((err, stream) => {
+    if (err) cb(err)
+    stream.on('data', d => ids.push(d))
+    stream.on('end', () => cb(null, ids))
+    stream.on('error', error => cb(error))
+  })
 }
 
 function exportObservationsAsObjects () {

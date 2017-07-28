@@ -1,6 +1,6 @@
 'use strict'
 const promisify = require('es6-promisify')
-const persist = promisify(require('electron-json-storage').set)
+const persist = promisify(window.require('electron-json-storage').set)
 const randombytes = require('randombytes')
 const {
   call,

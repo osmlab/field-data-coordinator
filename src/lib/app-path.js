@@ -1,8 +1,9 @@
 const mkdirp = require('mkdirp')
 const path = require('path')
+const fs = require('fs')
 const { app } = require('electron')
 
-const APP_DIR = 'org.osm-labs.field-data-coordinator'
+const APP_DIR = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf-8')).name
 
 module.exports = function () {
   var dir = app.getPath('userData')

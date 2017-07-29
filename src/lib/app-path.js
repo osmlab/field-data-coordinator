@@ -3,7 +3,8 @@ const path = require('path')
 const fs = require('fs')
 const { app } = require('electron')
 
-const APP_DIR = JSON.parse(fs.readFileSync(path.join(__dirname, 'package.json'), 'utf-8')).name
+const APP_DIR = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'package.json'), 'utf-8')).name
+process.stdout.write(APP_DIR + '\n')
 
 module.exports = function () {
   var dir = app.getPath('userData')

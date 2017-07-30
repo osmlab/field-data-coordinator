@@ -1,5 +1,6 @@
 'use strict'
 const React = require('react')
+const moment = require('moment')
 const { connect } = require('react-redux')
 const { getRecentObservations } = require('../../selectors')
 const PropTypes = require('prop-types')
@@ -7,6 +8,28 @@ const PropTypes = require('prop-types')
 const NUM_OBSERVATIONS_TO_SHOW = 5
 
 class App extends React.Component {
+  renderObservation (ob) {
+    const { properties } = ob
+    return (
+      <div className='data__card' key={properties._version_id}>
+        <div className='data__map' />
+        <div className='data__meta'>
+          <h2 className='data__title'>Name of Observation Point</h2>
+          <ul className='data__list'>
+            <li className='data__item'>{ob.geometry.coordinates.join(', ')}</li>
+            <li className='data__item'>Category</li>
+          </ul>
+          <dl className='meta-card__list'>
+            <dt className='meta-card__title'>Device ID:</dt>
+            <dd className='meta-card__def'>{properties._device_id}</dd>
+            <dt className='meta-card__title'>Date:</dt>
+            <dd className='meta-card__def'>{properties._timestamp}</dd>
+          </dl>
+        </div>
+      </div>
+    )
+  }
+
   render () {
     console.log(this.props.observations)
     return (
@@ -42,23 +65,7 @@ class App extends React.Component {
         <section className='page__body row'>
           <h1 className='section__title'>Recently Synced Data</h1>
           <div className='body__content'>
-            <div className='data__card'>
-              <div className='data__map' />
-              <div className='data__meta'>
-                <h2 className='data__title'>Name of Observation Point</h2>
-                <ul className='data__list'>
-                  <li className='data__item'>49° N 100° E</li>
-                  <li className='data__item'>Category</li>
-                </ul>
-                <dl className='meta-card__list'>
-                  <dt className='meta-card__title'>Author:</dt>
-                  <dd className='meta-card__def'>Author Name</dd>
-                  <dt className='meta-card__title'>Date:</dt>
-                  <dd className='meta-card__def'>2/26/17</dd>
-                </dl>
-                <p>80% complete</p>
-              </div>
-            </div>
+            {this.props.observations.map(this.renderObservation)}
           </div>
           <a className='link--page link--primary'>View All Data Points</a>
         </section>

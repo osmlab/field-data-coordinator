@@ -44,10 +44,10 @@ module.exports.getFlattenedProperties = function (state) {
 module.exports.getRecentObservations = function (sliceIndex) {
   return function (state) {
     const _map = state.observations.get('_map')
-    const observations = []
-    const ids = state.sequentialObservations.slice(0, sliceIndex).forEach(id => {
-      observations.push(_map[+id])
-    })
-    return observations
+    const lookup = {}
+    for (let id in _map) {
+      lookup[_map[id].properties._version_id] = _map[id]
+    }
+    return state.sequentialObservations.slice(0, sliceIndex).map(id => lookup[id]).toJS()
   }
 }

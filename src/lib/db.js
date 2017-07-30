@@ -201,10 +201,12 @@ function listObservations (cb) {
   })
 
   function write (row, enc, next) {
-    var values = Object.keys(row.values || {}).map(v => row.values[v])
+    var values = Object.keys(row.values || {}).map(v => Object.assign({
+      version_id: v
+    }, row.values[v]))
     if (values.length && get(values, '0.value.type') === 'observation') {
       var latest = values.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))[0]
-      features.push(observationToFeature(latest.value, row.key))
+      features.push(observationToFeature(latest, row.key))
     }
     next()
   }
@@ -214,17 +216,17 @@ function listObservations (cb) {
   }
 }
 
-function observationToFeature (obs, id) {
+function observationToFeature ({ version_id, value }, id) {
   var feature = {
     id,
     type: 'Feature',
     geometry: null,
-    properties: Object.assign({ id }, obs.tags)
+    properties: Object.assign({ id, _version_id: version_id }, value.tags)
   }
-  if (obs.lon && obs.lat) {
+  if (value.lon && value.lat) {
     feature.geometry = {
       type: 'Point',
-      coordinates: [ obs.lon, obs.lat ]
+      coordinates: [ value.lon, value.lat ]
     }
   }
   return feature

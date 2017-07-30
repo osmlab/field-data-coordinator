@@ -21,6 +21,8 @@ module.exports = {
   start,
   createOsmOrgReplicationStream,
   createObservationsReplicationStream,
+  getObservationById,
+  getObservationTimestampStream,
   listSequentialObservations,
   createObservation,
   listObservations,
@@ -63,28 +65,6 @@ function createObservationsReplicationStream () {
   return observationsDb.log.replicate()
 }
 
-function getObservationTimestampStream (options, cb) {
-  var done, opts
-  if (typeof cb === 'undefined') {
-    done = options
-    opts = {}
-  } else {
-    done = cb
-    opts = options
-  }
-  observationsTimestampIndex.ready(() => done(null, observationsTimestampIndex.getDocumentStream(opts)))
-}
-
-function listSequentialObservations (cb) {
-  const ids = []
-  getObservationTimestampStream((err, stream) => {
-    if (err) cb(err)
-    stream.on('data', d => ids.push(d))
-    stream.on('end', () => cb(null, ids))
-    stream.on('error', error => cb(error))
-  })
-}
-
 function exportObservationsAsObjects () {
   observationsExporter.osmObjects.apply(observationsExporter, arguments)
 }
@@ -95,17 +75,6 @@ function exportObservationsAsChange () {
 
 function exportObservationsAsChangeXml () {
   observationsExporter.osmChangeXml.apply(observationsExporter, arguments)
-}
-
-function wipeDb (db, path, cb) {
-  db.close(err => {
-    if (err) return cb(err)
-    else osmOrgDb = null
-    rimraf(path, err => {
-      if (err) return cb(err)
-      mkdirp(path, cb)
-    })
-  })
 }
 
 function getLocalOsmOrgXmlStream () {
@@ -196,6 +165,34 @@ function createObservation (feature, nodeId, cb) {
   })
 }
 
+function getObservationById (id, cb) {
+  observationsDb.get(id, (err, doc) => {
+    cb(err, doc)
+  })
+}
+
+function getObservationTimestampStream (options, cb) {
+  var done, opts
+  if (typeof cb === 'undefined') {
+    done = options
+    opts = {}
+  } else {
+    done = cb
+    opts = options
+  }
+  observationsTimestampIndex.ready(() => done(null, observationsTimestampIndex.getDocumentStream(opts)))
+}
+
+function listSequentialObservations (cb) {
+  const ids = []
+  getObservationTimestampStream((err, stream) => {
+    if (err) cb(err)
+    stream.on('data', d => ids.push(d))
+    stream.on('end', () => cb(null, ids))
+    stream.on('error', error => cb(error))
+  })
+}
+
 function listObservations (cb) {
   var features = []
 
@@ -231,4 +228,15 @@ function observationToFeature (obs, id) {
     }
   }
   return feature
+}
+
+function wipeDb (db, path, cb) {
+  db.close(err => {
+    if (err) return cb(err)
+    else osmOrgDb = null
+    rimraf(path, err => {
+      if (err) return cb(err)
+      mkdirp(path, cb)
+    })
+  })
 }

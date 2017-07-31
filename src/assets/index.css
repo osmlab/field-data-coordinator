@@ -50,8 +50,9 @@
 }
 
 .data__card {
-  margin: auto 0;
   width: 40%;
+  margin: 5px 5%;
+  display: inline-block;
   background-color: #FFF;
   box-shadow: 1px 1px 10px 1px #eeeeee;
 }
@@ -63,7 +64,7 @@
 
 .data__title {
   font-size: 1rem;
-  margin-bottom: 0.25rem; 
+  margin-bottom: 0.25rem;
   line-height: 0.75rem;
 }
 

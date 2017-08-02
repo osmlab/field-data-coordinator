@@ -13,6 +13,7 @@ const ObserveExport = require('observe-export')
 const { get } = require('object-path')
 const rimraf = require('rimraf')
 const mkdirp = require('mkdirp')
+const once = require('once')
 const deduplicatePlaceholderNodes = require('./dedupe-nodes')
 const getOsmStream = require('./get-osm-stream')
 const fs = require('fs')
@@ -166,9 +167,7 @@ function createObservation (feature, nodeId, cb) {
 }
 
 function getObservationById (id, cb) {
-  observationsDb.get(id, (err, doc) => {
-    cb(err, doc)
-  })
+  observationsDb.get(id, cb)
 }
 
 function getObservationTimestampStream (options, cb) {
@@ -185,11 +184,12 @@ function getObservationTimestampStream (options, cb) {
 
 function listSequentialObservations (cb) {
   const ids = []
+  const done = once(cb)
   getObservationTimestampStream((err, stream) => {
-    if (err) cb(err)
+    if (err) done(err)
     stream.on('data', d => ids.push(d))
-    stream.on('end', () => cb(null, ids))
-    stream.on('error', error => cb(error))
+    stream.on('end', () => done(null, ids))
+    stream.on('error', error => done(error))
   })
 }
 

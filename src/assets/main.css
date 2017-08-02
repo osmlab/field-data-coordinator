@@ -371,10 +371,6 @@ fieldset {
   transform: translate(-50%, 0);
 }
 
-.link--delete {
-  margin-left: 0.5rem;
-}
-
 .meta__group {
   padding: 1rem 1rem 2rem 0;
   max-width: 18rem;

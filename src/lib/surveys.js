@@ -120,7 +120,7 @@ const readSurvey = (filename, callback) => {
 
 const removeSurvey = (id, callback) => {
   var filename = id.indexOf('.tgz') < 0 ? id + '.tgz' : id
-  filename = path.join(app.getPath('userData'), 'surveys', filename)
+  filename = path.join(appPath(), 'surveys', filename)
   return fs.unlink(filename, callback)
 }
 

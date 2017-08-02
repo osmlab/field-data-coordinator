@@ -118,8 +118,15 @@ const readSurvey = (filename, callback) => {
   })
 }
 
+const removeSurvey = (id, callback) => {
+  var filename = id.indexOf('.tgz') < 0 ? id + '.tgz' : id
+  filename = path.join(app.getPath('userData'), 'surveys', filename)
+  return fs.unlink(filename, callback)
+}
+
 module.exports = {
   bundleSurvey,
   listSurveys,
-  readSurvey
+  readSurvey,
+  removeSurvey
 }

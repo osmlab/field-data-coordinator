@@ -14,6 +14,7 @@ const {
   listObservations,
   listSequentialObservations,
   importSurvey,
+  removeSurvey,
   importOsm
 } = require('../drivers/local')
 const { osmMetaFilename } = require('../config')
@@ -55,8 +56,18 @@ function * watchOsm () {
   yield takeEvery('GET_OSM', getOsm)
 }
 
+function * deleteSurvey ({id}) {
+  try {
+    yield call(removeSurvey, id)
+    yield put({ type: 'REMOVE_SURVEY_SUCCESS', id })
+  } catch (error) {
+    console.warn(error)
+  }
+}
+
 function * watchSurveys () {
   yield takeLatest('IMPORT_SURVEY', importSurvey)
+  yield takeLatest('REMOVE_SURVEY', deleteSurvey)
 }
 
 function * watchSync () {

@@ -305,13 +305,17 @@ fieldset {
 .importedSurvey {
   border-radius: 4px;
   margin-bottom: 3em;
-  padding: 1rem 0; 
+  padding: 1rem 0;
 }
 
 .surveyInputGeo {
   position: absolute;
   bottom: 2em;
   left: 18.5em;
+}
+
+.surveyMeta {
+  margin-bottom: 1em;
 }
 
 .react-datepicker__input-container input {
@@ -343,7 +347,7 @@ fieldset {
 .link--secondary {
   color: #8D8D8D;
   font-size: 0.75rem;
-  font-weight: 300;  
+  font-weight: 300;
   text-transform: uppercase;
   border-bottom: solid 1px #8D8D8D;
 }
@@ -365,14 +369,6 @@ fieldset {
   left: 50%;
   position: absolute;
   transform: translate(-50%, 0);
-}
-
-.link--edit {
-  margin-left: 0.5rem;
-}
-
-.link--delete {
-  margin-left: 0.5rem;
 }
 
 .meta__group {

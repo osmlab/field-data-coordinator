@@ -12,6 +12,7 @@ const {
 
 const {
   listObservations,
+  listSequentialObservations,
   importSurvey,
   importOsm
 } = require('../drivers/local')
@@ -21,6 +22,13 @@ function * getObservations () {
   try {
     const observations = yield call(listObservations)
     yield put({ type: 'SYNC_SUCCESS', observations })
+  } catch (error) {
+    yield put({ type: 'SYNC_FAILED', error })
+  }
+
+  try {
+    const observationIds = yield call(listSequentialObservations)
+    yield put({ type: 'TIMESTAMP_SYNC_SUCCESS', ids: observationIds })
   } catch (error) {
     yield put({ type: 'SYNC_FAILED', error })
   }

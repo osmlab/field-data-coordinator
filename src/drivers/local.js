@@ -5,6 +5,7 @@ const promisify = require('es6-promisify')
 const {
   db: {
     listObservations,
+    listSequentialObservations,
     importBulkOsm,
     bboxQuerySavedOsm
   },
@@ -21,6 +22,7 @@ const {
 
 module.exports = {
   listObservations: promisify(listObservations),
+  listSequentialObservations: promisify(listSequentialObservations),
   importSurvey: promisify(openImportSurveyDialog),
   importOsm: promisify(importBulkOsm),
   querySavedOsm: promisify(bboxQuerySavedOsm),

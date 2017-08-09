@@ -1,6 +1,7 @@
 .tableScrollContainer {
   max-width: 600px;
-  overflow: scroll;
+  overflow-x: scroll;
+  overflow-y: auto;
 }
 
 th {
@@ -8,7 +9,27 @@ th {
 }
 
 td, th {
-	padding: 0.5rem;
+  padding: 0.5rem;
   font-size: 0.75rem;
   border-bottom: 1px solid #F0ECEC;
+}
+
+.pagination li {
+  display: inline-block;
+  cursor: pointer;
+  padding: 1em;
+}
+
+.pagination li.active,
+.pagination li:hover {
+  text-decoration: underline;
+}
+
+.pagination li.disabled {
+  color: #DDDDDD;
+}
+
+.pagination li.disabled:hover {
+  cursor: default;
+  text-decoration: none;
 }

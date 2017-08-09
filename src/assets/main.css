@@ -45,7 +45,7 @@ li { list-style: none; }
 
 .contentMain {
   padding: 5em 0 8em 0;
-  flex: .9 auto;
+  flex: auto;
 }
 
 .header {
@@ -112,12 +112,14 @@ section {
 }
 
 .sidebar {
-  flex: .02 auto;
+  flex: none;
   background-color: #F3F3F3;
   padding: 5em 1em 2em 0;
   margin-right: 2em;
   z-index: 2;
   border-right: 1px solid #F0ECEC;
+  width: 175px;
+  overflow: hidden;
 }
 
 .sidebar--observations {
@@ -244,7 +246,7 @@ fieldset ul {
 
 .filters {
   max-height: 220px;
-  overflow-y: scroll;
+  overflow-y: auto;
   font-size: .85em;
 }
 

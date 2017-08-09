@@ -6,30 +6,27 @@ module.exports = class App extends React.Component {
     return (
       <div>
         <section className='page__header row'>
-          <h1 className='section__title'>Make surveys, collect data, edit data, export to OSM.</h1>
-          <div className='header__content'>
+          <h1 className='section__title withDescription'>Make surveys, collect observations, and export to OSM!</h1>
+          <p className='text--centered section__title--description--home'>New to Observe? Be sure to check out our about page for a complete overview of the product or follow the steps below.</p>
+          <div className='header__content clearfix'>
             <div className='header__card'>
-              <div className='card__image' />
-              <h2 className='card__title'>Create Surveys</h2>
-              <p className='card__prose'>Create surveys using our formatting in google docs or xcel. Import   yourspreadsheet   and share the link withyour surveyors</p>
+              <a href=''><img alt='add spreadsheet icon' className='card__image' src='./assets/icons/coordinator-icon-add.svg' /></a>
+              <h2 className='card__title'><a href=''>Create Surveys</a></h2>
+              <p className='card__prose'>Create surveys using our YML template. Import your survey and share the link with your surveyors android devices.</p>
               <a className='card__link link--primary'>Create a Survey</a>
             </div>
             <div className='header__card'>
-              <div className='card__image' />
-              <h2 className='card__title'>Collect Surveys</h2>
-              <p className='card__prose'>Surveyors can edit OSM information or complete surveys through their andriod devices .</p>
-              <a className='card__link link--primary'>Download the App</a>
+              <a href=''><img alt='edit map points icon' className='card__image' src='./assets/icons/coordinator-icon-edit.svg' /></a>
+              <h2 className='card__title'><a href=''>Collect & Edit Data</a></h2>
+              <p className='card__prose'>See and edit incoming data, that's been synced from surveyors in the field.</p>
+              <a className='card__link link--primary'>View Collected Observations</a>
             </div>
             <div className='header__card'>
-              <div className='card__image' />
-              <h2 className='card__title'>Edit Data</h2>
-              <p className='card__prose'>Collected data will sync back to the coordinator app, allowing coordinators to   clean up the data.</p>
-              <a className='card__link link--primary'>View Collected Data</a>
-            </div>
-            <div className='header__card'>
-              <div className='card__image' />
-              <h2 className='card__title'>Export to OSM</h2>
-              <p className='card__prose'>Once you’ve cleaned up your data export relevant data back to OSM.</p>
+              <a href=''><img alt='map export icon' className='card__image' src='./assets/icons/coordinator-icon-export.svg' /></a>
+              <h2 className='card__title'><a href=''>Export to OSM</a></h2>
+              <p className='card__prose'>Done with your collection? Be sure to download your data and upload it to OSM to share
+what you’ve learned with the larger community!</p>
+              <a className='card__link link--primary'>Export Data</a>
             </div>
           </div>
         </section>

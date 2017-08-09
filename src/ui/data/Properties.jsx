@@ -63,7 +63,7 @@ class Properties extends React.Component {
     const timestamps = this.getSortedTimestamps()
     return (
       <aside role='complementary' className='sidebar'>
-        <h4>Filter</h4>
+        <h3>Filter</h3>
         <a className='filterClear clickable' onClick={this.clearFilterProperties}>Clear All</a>
         {timestamps.length ? this.renderTimeRange(timestamps) : null}
         {['_device_id', '_preset_id'].map(name => {
@@ -102,22 +102,31 @@ class Properties extends React.Component {
   renderTimeRange (timestamps) {
     const { startDate, endDate } = this.state
     return (
-      <div className='timeRanges'>
-        Start: <DatePicker
-          minDate={moment(timestamps[0])}
-          maxDate={moment(timestamps[timestamps.length - 1])}
-          selected={moment(startDate)}
-          onChange={this.setStartDate}
-          selectsStart
-        />
-        End: <DatePicker
-          minDate={moment(timestamps[0])}
-          maxDate={moment(timestamps[timestamps.length - 1])}
-          selected={moment(endDate)}
-          onChange={this.setEndDate}
-          selectsEnd
-        />
-      </div>
+      <fieldset className='timeRanges'>
+        <legend>Date Range</legend>
+        <ul>
+          <li>
+            <label className='label-interior'>Start:</label>
+            <DatePicker
+              minDate={moment(timestamps[0])}
+              maxDate={moment(timestamps[timestamps.length - 1])}
+              selected={moment(startDate)}
+              onChange={this.setStartDate}
+              selectsStart
+            />
+          </li>
+          <li>
+            <label className='label-interior'>End:</label>
+            <DatePicker
+              minDate={moment(timestamps[0])}
+              maxDate={moment(timestamps[timestamps.length - 1])}
+              selected={moment(endDate)}
+              onChange={this.setEndDate}
+              selectsEnd
+            />
+          </li>
+        </ul>
+      </fieldset>
     )
   }
 

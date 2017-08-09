@@ -35,6 +35,7 @@
     "osm-p2p-observations": "^2.0.0",
     "osm-p2p-timestamp-index": "^1.0.0",
     "osm2json": "^2.1.0",
+    "paginator": "^1.0.0",
     "prop-types": "^15.5.10",
     "pump": "^1.0.2",
     "randombytes": "^2.0.4",

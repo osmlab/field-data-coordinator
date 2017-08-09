@@ -11,6 +11,7 @@
     "async": "^2.4.1",
     "body-parser": "^1.17.2",
     "bonjour": "^3.5.0",
+    "classnames": "^2.2.5",
     "concat-stream": "^1.6.0",
     "drag-drop": "^2.13.2",
     "electron-json-storage": "^3.0.6",

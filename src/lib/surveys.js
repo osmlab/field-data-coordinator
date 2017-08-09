@@ -4,26 +4,26 @@ const fs = require('fs')
 const path = require('path')
 
 const async = require('async')
-const { app } = require('electron')
 const eos = require('end-of-stream')
 const JSONStream = require('JSONStream')
 const mkdirp = require('mkdirp')
 const once = require('once')
 const slugify = require('slugify')
 const tar = require('tar-stream')
+const appPath = require('./app-path')
 
 function bundleSurvey (surveyDefinition, callback) {
   const bundle = tar.pack()
   const { name, version } = surveyDefinition
   const filename = `${slugify(name)}-${version}.tgz`
 
-  mkdirp(path.join(app.getPath('userData'), 'surveys'), err => {
+  mkdirp(path.join(appPath(), 'surveys'), err => {
     if (err) {
       return callback(err)
     }
 
     const output = fs.createWriteStream(
-      path.join(app.getPath('userData'), 'surveys', filename)
+      path.join(appPath(), 'surveys', filename)
     )
 
     // call the callback when the stream ends, one way or another
@@ -42,7 +42,7 @@ function bundleSurvey (surveyDefinition, callback) {
 }
 
 const listSurveys = function (callback) {
-  const surveyPath = path.join(app.getPath('userData'), 'surveys')
+  const surveyPath = path.join(appPath(), 'surveys')
 
   return fs.stat(surveyPath, (err, stats) => {
     if (err) {
@@ -78,7 +78,7 @@ const readSurvey = (filename, callback) => {
     filename += '.tgz'
   }
 
-  filename = path.join(app.getPath('userData'), 'surveys', filename)
+  filename = path.join(appPath(), 'surveys', filename)
 
   return fs.stat(filename, (err, stats) => {
     if (err) {
@@ -118,8 +118,15 @@ const readSurvey = (filename, callback) => {
   })
 }
 
+const removeSurvey = (id, callback) => {
+  var filename = id.indexOf('.tgz') < 0 ? id + '.tgz' : id
+  filename = path.join(appPath(), 'surveys', filename)
+  return fs.unlink(filename, callback)
+}
+
 module.exports = {
   bundleSurvey,
   listSurveys,
-  readSurvey
+  readSurvey,
+  removeSurvey
 }

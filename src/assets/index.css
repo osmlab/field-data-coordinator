@@ -76,8 +76,9 @@
 }
 
 .data__card {
-  margin: auto 0;
   width: 40%;
+  margin: 5px 5%;
+  display: inline-block;
   background-color: #FFF;
   box-shadow: 1px 1px 10px 1px #eeeeee;
 }

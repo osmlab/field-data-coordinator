@@ -5,7 +5,7 @@ const bboxPolygon = require('@turf/bbox-polygon')
 const calculateArea = require('@turf/area')
 const centroid = require('@turf/centroid')
 const objectPath = require('object-path')
-const Map = require('../map')
+const Map = require('../map/index.jsx')
 const { querySavedOsm } = require('../../drivers/local')
 
 const selectedMapOptions = {

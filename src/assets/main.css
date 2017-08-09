@@ -316,6 +316,10 @@ fieldset ul {
   left: 18.5em;
 }
 
+.surveyMeta {
+  margin-bottom: 1em;
+}
+
 .react-datepicker__input-container input {
   background: #ffffff;
   font-size: .88em;
@@ -369,14 +373,6 @@ fieldset ul {
   left: 50%;
   position: absolute;
   transform: translate(-50%, 0);
-}
-
-.link--edit {
-  margin-left: 0.5rem;
-}
-
-.link--delete {
-  margin-left: 0.5rem;
 }
 
 .meta__group {

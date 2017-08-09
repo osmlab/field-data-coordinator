@@ -33,3 +33,18 @@
   background-color: white;
   z-index: 100;
 }
+
+.smallModal .modal__inner{
+  border-radius: 5px;
+  top: 20%;
+  right: 20%;
+  bottom: auto;
+  left: 20%;
+  padding: 2em;
+  opacity: 0.9;
+  text-align: center;
+}
+
+.confirmButtons {
+  margin-top: 1em;
+}

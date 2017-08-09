@@ -1,6 +1,6 @@
 'use strict'
 const promisify = require('es6-promisify')
-const persist = promisify(require('electron-json-storage').set)
+const persist = promisify(window.require('electron-json-storage').set)
 const randombytes = require('randombytes')
 const {
   call,
@@ -12,7 +12,9 @@ const {
 
 const {
   listObservations,
+  listSequentialObservations,
   importSurvey,
+  removeSurvey,
   importOsm
 } = require('../drivers/local')
 const { osmMetaFilename } = require('../config')
@@ -21,6 +23,13 @@ function * getObservations () {
   try {
     const observations = yield call(listObservations)
     yield put({ type: 'SYNC_SUCCESS', observations })
+  } catch (error) {
+    yield put({ type: 'SYNC_FAILED', error })
+  }
+
+  try {
+    const observationIds = yield call(listSequentialObservations)
+    yield put({ type: 'TIMESTAMP_SYNC_SUCCESS', ids: observationIds })
   } catch (error) {
     yield put({ type: 'SYNC_FAILED', error })
   }
@@ -47,8 +56,18 @@ function * watchOsm () {
   yield takeEvery('GET_OSM', getOsm)
 }
 
+function * deleteSurvey ({id}) {
+  try {
+    yield call(removeSurvey, id)
+    yield put({ type: 'REMOVE_SURVEY_SUCCESS', id })
+  } catch (error) {
+    console.warn(error)
+  }
+}
+
 function * watchSurveys () {
   yield takeLatest('IMPORT_SURVEY', importSurvey)
+  yield takeLatest('REMOVE_SURVEY', deleteSurvey)
 }
 
 function * watchSync () {

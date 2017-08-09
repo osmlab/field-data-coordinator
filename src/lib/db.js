@@ -13,6 +13,7 @@ const ObserveExport = require('observe-export')
 const { get } = require('object-path')
 const rimraf = require('rimraf')
 const mkdirp = require('mkdirp')
+const once = require('once')
 const deduplicatePlaceholderNodes = require('./dedupe-nodes')
 const getOsmStream = require('./get-osm-stream')
 const fs = require('fs')
@@ -21,7 +22,9 @@ module.exports = {
   start,
   createOsmOrgReplicationStream,
   createObservationsReplicationStream,
+  getObservationById,
   getObservationTimestampStream,
+  listSequentialObservations,
   createObservation,
   listObservations,
   importBulkOsm,
@@ -63,18 +66,6 @@ function createObservationsReplicationStream () {
   return observationsDb.log.replicate()
 }
 
-function getObservationTimestampStream (options, cb) {
-  var done, opts
-  if (typeof cb === 'undefined') {
-    done = options
-    opts = {}
-  } else {
-    done = cb
-    opts = options
-  }
-  observationsTimestampIndex.ready(() => done(null, observationsTimestampIndex.getDocumentStream(opts)))
-}
-
 function exportObservationsAsObjects () {
   observationsExporter.osmObjects.apply(observationsExporter, arguments)
 }
@@ -85,17 +76,6 @@ function exportObservationsAsChange () {
 
 function exportObservationsAsChangeXml () {
   observationsExporter.osmChangeXml.apply(observationsExporter, arguments)
-}
-
-function wipeDb (db, path, cb) {
-  db.close(err => {
-    if (err) return cb(err)
-    else osmOrgDb = null
-    rimraf(path, err => {
-      if (err) return cb(err)
-      mkdirp(path, cb)
-    })
-  })
 }
 
 function getLocalOsmOrgXmlStream () {
@@ -186,6 +166,33 @@ function createObservation (feature, nodeId, cb) {
   })
 }
 
+function getObservationById (id, cb) {
+  observationsDb.get(id, cb)
+}
+
+function getObservationTimestampStream (options, cb) {
+  var done, opts
+  if (typeof cb === 'undefined') {
+    done = options
+    opts = {}
+  } else {
+    done = cb
+    opts = options
+  }
+  observationsTimestampIndex.ready(() => done(null, observationsTimestampIndex.getDocumentStream(opts)))
+}
+
+function listSequentialObservations (cb) {
+  const ids = []
+  const done = once(cb)
+  getObservationTimestampStream((err, stream) => {
+    if (err) done(err)
+    stream.on('data', d => ids.push(d))
+    stream.on('end', () => done(null, ids))
+    stream.on('error', error => done(error))
+  })
+}
+
 function listObservations (cb) {
   var features = []
 
@@ -194,10 +201,12 @@ function listObservations (cb) {
   })
 
   function write (row, enc, next) {
-    var values = Object.keys(row.values || {}).map(v => row.values[v])
+    var values = Object.keys(row.values || {}).map(v => Object.assign({
+      version_id: v
+    }, row.values[v]))
     if (values.length && get(values, '0.value.type') === 'observation') {
       var latest = values.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0))[0]
-      features.push(observationToFeature(latest.value, row.key))
+      features.push(observationToFeature(latest, row.key))
     }
     next()
   }
@@ -207,18 +216,29 @@ function listObservations (cb) {
   }
 }
 
-function observationToFeature (obs, id) {
+function observationToFeature ({ version_id, value }, id) {
   var feature = {
     id,
     type: 'Feature',
     geometry: null,
-    properties: Object.assign({ id }, obs.tags)
+    properties: Object.assign({ id, _version_id: version_id }, value.tags)
   }
-  if (obs.lon && obs.lat) {
+  if (value.lon && value.lat) {
     feature.geometry = {
       type: 'Point',
-      coordinates: [ obs.lon, obs.lat ]
+      coordinates: [ value.lon, value.lat ]
     }
   }
   return feature
+}
+
+function wipeDb (db, path, cb) {
+  db.close(err => {
+    if (err) return cb(err)
+    else osmOrgDb = null
+    rimraf(path, err => {
+      if (err) return cb(err)
+      mkdirp(path, cb)
+    })
+  })
 }

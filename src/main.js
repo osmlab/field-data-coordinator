@@ -14,6 +14,8 @@ const { bundleSurvey, listSurveys } = require('./lib/surveys')
 const { updateSurveyList } = require('./actions')
 const exportObservations = require('./lib/export')
 
+const appPath = require('./lib/app-path')
+
 let main
 let dispatch = () => console.warn('dispatch not yet connected')
 
@@ -64,7 +66,7 @@ function setupMenu () {
   // https://github.com/electron/electron/blob/master/docs/api/menu.md#main-process
 }
 
-const dbPath = path.join(app.getPath('userData'), 'db')
+const dbPath = path.join(appPath(), 'db')
 mkdirp.sync(dbPath)
 db.start(dbPath)
 

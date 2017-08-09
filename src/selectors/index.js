@@ -40,3 +40,14 @@ module.exports.getFlattenedProperties = function (state) {
   })
   return flattened
 }
+
+module.exports.getRecentObservations = function (sliceIndex) {
+  return function (state) {
+    const _map = state.observations.get('_map')
+    const lookup = {}
+    for (let id in _map) {
+      lookup[_map[id].properties._version_id] = _map[id]
+    }
+    return state.sequentialObservations.slice(0, sliceIndex).map(id => lookup[id]).toJS()
+  }
+}

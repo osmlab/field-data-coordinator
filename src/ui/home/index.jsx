@@ -1,5 +1,6 @@
 'use strict'
 const React = require('react')
+const { Link } = require('react-router-dom')
 
 module.exports = class App extends React.Component {
   render () {
@@ -10,23 +11,23 @@ module.exports = class App extends React.Component {
           <p className='text--centered section__title--description--home'>New to Observe? Be sure to check out our about page for a complete overview of the product or follow the steps below.</p>
           <div className='header__content clearfix'>
             <div className='header__card'>
-              <a href=''><img alt='add spreadsheet icon' className='card__image' src='./assets/icons/coordinator-icon-add.svg' /></a>
-              <h2 className='card__title'><a href=''>Create Surveys</a></h2>
+              <Link to='/surveys'><img alt='add spreadsheet icon' className='card__image' src='./assets/icons/coordinator-icon-add.svg' /></Link>
+              <h2 className='card__title'><Link to='/surveys'>Create Surveys</Link></h2>
               <p className='card__prose'>Create surveys using our YML template. Import your survey and share the link with your surveyors android devices.</p>
-              <a className='card__link link--primary'>Create a Survey</a>
+              <Link to='/surveys' className='card__link link--primary'>Create a Survey</Link>
             </div>
             <div className='header__card'>
-              <a href=''><img alt='edit map points icon' className='card__image' src='./assets/icons/coordinator-icon-edit.svg' /></a>
-              <h2 className='card__title'><a href=''>Collect & Edit Data</a></h2>
+              <Link to='/data'><img alt='edit map points icon' className='card__image' src='./assets/icons/coordinator-icon-edit.svg' /></Link>
+              <h2 className='card__title'><Link to='/data'>Collect & Edit Data</Link></h2>
               <p className='card__prose'>See and edit incoming data, that's been synced from surveyors in the field.</p>
-              <a className='card__link link--primary'>View Collected Observations</a>
+              <Link to='/data' className='card__link link--primary'>View Collected Observations</Link>
             </div>
             <div className='header__card'>
-              <a href=''><img alt='map export icon' className='card__image' src='./assets/icons/coordinator-icon-export.svg' /></a>
-              <h2 className='card__title'><a href=''>Export to OSM</a></h2>
+              <Link to='/data'><img alt='map export icon' className='card__image' src='./assets/icons/coordinator-icon-export.svg' /></Link>
+              <h2 className='card__title'><Link to='/data'>Export to OSM</Link></h2>
               <p className='card__prose'>Done with your collection? Be sure to download your data and upload it to OSM to share
 what you’ve learned with the larger community!</p>
-              <a className='card__link link--primary'>Export Data</a>
+              <Link to='/data' className='card__link link--primary'>Export Data</Link>
             </div>
           </div>
         </section>

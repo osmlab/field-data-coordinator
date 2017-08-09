@@ -112,9 +112,9 @@ class ObservationMap extends React.Component {
       </dl>
       <p class='data_item'>80% complete</p>
       ${singleObservation ? '' : `
-      <p data-href='${feature.properties.id}'
-      class='clickable'
-      data-observation=1>Link</p>
+      <a data-href='${feature.properties.id}'
+      class='clickable link--primary link--primary--card'
+      data-observation=1>View Observation</a>
       `}
     </div>
     `

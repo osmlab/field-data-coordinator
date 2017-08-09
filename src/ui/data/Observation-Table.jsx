@@ -1,5 +1,6 @@
 'use strict'
 const React = require('react')
+const c = require('classnames')
 const Paginator = require('paginator')
 const get = require('object-path').get
 const { getActiveFeatures } = require('../../selectors')
@@ -66,14 +67,14 @@ class ObservationTable extends React.Component {
     return (
       <div className='pagination'>
         <ol>
-          <li className={meta.has_previous_page ? '' : 'disabled'}
+          <li className={c({ 'disabled': meta.has_previous_page })}
             onClick={meta.has_previous_page ? () => this.setState({page: currentPage - 1}) : noop}>Previous</li>
           {pages.map(page => (
             <li key={`pagination-page-${page}`}
               onClick={() => this.setState({ page })}
-              className={page === currentPage ? 'active' : ''}>{page}</li>
+              className={c({ 'active': page === currentPage })}>{page}</li>
           ))}
-          <li className={meta.has_next_page ? '' : 'disabled'}
+          <li className={c({ 'disabled': meta.has_next_page })}
             onClick={meta.has_next_page ? () => this.setState({page: currentPage + 1}) : noop}>Next</li>
         </ol>
       </div>
@@ -90,12 +91,11 @@ class ObservationTable extends React.Component {
       : { start: 0, stop: features.length }
 
     // Determine the sort order
-    const prop = sortProperty || columnNames[0]
-    const sortFunction = (a, b) => a.properties[prop] > b.properties[prop] ? -1 : 1
+    const sortFunction = (a, b) => a.properties[sortProperty] > b.properties[sortProperty] ? -1 : 1
 
     // Get the sorted, paginated features
     const sortedRows = features.sort(sortFunction)
-    if (sortOrder < 0) sortedRows.reverse()
+    if (sortOrder > 0) sortedRows.reverse()
     const visibleRows = sortedRows.slice(start, stop)
 
     return (
@@ -107,6 +107,10 @@ class ObservationTable extends React.Component {
             <tr>
               {columnNames.map(n => (
                 <th key={n}
+                  className={c('tableToggle', {
+                    'tableToggleDesc': n === sortProperty && sortOrder > 0,
+                    'tableToggleAsc': n === sortProperty && sortOrder < 0
+                  })}
                   onClick={() => this.setSortProperty(n)}>{n}</th>
               ))}
             </tr>

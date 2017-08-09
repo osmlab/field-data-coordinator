@@ -14,6 +14,41 @@ td, th {
   border-bottom: 1px solid #F0ECEC;
 }
 
+.tableToggle {
+  position: relative;
+  cursor: pointer;
+  color: #575456;
+}
+
+.tableToggle:after {
+  position: absolute;
+  background-image: url(./icons/coordinator-icon-toggle.svg);
+  content: ' ';
+  width: 10px;
+  height: 13px;
+  background-size: 10px 13px;
+  display: inline-block;
+  margin-left: 2px;
+  bottom: 13px;
+}
+
+.tableToggleAsc:after,
+.tableToggleDesc:after {
+  width: 7px;
+  height: 7px;
+  background-size: 7px 7px;
+  margin-left: 3px;
+}
+
+.tableToggleAsc:after {
+  background-image: url(./icons/coordinator-icon-chevron-up.svg);
+  bottom: 18px;
+}
+
+.tableToggleDesc:after {
+  background-image: url(./icons/coordinator-icon-chevron-down.svg);
+}
+
 .pagination li {
   display: inline-block;
   cursor: pointer;

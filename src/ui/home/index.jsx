@@ -1,14 +1,12 @@
 'use strict'
 const React = require('react')
-const moment = require('moment')
 const { Link } = require('react-router-dom')
 const { connect } = require('react-redux')
 const { getRecentObservations } = require('../../selectors')
 const PropTypes = require('prop-types')
+const { date } = require('../format')
 
 const NUM_OBSERVATIONS_TO_SHOW = 6
-
-const formatDate = timestamp => moment(timestamp).format('MM/DD/YY')
 
 class App extends React.Component {
   renderObservation (ob) {
@@ -26,7 +24,7 @@ class App extends React.Component {
             <dt className='meta-card__title'>Device ID:</dt>
             <dd className='meta-card__def'>{properties._device_id}</dd>
             <dt className='meta-card__title'>Date:</dt>
-            <dd className='meta-card__def'>{formatDate(properties._timestamp)}</dd>
+            <dd className='meta-card__def'>{date(properties._timestamp)}</dd>
           </dl>
         </div>
       </div>

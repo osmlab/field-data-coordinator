@@ -11,6 +11,7 @@ const { getActiveFeatures } = require('../../selectors')
 const { styleUrl } = require('../../config')
 
 const SOURCE = 'ACTIVE_OBSERVATIONS'
+const CLICK_TO_ZOOM_LEVEL = 6
 
 const markerStyle = {
   id: 'observations',
@@ -77,7 +78,7 @@ class ObservationMap extends React.Component {
 
   mouseclick (e) {
     const features = this.map.queryRenderedFeatures(e.point, { layer: [SOURCE] })
-    if (features.length && features[0].properties.hasOwnProperty('id')) this.open(e.lngLat, features[0])
+    if (features.length && features[0].properties.hasOwnProperty('id')) this.fit({features: [features[0]]})
   }
 
   open (lngLat, feature) {
@@ -136,6 +137,10 @@ class ObservationMap extends React.Component {
     if (features && features.length) {
       if (features.length === 1) {
         this.map.setCenter(features[0].geometry.coordinates)
+        const zoom = this.map.getZoom()
+        if (zoom < CLICK_TO_ZOOM_LEVEL) {
+          this.map.setZoom(CLICK_TO_ZOOM_LEVEL)
+        }
         this.open(features[0].geometry.coordinates, features[0])
       } else {
         this.map.fitBounds(extent(activeFeatures), {

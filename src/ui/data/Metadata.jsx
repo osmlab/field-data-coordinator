@@ -1,33 +1,35 @@
 'use strict'
 const React = require('react')
+const PropTypes = require('prop-types')
+const get = require('object-path').get
 class Metadata extends React.Component {
   render () {
+    const { observation } = this.props
+    const tags = Object.keys(get(observation, 'properties', {})).filter(t => t.charAt(0) !== '_')
     return (
       <aside role='complementary' className='sidebar--observations'>
         <div className='meta__group'>
-          <h2 className='data__subtitle'>Basic Information <span><a className='link--primary link--edit'>Edit</a></span></h2>
+          <h2 className='data__subtitle'>Basic Information</h2>
           <dl>
             <dt className='data__tag'>Name of point</dt>
-            <dd className='data__tag-def'>Cheboygan Area State Part</dd>
-            <dt className='data__tag'>Address</dt>
-            <dd className='data__tag-def'>124 Cheboygan Dr. Cheboygan MI, 49721</dd>
+            <dd className='data__tag-def'>{get(observation, 'properties.name', '--')}</dd>
           </dl>
         </div>
         <div className='meta__group'>
-          <h2 className='data__subtitle'>Notes</h2>
-          <p className='meta__prose'>Add anything that is happening at this point in time that you think is valuable to record.</p>
-          <a className='link--add'>+ Add a New Note</a>
-        </div>
-        <div className='meta__group'>
-          <h2 className='data__subtitle'>Tags <span><a className='link--primary link--edit'>Edit</a></span></h2>
-          <ul className='meta__prose'>
-            <li>Natural/Oil Spill</li>
-            <li>Hazard</li>
-          </ul>
-          <a className='link--add'> + Add a New Tag</a>
+          <h2 className='data__subtitle'>Tags</h2>
+          {tags.length ? (
+            <ul className='meta__prose'>
+              {tags.map(t => <li key={t}>{t}: {observation.properties[t]}</li>)}
+            </ul>
+            ) : <p>--</p>}
         </div>
       </aside>
     )
   }
 }
+
+Metadata.proptypes = {
+  observation: PropTypes.object
+}
+
 module.exports = Metadata

@@ -30,7 +30,7 @@ class Observation extends React.Component {
           </dl>
         </div>
         <div className='content observation__content'>
-          <Metadata />
+          <Metadata observation={observation} />
           <ObservationMap observationId={params.observationId} />
         </div>
       </div>

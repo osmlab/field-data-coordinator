@@ -9,6 +9,7 @@ const { withRouter } = require('react-router-dom')
 const { setActiveObservation } = require('../../actions')
 const { getActiveFeatures } = require('../../selectors')
 const { styleUrl } = require('../../config')
+const { date } = require('../format')
 
 const SOURCE = 'ACTIVE_OBSERVATIONS'
 const CLICK_TO_ZOOM_LEVEL = 6
@@ -96,24 +97,23 @@ class ObservationMap extends React.Component {
     this.popup.remove()
   }
 
-  tooltip (feature) {
+  tooltip ({ geometry, properties }) {
     const { singleObservation } = this.state
     return `
     <div class='data__meta'>
-      <h2 class='data__title'>Name of Observation Point</h2>
+      <h2 class='data__title'>${properties.id}</h2>
       <ul class='data__list'>
-        <li class='data__item'>49° N 100° E</li>
-        <li class='data__item'>Category</li>
+        <li class='data__item'>${geometry.coordinates.join(', ')}</li>
+        <li class='data__item'>Type: Observation</li>
       </ul>
       <dl class='meta-card__list'>
-        <dt class='meta-card__title'>Author:</dt>
-        <dd class='meta-card__def'>Author Name</dd>
+        <dt class='meta-card__title'>Device ID:</dt>
+        <dd class='meta-card__def'>${properties._device_id}</dd>
         <dt class='meta-card__title'>Date:</dt>
-        <dd class='meta-card__def'>2/26/17</dd>
+        <dd class='meta-card__def'>${date(properties._timestamp)}</dd>
       </dl>
-      <p class='data_item'>80% complete</p>
       ${singleObservation ? '' : `
-      <a data-href='${feature.properties.id}'
+      <a data-href='${properties.id}'
       class='clickable link--primary link--primary--card'
       data-observation=1>View Observation</a>
       `}

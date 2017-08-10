@@ -51,3 +51,8 @@ module.exports.getRecentObservations = function (sliceIndex) {
     return state.sequentialObservations.slice(0, sliceIndex).map(id => lookup[id]).toJS()
   }
 }
+
+module.exports.getSingleObservationById = function (state, id) {
+  const _map = state.observations.get('_map')
+  return _map[id]
+}

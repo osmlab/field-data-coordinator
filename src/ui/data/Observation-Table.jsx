@@ -2,10 +2,12 @@
 const React = require('react')
 const c = require('classnames')
 const Paginator = require('paginator')
+const { withRouter } = require('react-router-dom')
 const get = require('object-path').get
 const { getActiveFeatures } = require('../../selectors')
 const { connect } = require('react-redux')
 const nullvalue = '--'
+const { setActiveObservation } = require('../../actions')
 
 // rows of table data per page
 const limit = 10
@@ -23,6 +25,7 @@ class ObservationTable extends React.Component {
     this.renderPagination = this.renderPagination.bind(this)
     this.setSortProperty = this.setSortProperty.bind(this)
     this.getColumnNames = this.getColumnNames.bind(this)
+    this.navigate = this.navigate.bind(this)
     const columnNames = this.getColumnNames()
     this.state = {
       page: 1,
@@ -55,6 +58,12 @@ class ObservationTable extends React.Component {
     const { sortProperty, sortOrder } = this.state
     if (prop === sortProperty) this.setState({ sortOrder: sortOrder * -1 })
     else this.setState({ sortProperty: prop, sortOrder: 1 })
+  }
+
+  navigate (id) {
+    this.props.setActiveObservation(id)
+    const { history, match } = this.props
+    history.push(`${match.url}/observations/${id}`)
   }
 
   renderPagination () {
@@ -117,7 +126,7 @@ class ObservationTable extends React.Component {
           </thead>
           <tbody>
             {visibleRows.map(feature => (
-              <tr key={feature.id}>
+              <tr key={feature.id} className='tableClickableRow' onClick={() => this.navigate(feature.id)}>
                 {columnNames.map(n => (
                   <td key={feature.id + n}>{feature.properties[n] || nullvalue}</td>
                 ))}
@@ -137,4 +146,4 @@ const mapStateToProps = state => {
     activeFeatureIds: state.observations.get('active')
   }
 }
-module.exports = connect(mapStateToProps)(ObservationTable)
+module.exports = withRouter(connect(mapStateToProps, { setActiveObservation })(ObservationTable))

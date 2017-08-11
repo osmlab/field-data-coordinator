@@ -69,3 +69,7 @@ td, th {
   cursor: default;
   text-decoration: none;
 }
+
+.tableClickableRow {
+  cursor: pointer;
+}

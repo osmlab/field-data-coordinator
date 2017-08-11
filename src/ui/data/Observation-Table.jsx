@@ -67,14 +67,14 @@ class ObservationTable extends React.Component {
     return (
       <div className='pagination'>
         <ol>
-          <li className={c({ 'disabled': meta.has_previous_page })}
+          <li className={c({ 'disabled': !meta.has_previous_page })}
             onClick={meta.has_previous_page ? () => this.setState({page: currentPage - 1}) : noop}>Previous</li>
           {pages.map(page => (
             <li key={`pagination-page-${page}`}
               onClick={() => this.setState({ page })}
               className={c({ 'active': page === currentPage })}>{page}</li>
           ))}
-          <li className={c({ 'disabled': meta.has_next_page })}
+          <li className={c({ 'disabled': !meta.has_next_page })}
             onClick={meta.has_next_page ? () => this.setState({page: currentPage + 1}) : noop}>Next</li>
         </ol>
       </div>

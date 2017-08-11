@@ -62,6 +62,7 @@ td, th {
 
 .pagination li.disabled {
   color: #DDDDDD;
+  pointer-events: none;
 }
 
 .pagination li.disabled:hover {

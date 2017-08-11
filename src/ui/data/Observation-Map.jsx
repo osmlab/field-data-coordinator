@@ -19,8 +19,8 @@ const markerStyle = {
   type: 'circle',
   source: SOURCE,
   paint: {
-    'circle-radius': 6,
-    'circle-color': '#B42222'
+    'circle-radius': 7,
+    'circle-color': '#555555'
   },
   filter: ['==', '$type', 'Point']
 }

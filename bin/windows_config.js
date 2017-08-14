@@ -7,9 +7,9 @@ module.exports = {
   icon: config.iconPath + '.icns',
   out: config.out,
   tmpdir: false,
-  version: config.electronVersion,
-  'app-version': config.version,
-  'build-version': config.version,
+  electronVersion: config.electronVersion,
+  appVersion: config.version,
+  buildVersion: config.version,
   prune: true,
   overwrite: true,
   'version-string': {

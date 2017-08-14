@@ -108,32 +108,33 @@ class ObservationTable extends React.Component {
     const visibleRows = sortedRows.slice(start, stop)
 
     return (
-      <div className='tableScrollContainer'>
-        { showPagination ? this.renderPagination() : null }
-        <p>Showing {start + 1} - {stop}</p>
-        <table className='table'>
-          <thead>
-            <tr>
-              {columnNames.map(n => (
-                <th key={n}
-                  className={c('tableToggle', {
-                    'tableToggleDesc': n === sortProperty && sortOrder > 0,
-                    'tableToggleAsc': n === sortProperty && sortOrder < 0
-                  })}
-                  onClick={() => this.setSortProperty(n)}>{n}</th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {visibleRows.map(feature => (
-              <tr key={feature.id} className='tableClickableRow' onClick={() => this.navigate(feature.id)}>
+      <div>
+        <p className='table--num'>Showing {start + 1} - {stop}</p>
+        <div className='tableScrollContainer'>
+          <table className='table'>
+            <thead>
+              <tr>
                 {columnNames.map(n => (
-                  <td key={feature.id + n}>{feature.properties[n] || nullvalue}</td>
+                  <th key={n}
+                    className={c('tableToggle', {
+                      'tableToggleDesc': n === sortProperty && sortOrder > 0,
+                      'tableToggleAsc': n === sortProperty && sortOrder < 0
+                    })}
+                    onClick={() => this.setSortProperty(n)}>{n}</th>
                 ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {visibleRows.map(feature => (
+                <tr key={feature.id} className='tableClickableRow' onClick={() => this.navigate(feature.id)}>
+                  {columnNames.map(n => (
+                    <td key={feature.id + n}>{feature.properties[n] || nullvalue}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
         { showPagination ? this.renderPagination() : null }
       </div>
     )

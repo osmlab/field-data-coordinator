@@ -11,7 +11,7 @@ const { compileSurvey } = require('@mojodna/observe-tools')
 const db = require('./lib/db')
 const Server = require('./lib/server')
 const { bundleSurvey, listSurveys } = require('./lib/surveys')
-const { updateSurveyList } = require('./actions')
+const { updateSurveyList, sync } = require('./actions')
 const exportObservations = require('./lib/export')
 
 const appPath = require('./lib/app-path')
@@ -31,6 +31,7 @@ function init () {
     dispatch = payload => {
       sender.send('dispatch', payload)
     }
+    console.log('redux store connection initialized')
 
     // update the Redux store with the list of available surveys
     listSurveys((err, surveys) => {
@@ -72,6 +73,9 @@ db.start(dbPath)
 
 var server = new Server()
 server.listen()
+server.on('replicatedObservations', function () {
+  dispatch(sync())
+})
 
 app.on('ready', init)
 

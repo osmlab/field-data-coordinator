@@ -18,6 +18,7 @@ const { osmMetaFilename } = require('../config')
 function Server (opts) {
   if (!(this instanceof Server)) return new Server(opts)
 
+  const self = this
   opts = opts || {}
   opts.port = opts.port || 3210
 
@@ -48,6 +49,19 @@ function Server (opts) {
       bonjourService.on('down', () => console.log('service down'))
       bonjourService.on('error', (err) => console.log('service err', err))
     })
+  }
+
+  // set up a simple event emitter interface
+  const handlers = {}
+  this.on = function (name, handler) {
+    handlers[name] = (typeof handler === 'function' ? handler : null)
+  }
+  this.send = function () {
+    const args = Array.prototype.slice.call(arguments)
+    const name = args[0]
+    if (typeof handlers[name] === 'function') {
+      handlers[name].apply(null, args.slice(1))
+    }
   }
 
   // list observations
@@ -129,6 +143,8 @@ function Server (opts) {
     var stream = websocketStreamify(ws)
     handleWebsocketStream(stream, db.createObservationsReplicationStream(), err => {
       if (err) console.error('replication error', err)
+      // update the renderer UI
+      self.send('replicatedObservations')
     })
   })
 

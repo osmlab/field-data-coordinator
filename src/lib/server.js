@@ -139,6 +139,16 @@ function Server (opts) {
     })
   })
 
+  app.get('/osm/xml', function (req, res, next) {
+    var stream = db.getLocalOsmOrgXmlStream()
+    if (!stream) {
+      return res.sendStatus(404)
+    } else {
+      stream.on('end', () => res.end())
+      stream.pipe(res)
+    }
+  })
+
   app.ws('/replicate/observations', function (ws) {
     var stream = websocketStreamify(ws)
     handleWebsocketStream(stream, db.createObservationsReplicationStream(), err => {

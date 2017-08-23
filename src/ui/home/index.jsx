@@ -4,28 +4,45 @@ const { Link } = require('react-router-dom')
 const { connect } = require('react-redux')
 const { getRecentObservations } = require('../../selectors')
 const PropTypes = require('prop-types')
+const Map = require('../map/index.jsx')
 const { date } = require('../format')
+const { SOURCE, markerStyle } = require('../map/config')
 
 const NUM_OBSERVATIONS_TO_SHOW = 6
+const mapOptions = {
+  interactive: false
+}
 
 class App extends React.Component {
   renderObservation (ob) {
-    const { id, properties } = ob
+    const { id, properties, geometry } = ob
+    const onMapLoad = (map) => {
+      map.addSource(SOURCE, { type: 'geojson', data: ob })
+      map.addLayer(markerStyle)
+    }
     return (
       <div className='data__card' key={properties._version_id}>
-        <div className='data__map' />
-        <div className='data__meta'>
-          <Link to={`data/observations/${id}`}><h2 className='data__title'>ID: {id}</h2></Link>
-          <ul className='data__list'>
-            <li className='data__item'>{ob.geometry.coordinates.join(', ')}</li>
-            <li className='data__item'>Category</li>
-          </ul>
-          <dl className='meta-card__list'>
-            <dt className='meta-card__title'>Device ID:</dt>
-            <dd className='meta-card__def'>{properties._device_id}</dd>
-            <dt className='meta-card__title'>Date:</dt>
-            <dd className='meta-card__def'>{date(properties._timestamp)}</dd>
-          </dl>
+        <div className='data__card--in'>
+          <Map
+            center={geometry.coordinates}
+            containerClass='data__map'
+            zoom={8}
+            options={mapOptions}
+            onLoad={onMapLoad}
+          />
+          <div className='data__meta'>
+            <Link to={`data/observations/${id}`}><h2 className='data__title'>ID: {id}</h2></Link>
+            <ul className='data__list'>
+              <li className='data__item'>{ob.geometry.coordinates.join(', ')}</li>
+              <li className='data__item'>Category</li>
+            </ul>
+            <dl className='meta-card__list'>
+              <dt className='meta-card__title'>Device ID:</dt>
+              <dd className='meta-card__def'>{properties._device_id}</dd>
+              <dt className='meta-card__title'>Date:</dt>
+              <dd className='meta-card__def'>{date(properties._timestamp)}</dd>
+            </dl>
+          </div>
         </div>
       </div>
     )

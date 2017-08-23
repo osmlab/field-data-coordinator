@@ -1,6 +1,8 @@
 'use strict'
 
 const path = require('path')
+const fs = require('fs')
+const slugify = require('slugify')
 
 const async = require('async')
 const { app, BrowserWindow, dialog, ipcMain, Menu } = require('electron')
@@ -15,6 +17,7 @@ const { updateSurveyList, sync } = require('./actions')
 const exportObservations = require('./lib/export')
 
 const appPath = require('./lib/app-path')
+const osmPresets = require('./data/osm-presets.json')
 
 let main
 let dispatch = () => console.warn('dispatch not yet connected')
@@ -33,14 +36,36 @@ function init () {
     }
     console.log('redux store connection initialized')
 
-    // update the Redux store with the list of available surveys
-    listSurveys((err, surveys) => {
-      if (err) {
-        return console.warn(err.stack)
-      }
-
-      return dispatch(updateSurveyList(surveys))
+    setupInitialSurvey(() => {
+      // update the Redux store with the list of available surveys
+      listSurveys((err, surveys) => {
+        if (err) {
+          return console.warn(err.stack)
+        }
+        return dispatch(updateSurveyList(surveys))
+      })
     })
+  })
+}
+
+function setupInitialSurvey (cb) {
+  const { name, version } = osmPresets
+  const filename = `${slugify(name)}-${version}.tgz`
+  const defaultSurveyPath = path.join(appPath(), 'surveys', filename)
+  fs.access(defaultSurveyPath, err => {
+    if (err) {
+      bundleSurvey(osmPresets, err => {
+        if (err) {
+          console.warn(err.stack)
+        } else {
+          console.log('initialized default (OSM) survey')
+        }
+        cb()
+      })
+    } else {
+      console.log('default (OSM) survey already exists')
+      cb()
+    }
   })
 }
 

@@ -54,6 +54,7 @@ function setupInitialSurvey (cb) {
   const defaultSurveyPath = path.join(appPath(), 'surveys', filename)
   fs.access(defaultSurveyPath, err => {
     if (err) {
+      osmPresets._OBSERVE_DEFAULT_SURVEY = true
       bundleSurvey(osmPresets, err => {
         if (err) {
           console.warn(err.stack)

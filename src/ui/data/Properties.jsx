@@ -7,8 +7,7 @@ const { getFlattenedProperties } = require('../../selectors')
 const DatePicker = require('react-datepicker').default
 const moment = require('moment')
 const { toggleFilterProperty, clearFilterProperties, setObservationTimeRange } = require('../../actions')
-
-const excludedProperties = ['id', '_timestamp', '_device_id', '_preset_id']
+const { excludedProperties } = require('./property-names')
 
 class Properties extends React.Component {
   constructor (props) {

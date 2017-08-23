@@ -8,10 +8,12 @@ const { getActiveFeatures } = require('../../selectors')
 const { connect } = require('react-redux')
 const nullvalue = '--'
 const { setActiveObservation } = require('../../actions')
+const { excludedProperties, formatHeader, formatRow } = require('./property-names')
 
 // rows of table data per page
 const limit = 10
 const noop = e => e.preventDefault()
+const noFormat = d => d
 
 const getPaginatedStops = (features, page) => {
   const start = (page - 1) * limit
@@ -48,7 +50,9 @@ class ObservationTable extends React.Component {
     const properties = {}
     features.forEach(feature => {
       for (let property in feature.properties) {
-        properties[property] = true
+        if (excludedProperties.indexOf(property) === -1) {
+          properties[property] = true
+        }
       }
     })
     return Object.keys(properties)
@@ -120,16 +124,17 @@ class ObservationTable extends React.Component {
                       'tableToggleDesc': n === sortProperty && sortOrder > 0,
                       'tableToggleAsc': n === sortProperty && sortOrder < 0
                     })}
-                    onClick={() => this.setSortProperty(n)}>{n}</th>
+                    onClick={() => this.setSortProperty(n)}>{ formatHeader[n] ? formatHeader[n] : n }</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {visibleRows.map(feature => (
                 <tr key={feature.id} className='tableClickableRow' onClick={() => this.navigate(feature.id)}>
-                  {columnNames.map(n => (
-                    <td key={feature.id + n}>{feature.properties[n] || nullvalue}</td>
-                  ))}
+                  {columnNames.map(n => {
+                    const format = formatRow[n] || noFormat
+                    return <td key={feature.id + n}>{format(feature.properties[n] || nullvalue)}</td>
+                  })}
                 </tr>
               ))}
             </tbody>

@@ -83,9 +83,23 @@
   box-shadow: 1px 1px 10px 1px #eeeeee;
 }
 
+.data__card--in {
+  display: flex;
+}
+
+.data__map, .data__meta {
+  display: inline-block;
+}
+
+.data__map {
+  width: 128px;
+  height: 128px;
+}
+.data__map .mapboxgl-ctrl { display: none; }
+
 .data__meta {
-  padding: 1.25rem;
   font-size: 0.75rem;
+  padding: 1.25rem;
 }
 
 .data__title {

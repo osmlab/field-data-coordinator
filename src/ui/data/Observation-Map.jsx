@@ -10,20 +10,8 @@ const { setActiveObservation } = require('../../actions')
 const { getActiveFeatures } = require('../../selectors')
 const { styleUrl } = require('../../config')
 const { date } = require('../format')
-
-const SOURCE = 'ACTIVE_OBSERVATIONS'
+const { SOURCE, markerStyle } = require('../map/config')
 const CLICK_TO_ZOOM_LEVEL = 6
-
-const markerStyle = {
-  id: 'observations',
-  type: 'circle',
-  source: SOURCE,
-  paint: {
-    'circle-radius': 7,
-    'circle-color': '#555555'
-  },
-  filter: ['==', '$type', 'Point']
-}
 
 class ObservationMap extends React.Component {
   constructor (props) {

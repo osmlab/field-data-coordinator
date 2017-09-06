@@ -11,7 +11,13 @@ const { setActiveObservation } = require('../../actions')
 const { getActiveFeatures } = require('../../selectors')
 const { styleUrl } = require('../../config')
 const { date } = require('../format')
-const { SOURCE, markerStyle, hoverMarkerStyle } = require('../map/config')
+const {
+  SOURCE,
+  markerStyle,
+  hoverMarkerStyle,
+  clusterMarkerStyle,
+  clusterCountStyle
+} = require('../map/config')
 const CLICK_TO_ZOOM_LEVEL = 6
 
 class ObservationMap extends React.Component {
@@ -54,10 +60,25 @@ class ObservationMap extends React.Component {
     map.touchZoomRotate.disableRotation()
     map.once('load', () => {
       const { activeFeatures } = this.props
-      map.addSource(SOURCE, { type: 'geojson', data: activeFeatures })
+      map.addSource(SOURCE, {
+        type: 'geojson',
+        data: activeFeatures,
+        cluster: true,
+        clusterMaxZoom: CLICK_TO_ZOOM_LEVEL + 1,
+        clusterRadius: 40
+      })
       this.fit(activeFeatures)
-      map.addLayer(markerStyle)
+
+      // Clustered marker styles
+      map.addLayer(clusterMarkerStyle)
+      // Non-clustered marker styles
+      map.addLayer(Object.assign({}, markerStyle, {
+        filter: ['!has', 'point_count']
+      }))
+      // Hover marker styles
       map.addLayer(hoverMarkerStyle)
+      // Clustered counts
+      map.addLayer(clusterCountStyle)
       map.on('mousemove', this.mousemove)
       map.on('click', this.mouseclick)
     })

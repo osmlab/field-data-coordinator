@@ -6,27 +6,29 @@ const get = require('object-path').get
 const Metadata = require('./Metadata.jsx')
 const ObservationMap = require('./Observation-Map.jsx')
 const { getSingleObservationById } = require('../../selectors')
-const { date } = require('../format')
+const { nullValue, date, coordinates } = require('../format')
+const { device, timestamp } = require('./property-names').accessors
 
 class Observation extends React.Component {
   render () {
     const { params } = this.props.match
     const { observation } = this.props
     if (!observation) return null
+    const { properties } = observation
     return (
       <div className='row'>
         <div className='observation__header'>
           <Link className='link--primary' to='/data'>Back to all observations</Link>
           <h2 className='observation__title'>Observation ID: {params.observationId}</h2>
           <ul className='data__list'>
-            <li className='data__item'>Location: {get(observation, 'geometry.coordinates', []).join(', ')}</li>
+            <li className='data__item'>Location: {coordinates(get(observation, 'geometry.coordinates'))}</li>
             <li className='data__item'>Type: Observation</li>
           </ul>
           <dl className='meta-card__list'>
             <dt className='meta-card__title'>Device ID:</dt>
-            <dd className='meta-card__def'>{get(observation, 'properties._device_id')}</dd>
+            <dd className='meta-card__def'>{get(properties, device, nullValue)}</dd>
             <dt className='meta-card__title'>Date:</dt>
-            <dd className='meta-card__def'>{date(get(observation, 'properties._timestamp'))}</dd>
+            <dd className='meta-card__def'>{date(get(properties, timestamp, nullValue))}</dd>
           </dl>
         </div>
         <div className='content observation__content'>

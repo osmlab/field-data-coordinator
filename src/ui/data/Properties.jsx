@@ -7,8 +7,8 @@ const { getFlattenedProperties } = require('../../selectors')
 const DatePicker = require('react-datepicker').default
 const moment = require('moment')
 const { toggleFilterProperty, clearFilterProperties, setObservationTimeRange } = require('../../actions')
-
-const excludedProperties = ['id', '_timestamp', '_device_id', '_preset_id']
+const { accessors, excludedProperties } = require('./property-names')
+const { timestamp, device, survey } = accessors
 
 class Properties extends React.Component {
   constructor (props) {
@@ -53,8 +53,8 @@ class Properties extends React.Component {
 
   getSortedTimestamps () {
     const { properties } = this.props
-    if (!properties._timestamp) return []
-    return Object.keys(properties._timestamp).map(t => parseInt(t, 10)).sort()
+    if (!properties[timestamp]) return []
+    return Object.keys(properties[timestamp]).map(t => parseInt(t, 10)).sort()
   }
 
   render () {
@@ -66,7 +66,7 @@ class Properties extends React.Component {
         <h3>Filter</h3>
         <a className='filterClear clickable' onClick={this.clearFilterProperties}>Clear All</a>
         {timestamps.length ? this.renderTimeRange(timestamps) : null}
-        {['_device_id', '_preset_id'].map(name => {
+        {[device, survey].map(name => {
           return properties[name] ? this.renderProperty(name, properties[name]) : null
         })}
         <h5 className='clickable' onClick={this.togglePropertiesPane}>All properties { showProperties ? '[hide]' : '[show]' }</h5>

@@ -56,7 +56,7 @@ class Surveys extends React.Component {
         )}
         <p><span className='data__tag'>Version:</span> {survey.version}</p>
         <div className='link--group'>
-          <a className='link--primary link--delete' onClick={() => this.setState({ surveyToRemove: id })}>Delete</a>
+          { survey._OBSERVE_DEFAULT_SURVEY ? null : <a className='link--primary link--delete' onClick={() => this.setState({ surveyToRemove: id })}>Delete</a> }
         </div>
       </div>
     )

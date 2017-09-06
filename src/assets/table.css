@@ -1,7 +1,7 @@
 .tableScrollContainer {
-  max-width: 600px;
   overflow-x: scroll;
   overflow-y: auto;
+  margin-bottom: 3em;
 }
 
 th {
@@ -12,6 +12,16 @@ td, th {
   padding: 0.5rem;
   font-size: 0.75rem;
   border-bottom: 1px solid #F0ECEC;
+}
+
+td {
+  padding: 1.2em 0.5rem;
+}
+
+.table--num {
+  font-weight: 600;
+  margin-bottom: 1em;
+  color: #575456;
 }
 
 .tableToggle {
@@ -28,7 +38,7 @@ td, th {
   height: 13px;
   background-size: 10px 13px;
   display: inline-block;
-  margin-left: 2px;
+  margin-left: 6px;
   bottom: 13px;
 }
 
@@ -37,7 +47,7 @@ td, th {
   width: 7px;
   height: 7px;
   background-size: 7px 7px;
-  margin-left: 3px;
+  margin-left: 6px;
 }
 
 .tableToggleAsc:after {
@@ -52,12 +62,22 @@ td, th {
 .pagination li {
   display: inline-block;
   cursor: pointer;
-  padding: 1em;
+  margin-right: 1em;
+  padding: 0 .2em;
+}
+
+.pagination li:first-of-type {
+  margin-right: 2.5em;
+}
+
+.pagination li:last-of-type {
+  margin-left: 1.5em;
 }
 
 .pagination li.active,
 .pagination li:hover {
-  text-decoration: underline;
+  border-bottom: 1px solid #8212C6;
+  color: #8212C6;
 }
 
 .pagination li.disabled {
@@ -72,4 +92,11 @@ td, th {
 
 .tableClickableRow {
   cursor: pointer;
+  transition: all 0.6s ease 0.2s;
+  -webkit-transition: all 0.6s;
+  -moz-transition: all 0.6s;
+}
+
+.tableClickableRow:hover {
+  background-color: #F7F7F7;
 }

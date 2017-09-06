@@ -1,6 +1,7 @@
 'use strict'
 const React = require('react')
 const mapboxgl = require('mapbox-gl')
+const get = require('object-path').get
 const { connect } = require('react-redux')
 const PropTypes = require('prop-types')
 const immutable = require('immutable')
@@ -9,21 +10,16 @@ const { withRouter } = require('react-router-dom')
 const { setActiveObservation } = require('../../actions')
 const { getActiveFeatures } = require('../../selectors')
 const { styleUrl } = require('../../config')
-const { date } = require('../format')
-
-const SOURCE = 'ACTIVE_OBSERVATIONS'
+const { date, nullValue, coordinates } = require('../format')
+const {
+  SOURCE,
+  markerStyle,
+  hoverMarkerStyle,
+  clusterMarkerStyle,
+  clusterCountStyle
+} = require('../map/config')
 const CLICK_TO_ZOOM_LEVEL = 6
-
-const markerStyle = {
-  id: 'observations',
-  type: 'circle',
-  source: SOURCE,
-  paint: {
-    'circle-radius': 7,
-    'circle-color': '#555555'
-  },
-  filter: ['==', '$type', 'Point']
-}
+const { observationId, timestamp, device } = require('./property-names').accessors
 
 class ObservationMap extends React.Component {
   constructor (props) {
@@ -34,7 +30,8 @@ class ObservationMap extends React.Component {
     this.navigate = this.navigate.bind(this)
     const isSingleObservation = props.hasOwnProperty('observationId')
     this.state = {
-      singleObservation: isSingleObservation
+      singleObservation: isSingleObservation,
+      showingPopup: false
     }
   }
 
@@ -64,9 +61,25 @@ class ObservationMap extends React.Component {
     map.touchZoomRotate.disableRotation()
     map.once('load', () => {
       const { activeFeatures } = this.props
-      map.addSource(SOURCE, { type: 'geojson', data: activeFeatures })
+      map.addSource(SOURCE, {
+        type: 'geojson',
+        data: activeFeatures,
+        cluster: true,
+        clusterMaxZoom: CLICK_TO_ZOOM_LEVEL + 1,
+        clusterRadius: 40
+      })
       this.fit(activeFeatures)
-      map.addLayer(markerStyle)
+
+      // Clustered marker styles
+      map.addLayer(clusterMarkerStyle)
+      // Non-clustered marker styles
+      map.addLayer(Object.assign({}, markerStyle, {
+        filter: ['!has', 'point_count']
+      }))
+      // Hover marker styles
+      map.addLayer(hoverMarkerStyle)
+      // Clustered counts
+      map.addLayer(clusterCountStyle)
       map.on('mousemove', this.mousemove)
       map.on('click', this.mouseclick)
     })
@@ -74,12 +87,22 @@ class ObservationMap extends React.Component {
 
   mousemove (e) {
     const features = this.map.queryRenderedFeatures(e.point, { layer: [SOURCE] })
-    this.map.getCanvas().style.cursor = features.length ? 'pointer' : ''
+    const id = get(features, '0.properties.id')
+    if (id) {
+      this.map.getCanvas().style.cursor = 'pointer'
+      this.map.setFilter(hoverMarkerStyle.id, ['==', 'id', id])
+    } else {
+      this.map.getCanvas().style.cursor = ''
+      if (!this.state.showingPopup) {
+        this.map.setFilter(hoverMarkerStyle.id, ['==', 'id', ''])
+      }
+    }
   }
 
   mouseclick (e) {
     const features = this.map.queryRenderedFeatures(e.point, { layer: [SOURCE] })
-    if (features.length && features[0].properties.hasOwnProperty('id')) this.fit({features: [features[0]]})
+    const id = get(features, '0.properties.id')
+    if (id) this.fit({features: [features[0]]})
   }
 
   open (lngLat, feature) {
@@ -91,6 +114,8 @@ class ObservationMap extends React.Component {
     .setLngLat(lngLat)
     .setHTML(this.tooltip(feature))
     .addTo(this.map)
+    this.setState({ showingPopup: true })
+    this.popup.once('close', () => this.setState({ showingPopup: false }))
   }
 
   close () {
@@ -101,16 +126,16 @@ class ObservationMap extends React.Component {
     const { singleObservation } = this.state
     return `
     <div class='data__meta'>
-      <h2 class='data__title'>${properties.id}</h2>
+      <h2 class='data__title'>${get(properties, observationId, nullValue)}</h2>
       <ul class='data__list'>
-        <li class='data__item'>${geometry.coordinates.join(', ')}</li>
+        <li class='data__item'>${coordinates(geometry.coordinates)}</li>
         <li class='data__item'>Type: Observation</li>
       </ul>
       <dl class='meta-card__list'>
         <dt class='meta-card__title'>Device ID:</dt>
-        <dd class='meta-card__def'>${properties._device_id}</dd>
+        <dd class='meta-card__def'>${get(properties, device, nullValue)}</dd>
         <dt class='meta-card__title'>Date:</dt>
-        <dd class='meta-card__def'>${date(properties._timestamp)}</dd>
+        <dd class='meta-card__def'>${date(properties[timestamp])}</dd>
       </dl>
       ${singleObservation ? '' : `
       <a data-href='${properties.id}'

@@ -1,6 +1,7 @@
 'use strict'
 const React = require('react')
 const mapboxgl = require('mapbox-gl')
+const get = require('object-path').get
 const { connect } = require('react-redux')
 const PropTypes = require('prop-types')
 const immutable = require('immutable')
@@ -10,7 +11,7 @@ const { setActiveObservation } = require('../../actions')
 const { getActiveFeatures } = require('../../selectors')
 const { styleUrl } = require('../../config')
 const { date } = require('../format')
-const { SOURCE, markerStyle } = require('../map/config')
+const { SOURCE, markerStyle, hoverMarkerStyle } = require('../map/config')
 const CLICK_TO_ZOOM_LEVEL = 6
 
 class ObservationMap extends React.Component {
@@ -22,7 +23,8 @@ class ObservationMap extends React.Component {
     this.navigate = this.navigate.bind(this)
     const isSingleObservation = props.hasOwnProperty('observationId')
     this.state = {
-      singleObservation: isSingleObservation
+      singleObservation: isSingleObservation,
+      showingPopup: false
     }
   }
 
@@ -55,6 +57,7 @@ class ObservationMap extends React.Component {
       map.addSource(SOURCE, { type: 'geojson', data: activeFeatures })
       this.fit(activeFeatures)
       map.addLayer(markerStyle)
+      map.addLayer(hoverMarkerStyle)
       map.on('mousemove', this.mousemove)
       map.on('click', this.mouseclick)
     })
@@ -62,12 +65,22 @@ class ObservationMap extends React.Component {
 
   mousemove (e) {
     const features = this.map.queryRenderedFeatures(e.point, { layer: [SOURCE] })
-    this.map.getCanvas().style.cursor = features.length ? 'pointer' : ''
+    const id = get(features, '0.properties.id')
+    if (id) {
+      this.map.getCanvas().style.cursor = 'pointer'
+      this.map.setFilter(hoverMarkerStyle.id, ['==', 'id', id])
+    } else {
+      this.map.getCanvas().style.cursor = ''
+      if (!this.state.showingPopup) {
+        this.map.setFilter(hoverMarkerStyle.id, ['==', 'id', ''])
+      }
+    }
   }
 
   mouseclick (e) {
     const features = this.map.queryRenderedFeatures(e.point, { layer: [SOURCE] })
-    if (features.length && features[0].properties.hasOwnProperty('id')) this.fit({features: [features[0]]})
+    const id = get(features, '0.properties.id')
+    if (id) this.fit({features: [features[0]]})
   }
 
   open (lngLat, feature) {
@@ -79,6 +92,8 @@ class ObservationMap extends React.Component {
     .setLngLat(lngLat)
     .setHTML(this.tooltip(feature))
     .addTo(this.map)
+    this.setState({ showingPopup: true })
+    this.popup.once('close', () => this.setState({ showingPopup: false }))
   }
 
   close () {

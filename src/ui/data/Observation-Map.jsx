@@ -10,7 +10,7 @@ const { withRouter } = require('react-router-dom')
 const { setActiveObservation } = require('../../actions')
 const { getActiveFeatures } = require('../../selectors')
 const { styleUrl } = require('../../config')
-const { date } = require('../format')
+const { date, nullValue, coordinates } = require('../format')
 const {
   SOURCE,
   markerStyle,
@@ -19,6 +19,7 @@ const {
   clusterCountStyle
 } = require('../map/config')
 const CLICK_TO_ZOOM_LEVEL = 6
+const { observationId, timestamp, device } = require('./property-names').accessors
 
 class ObservationMap extends React.Component {
   constructor (props) {
@@ -125,16 +126,16 @@ class ObservationMap extends React.Component {
     const { singleObservation } = this.state
     return `
     <div class='data__meta'>
-      <h2 class='data__title'>${properties.id}</h2>
+      <h2 class='data__title'>${get(properties, observationId, nullValue)}</h2>
       <ul class='data__list'>
-        <li class='data__item'>${geometry.coordinates.join(', ')}</li>
+        <li class='data__item'>${coordinates(geometry.coordinates)}</li>
         <li class='data__item'>Type: Observation</li>
       </ul>
       <dl class='meta-card__list'>
         <dt class='meta-card__title'>Device ID:</dt>
-        <dd class='meta-card__def'>${properties._device_id}</dd>
+        <dd class='meta-card__def'>${get(properties, device, nullValue)}</dd>
         <dt class='meta-card__title'>Date:</dt>
-        <dd class='meta-card__def'>${date(properties._timestamp)}</dd>
+        <dd class='meta-card__def'>${date(properties[timestamp])}</dd>
       </dl>
       ${singleObservation ? '' : `
       <a data-href='${properties.id}'

@@ -1,9 +1,8 @@
 const mkdirp = require('mkdirp')
 const path = require('path')
-const fs = require('fs')
 const { app } = require('electron')
-
-const APP_DIR = JSON.parse(fs.readFileSync(path.join(__dirname, '..', '..', 'package.json'), 'utf-8')).name
+const config = require('../package.json')
+const APP_DIR = config.name
 process.stdout.write(APP_DIR + '\n')
 
 module.exports = function () {

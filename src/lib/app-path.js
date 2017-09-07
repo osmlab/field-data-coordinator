@@ -1,6 +1,5 @@
 const mkdirp = require('mkdirp')
 const path = require('path')
-const fs = require('fs')
 const { app } = require('electron')
 const config = require('../package.json')
 const APP_DIR = config.name

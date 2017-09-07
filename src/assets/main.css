@@ -47,7 +47,6 @@ li { list-style: none; }
   padding: 5em 0 8em 0;
   flex: auto;
   float: left;
-  width: 75%;
 }
 
 .header {

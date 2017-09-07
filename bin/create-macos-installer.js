@@ -22,8 +22,8 @@ function createConfiguration () {
       icon: config.iconPath + '.icns',
       'icon-size': 128,
       contents: [
-        { x: 122, y: 240, type: 'file', path: appPath },
-        { x: 380, y: 240, type: 'link', path: '/Applications' },
+        { x: 180, y: 240, type: 'file', path: appPath },
+        { x: 450, y: 240, type: 'link', path: '/Applications' },
 
         // Hide hidden icons out of view, for users who have hidden files shown.
         // https://github.com/LinusU/node-appdmg/issues/45#issuecomment-153924954

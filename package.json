@@ -1,7 +1,7 @@
 {
   "name": "field-data-coordinator",
   "productName": "observe-desktop",
-  "version": "0.0.1",
+  "version": "1.0.0-rc1",
   "description": "Coordinator app for the field data project",
   "main": "src/main.js",
   "scripts": {

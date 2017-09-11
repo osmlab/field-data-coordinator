@@ -5,10 +5,13 @@ module.exports.getSurveys = state => state.surveys
 /*
  * Get a FeatureCollection of all active Observations
  */
-module.exports.getActiveFeatures = function (state) {
+module.exports.getActiveFeatures = function (state, mustHaveGeometry) {
   const all = state.observations.get('_map')
   const activeFeatures = []
-  state.observations.get('active').forEach(id => activeFeatures.push(all[id]))
+  state.observations.get('active').forEach(id => {
+    if (mustHaveGeometry && !all[id].geometry) return
+    activeFeatures.push(all[id])
+  })
   return {
     type: 'FeatureCollection',
     features: activeFeatures

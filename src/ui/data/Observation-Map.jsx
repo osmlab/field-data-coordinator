@@ -195,7 +195,7 @@ ObservationMap.propTypes = {
 const mapStateToProps = state => {
   return {
     activeIds: state.observations.get('active'),
-    activeFeatures: getActiveFeatures(state)
+    activeFeatures: getActiveFeatures(state, true)
   }
 }
 module.exports = withRouter(connect(mapStateToProps, { setActiveObservation })(ObservationMap))

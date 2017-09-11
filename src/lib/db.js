@@ -149,7 +149,7 @@ function createObservation (feature, nodeId, cb) {
     tags: feature.properties,
     timestamp: new Date().toISOString()
   }
-  if (feature.geometry && feature.geometry.coordinates) {
+  if (feature.geometry && Array.isArray(feature.geometry.coordinates)) {
     obs.lon = feature.geometry.coordinates[0]
     obs.lat = feature.geometry.coordinates[1]
   }

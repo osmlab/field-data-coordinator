@@ -22,21 +22,27 @@ class App extends React.Component {
       map.addSource(SOURCE, { type: 'geojson', data: ob })
       map.addLayer(markerStyle)
     }
+    const coords = get(geometry, 'coordinates')
     return (
       <div className='data__card' key={properties[version]}>
         <div className='data__card--in'>
-          <Map
-            center={geometry.coordinates}
-            containerClass='data__map'
-            zoom={8}
-            options={mapOptions}
-            onLoad={onMapLoad}
-          />
+          { coords ? (
+            <Map
+              center={coords}
+              containerClass='data__map'
+              zoom={8}
+              options={mapOptions}
+              onLoad={onMapLoad}
+            />
+          ) : null }
+
           <div className='data__meta'>
             <Link to={`data/observations/${id}`}><h2 className='data__title'>ID: {id}</h2></Link>
-            <ul className='data__list'>
-              <li className='data__item'>{coordinates(ob.geometry.coordinates)}</li>
-            </ul>
+            { coords ? (
+              <ul className='data__list'>
+                <li className='data__item'>{coordinates(coords)}</li>
+              </ul>
+            ) : null }
             <dl className='meta-card__list'>
               <dt className='meta-card__title'>Category:</dt>
               <dd className='meta-card__def'>{get(properties, surveyType, nullValue)}</dd>

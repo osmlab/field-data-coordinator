@@ -44,6 +44,7 @@ gulp.task('folders', function () {
   const folders = [
     'src/assets/**/*',
     'src/lib/**/*',
+    'src/data/**/*',
     'src/actions/**/*',
     'src/node_modules/**/*'
   ]

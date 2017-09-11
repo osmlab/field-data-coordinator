@@ -13,7 +13,7 @@ var buildName = 'installer-' + baseName
 var installerFolder = path.join(releaseFolder, buildName)
 
 function createConfiguration () {
-  var buildFolder = path.join(releaseFolder, 'build-' + baseName)
+  var buildFolder = path.join(releaseFolder, baseName)
 
   return {
     appDirectory: buildFolder,

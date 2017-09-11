@@ -16,8 +16,9 @@ if (!cfg) {
 }
 
 const distFolder = path.join(__dirname, 'release')
-const buildName = config.appName + cfg.platform + '-' + cfg.arch
+const buildName = config.appName + '-' + cfg.platform + '-' + cfg.arch
 const buildFolder = path.join(distFolder, buildName)
+console.log('Gonna clear', buildFolder)
 rimraf(buildFolder, function (err) {
   if (err) throw err
   doPackaging(cfg)

@@ -13,7 +13,7 @@
     "appdeps": "cd src && yarn",
     "test": "tape 'test/**/*.js'",
     "mac": "./bin/package.js macos && ./bin/create-macos-installer.js",
-    "win": "./bin/package.js windows && ./bin/create-windows-installer.js",
+    "win": "node ./bin/package.js windows && node ./bin/create-windows-installer.js",
     "postinstall": "npmpd"
   },
   "repository": "git@github.com:osmlab/field-data-coordinator.git",

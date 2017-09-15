@@ -18,12 +18,10 @@ function createConfiguration () {
   return {
     appDirectory: buildFolder,
     outputDirectory: installerFolder,
-
     usePackageJson: false,
-
     description: config.description,
     authors: config.teamName,
-    name: config.appName,
+    name: config.appName.replace(/-/g, ''), // electron-winstaller has problems with dashes in this property? https://github.com/electron/windows-installer/issues/187
     exe: config.appName + '.exe',
     setupExe: buildName + '-' + config.version + '.exe',
     iconUrl: 'https://raw.githubusercontent.com/digidem/mapfilter-desktop/master/static/mapfilter.ico',

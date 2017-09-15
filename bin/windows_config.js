@@ -1,7 +1,7 @@
 const config = require('../config')
 module.exports = {
   dir: config.dir,
-  arch: 'x64',
+  arch: 'all',
   asar: true,
   platform: 'win32',
   icon: config.iconPath + '.icns',

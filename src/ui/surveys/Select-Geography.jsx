@@ -122,6 +122,7 @@ class SelectGeography extends React.Component {
   }
 
   getStyle () {
+    if (!this.map) return
     const { width, height } = this.getDimensions()
     return { width: width + 'px', height: height + 'px' }
   }

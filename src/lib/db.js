@@ -91,7 +91,7 @@ function getLocalOsmOrgXmlStream () {
  * closing and wiping the db beforehand and re-upping it afterwards.
  */
 function importBulkOsm (bbox, cb) {
-  wipeDb(osmOrgDb.db, osmOrgDbPath, (err) => {
+  wipeDb(osmOrgDb, osmOrgDbPath, (err) => {
     if (err) {
       done(err)
     } else {

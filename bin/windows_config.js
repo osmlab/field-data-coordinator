@@ -1,9 +1,9 @@
 const config = require('../config')
 module.exports = {
   dir: config.dir,
-  arch: 'x64',
-  asar: false,
-  platform: 'darwin',
+  arch: 'all',
+  asar: true,
+  platform: 'win32',
   icon: config.iconPath + '.icns',
   out: config.out,
   tmpdir: false,
@@ -12,5 +12,8 @@ module.exports = {
   buildVersion: config.version,
   prune: true,
   overwrite: true,
-  appBundleId: 'osmlabs.observe.coordinator'
+  'version-string': {
+    ProductName: config.appName,
+    CompanyName: config.teamName
+  }
 }

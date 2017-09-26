@@ -54,7 +54,7 @@ class Properties extends React.Component {
   getSortedTimestamps () {
     const { properties } = this.props
     if (!properties[timestamp]) return []
-    return Object.keys(properties[timestamp]).map(t => parseInt(t, 10)).sort()
+    return Object.keys(properties[timestamp]).map(t => new Date(t)).sort()
   }
 
   render () {

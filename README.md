@@ -31,9 +31,7 @@ yarn start
 ```
 cd bin
 yarn install
-node ./generate-mock-observations.js 10
-# generates 10 files in observations folder
-ls observations
+./parse-mock-observations.js
 ./upload-mock-observations.sh
 ```
 

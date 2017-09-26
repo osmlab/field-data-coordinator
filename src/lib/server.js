@@ -79,7 +79,7 @@ function Server (opts) {
   app.put('/observations/create', function (req, res, next) {
     if (!req.body) return res.sendStatus(400)
 
-    var id = feature.id
+    var id = req.body.id
     return db.createObservation(req.body, id, function (err) {
       if (err) {
         return next(err)

@@ -1,0 +1,126 @@
+[{
+  "id": "10391469678999709028",
+    "type": "Feature",
+    "geometry": {
+      "type": "Point",
+      "coordinates": [
+        -122.07666499999999,
+        37.394605550000016
+        ]
+    },
+    "properties": {
+      "id": "10391469678999709028",
+      "_version_id": "ec5506b4faeb3d4bf3295d4a21846aba0f8714f623eacb5ebe9b1b1d6ed6493e",
+      "osm-p2p-id": null,
+      "hfhn:supervisor": "a",
+      "hfhn:id_number": "2",
+      "hfhn:village": "test",
+      "hfhn:municipality": "test",
+      "surveyId": "HFH Inspection Form",
+      "surveyType": "stone_pre_foundation",
+      "deviceId": "6b3a49b4be4e1b46"
+    }
+},
+{
+  "id": "13316658014913345828",
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      -122.07666499999999,
+    37.394605550000016
+      ]
+  },
+  "properties": {
+    "id": "13316658014913345828",
+    "_version_id": "d312d6a52326eba98f5162e79f04b2aea15c0ea0d0b2ef997598c6f80d6c5a8e",
+    "osm-p2p-id": "7387112046595570000",
+    "surveyType": "building=house",
+    "building:levels": "3",
+    "userName": "Ali Felski",
+    "userEmail": "alifelski@gmail.com",
+    "deviceId": "6b3a49b4be4e1b46"
+  }
+},
+{
+  "id": "16864331653011895953",
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      -122.08400000000002,
+    37.42199833333333
+      ]
+  },
+  "properties": {
+    "id": "16864331653011895953",
+    "_version_id": "90badbd2195c978e1e98dfa7ec5184dbc5ef1620924198445d241f8f2b26edfe",
+    "osm-p2p-id": null,
+    "hfhn:inspection": "brick_pre_foundation",
+    "surveyId": "HFH Inspection Form",
+    "surveyType": "brick_pre_foundation",
+    "hfhn:supervisor": "a",
+    "hfhn:id_number": "3",
+    "hfhn:village": "test",
+    "userName": "",
+    "userEmail": "",
+    "deviceId": "663ea46e847b2a7a"
+  }
+},
+{
+  "id": "17133750506647471459",
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      -122.07774833333333,
+    37.39333999999997
+      ]
+  },
+  "properties": {
+    "id": "17133750506647471459",
+    "_version_id": "83c8c7a603d3b9b8fbfbebe0087ff1e086bdc5cdd5256d7d6b93f4f176eef020",
+    "osm-p2p-id": null,
+    "surveyType": "golf=fairway",
+    "userName": "Ali Felski",
+    "userEmail": "alifelski@gmail.com",
+    "deviceId": "6b3a49b4be4e1b46"
+  }
+},
+{
+  "id": "2779642893894354254",
+  "type": "Feature",
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+      -122.07774833333333,
+    37.39333999999997
+      ]
+  },
+  "properties": {
+    "id": "2779642893894354254",
+    "_version_id": "c279010a476e7c590f1db669d274b59ec1ac878c9463ef7276cd333277c8e637",
+    "osm-p2p-id": null,
+    "gauge": "1",
+    "electrified": "contact_line",
+    "service": "siding",
+    "surveyId": "OSM",
+    "surveyType": "railway=rail",
+    "deviceId": "6b3a49b4be4e1b46"
+  }
+},
+{
+  "id": "7516693010043429570",
+  "type": "Feature",
+  "geometry": null,
+  "properties": {
+    "id": "7516693010043429570",
+    "_version_id": "d7c6a39bf09ef73cb178ea9ee7175e394af2aec10112aade5fbd14fab660895e",
+    "osm-p2p-id": null,
+    "fence_type": "type",
+    "height": "58",
+    "surveyId": "OSM",
+    "surveyType": "barrier=fence",
+    "deviceId": "6b3a49b4be4e1b46"
+  }
+}]

@@ -221,7 +221,11 @@ function observationToFeature ({ version_id, value }, id) {
     id,
     type: 'Feature',
     geometry: null,
-    properties: Object.assign({ id, _version_id: version_id }, value.tags)
+    properties: Object.assign({
+      id,
+      _version_id: version_id,
+      _timestamp: value.timestamp
+    }, value.tags)
   }
   if (value.lon && value.lat) {
     feature.geometry = {

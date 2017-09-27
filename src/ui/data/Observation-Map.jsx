@@ -19,7 +19,7 @@ const {
   clusterCountStyle
 } = require('../map/config')
 const CLICK_TO_ZOOM_LEVEL = 6
-const { observationId, timestamp, device } = require('./property-names').accessors
+const { observationId, timestamp, device, surveyType } = require('./property-names').accessors
 
 class ObservationMap extends React.Component {
   constructor (props) {
@@ -88,9 +88,12 @@ class ObservationMap extends React.Component {
   mousemove (e) {
     const features = this.map.queryRenderedFeatures(e.point, { layer: [SOURCE] })
     const id = get(features, '0.properties.id')
+    const cluster = get(features, '0.properties.cluster')
     if (id) {
       this.map.getCanvas().style.cursor = 'pointer'
       this.map.setFilter(hoverMarkerStyle.id, ['==', 'id', id])
+    } else if (cluster) {
+      this.map.getCanvas().style.cursor = 'pointer'
     } else {
       this.map.getCanvas().style.cursor = ''
       if (!this.state.showingPopup) {
@@ -101,6 +104,8 @@ class ObservationMap extends React.Component {
 
   mouseclick (e) {
     const features = this.map.queryRenderedFeatures(e.point, { layer: [SOURCE] })
+    const cluster = get(features, '0.properties.cluster')
+    if (cluster) return this.map.setZoom(CLICK_TO_ZOOM_LEVEL + 2)
     const id = get(features, '0.properties.id')
     if (!id) return
     if (this.state.singleObservation) this.fit({features: [features[0]]})
@@ -131,7 +136,7 @@ class ObservationMap extends React.Component {
       <h2 class='data__title'>${get(properties, observationId, nullValue)}</h2>
       <ul class='data__list'>
         <li class='data__item'>${coordinates(geometry.coordinates)}</li>
-        <li class='data__item'>Type: Observation</li>
+        <li class='data__item'>Type: ${get(properties, surveyType, nullValue)}</li>
       </ul>
       <dl class='meta-card__list'>
         <dt class='meta-card__title'>Device ID:</dt>

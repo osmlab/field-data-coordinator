@@ -61,8 +61,8 @@ li { list-style: none; }
 
 .navItem a {
   display: inline-block;
-  padding: 1.4em .5em 1em;
-  margin: 0 1em;
+  padding: 1.1em .2em .2em;
+  margin: 1.5em 1.3em 0;
   font-size: .85em;
   font-weight: 100;
   letter-spacing: .03em;
@@ -80,13 +80,19 @@ li { list-style: none; }
   border-bottom: 2px solid #fff;
 }
 
-.navItemHome a:hover, .navItemHome .header__active {
-  border-bottom: 2px solid #6579FC;
+.navItemHome a, .navItemHome a:hover, .navItemHome .header__active {
+  border-bottom: 0px solid #6579FC;
 }
 
 .navItem:first-of-type a {
   margin-left: 0;
   padding-left: 0;
+  padding: .5em .5em 0;
+  margin-top: 0;
+}
+
+.navItem:first-of-type {
+  float: left;
 }
 
 .navItemLink {
@@ -175,6 +181,10 @@ section {
 
 .header__title {
   display: inline-block;
+}
+
+.logo-main {
+  width: 120px;
 }
 
 h1, h2, h3, h4, h5 { color: #575456; }

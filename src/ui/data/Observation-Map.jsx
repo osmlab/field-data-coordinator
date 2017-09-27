@@ -88,9 +88,12 @@ class ObservationMap extends React.Component {
   mousemove (e) {
     const features = this.map.queryRenderedFeatures(e.point, { layer: [SOURCE] })
     const id = get(features, '0.properties.id')
+    const cluster = get(features, '0.properties.cluster')
     if (id) {
       this.map.getCanvas().style.cursor = 'pointer'
       this.map.setFilter(hoverMarkerStyle.id, ['==', 'id', id])
+    } else if (cluster) {
+      this.map.getCanvas().style.cursor = 'pointer'
     } else {
       this.map.getCanvas().style.cursor = ''
       if (!this.state.showingPopup) {
@@ -101,6 +104,8 @@ class ObservationMap extends React.Component {
 
   mouseclick (e) {
     const features = this.map.queryRenderedFeatures(e.point, { layer: [SOURCE] })
+    const cluster = get(features, '0.properties.cluster')
+    if (cluster) return this.map.setZoom(CLICK_TO_ZOOM_LEVEL + 2)
     const id = get(features, '0.properties.id')
     if (!id) return
     if (this.state.singleObservation) this.fit({features: [features[0]]})

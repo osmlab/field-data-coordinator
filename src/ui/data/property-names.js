@@ -1,7 +1,5 @@
 const { fullDate } = require('../format')
 
-module.exports.excludedProperties = ['id', '_version_id']
-
 module.exports.accessors = {
   device: 'deviceId',
   survey: 'surveyId',
@@ -26,4 +24,11 @@ module.exports.tableRows = [
   'surveyId',
   'surveyType',
   (d) => fullDate(d._timestamp)
+]
+
+module.exports.filterItems = [
+  ['Username', 'userName'],
+  ['Device ID', 'deviceId'],
+  ['Survey ID', 'surveyId'],
+  ['Observation Type', 'surveyType']
 ]

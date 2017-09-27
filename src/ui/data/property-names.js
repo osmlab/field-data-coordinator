@@ -1,5 +1,10 @@
 const { fullDate } = require('../format')
 
+module.exports.excludedProperties = [
+  '_version_id',
+  'osm-p2p-id',
+  'id'
+]
 module.exports.accessors = {
   device: 'deviceId',
   survey: 'surveyId',

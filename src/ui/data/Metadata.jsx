@@ -5,8 +5,12 @@ const PropTypes = require('prop-types')
 const { List } = require('immutable')
 const get = require('object-path').get
 const { getSurveys } = require('../../selectors')
-const { nullValue } = require('../format')
-const { accessors, tableHeaders, excludedProperties } = require('./property-names')
+const {
+  accessors,
+  tableHeaders,
+  tableRows,
+  excludedProperties
+} = require('./property-names')
 const basicInfoTags = tableHeaders.map(t => t[1])
 
 function getSurveyLabel (tag, survey) {
@@ -14,7 +18,7 @@ function getSurveyLabel (tag, survey) {
   for (let i = 0; i < featureTypes.length; ++i) {
     for (let k = 0; k < featureTypes[i].fields.length; ++k) {
       if (featureTypes[i].fields[k].key === tag) {
-        return featureTypes[k].fields[k].label
+        return featureTypes[i].fields[k].label
       }
     }
   }
@@ -45,12 +49,15 @@ class Metadata extends React.Component {
         <div className='meta__group'>
           <h2 className='data__subtitle'>Basic Information</h2>
           <ul className='meta__prose'>
-            {tableHeaders.map(t => <li key={t[1]}>{t[0]}: <strong>{get(observation.properties, t[1], nullValue)}</strong></li>)}
+            {tableHeaders.map((t, i) => {
+              const value = typeof tableRows[i] === 'function' ? tableRows[i](observation.properties) : get(observation.properties, t[1])
+              return <li key={t[1]}>{t[0]}: <strong>{value}</strong></li>
+            })}
           </ul>
         </div>
         <div className='meta__group'>
 
-          <h2 className='data__subtitle'>Tags</h2>
+          <h2 className='data__subtitle'>Observations</h2>
           {tags.length ? (
             <ul className='meta__prose'>
               {tags.map(t => this.renderSurveyTag(t, survey))}

@@ -70,6 +70,11 @@ class Surveys extends React.Component {
       <div className='row'>
         <section className='initialSection'>
           <h2>Surveys</h2>
+          <div className='paragraph--block'>
+            <p>Surveys are a method for directing mappers to collect relevant metadata about a given area, whether it's collecting survey information or point data.</p>
+
+            <p>Upload surveys from your hard drive, and specify a bounding box of Open Street Map (OSM) data to download and save locally. Both are required for proper surveying. Once synced to a Collection App, the OSM data allows mappers to see existing local landmarks, and the survey acts as a set of questions.</p>
+          </div>
           <div className='surveyInputs'>
             <ImportSurvey />
           </div>

@@ -55,7 +55,7 @@ class SelectGeography extends React.Component {
     return (
       <div className='surveyInput'>
         <h3 className='withDescription'>Select a new geography</h3>
-        <p className='description'>Description of how to add things. Find more information about how to make a survey file here.</p>
+        <p className='description'>Because of OSM API restrictions geographic areas are limited to 27 square kilometers (roughly 10 square miles). Also, please note that, for now the Observe App allows only one bounding box to be stored at a time.</p>
         <button className='button buttonGroup' onClick={() => this.setState({ active: true })}>Select an area to import</button>
         {this.state.active ? (
           <Modal>

@@ -16,6 +16,7 @@ const Home = require('./ui/home/index.jsx')
 const Data = require('./ui/data/index.jsx')
 const Observation = require('./ui/data/Observation.jsx')
 const Surveys = require('./ui/surveys/index.jsx')
+const About = require('./ui/about/index.jsx')
 
 const sagaMiddleware = createSagaMiddleware()
 const localstorageMiddleware = persistState('osmBounds')
@@ -41,6 +42,7 @@ ReactDOM.render(
         <Route path='/data' component={Data} />
         <Route path='/data/observations/:observationId' component={Observation} />
         <Route path='/surveys' component={Surveys} />
+        <Route path='/about' component={About} />
         <Redirect from='/' to='/home' />
       </App>
     </HashRouter>

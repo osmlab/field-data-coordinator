@@ -19,7 +19,7 @@ const {
   clusterCountStyle
 } = require('../map/config')
 const CLICK_TO_ZOOM_LEVEL = 6
-const { observationId, timestamp, device } = require('./property-names').accessors
+const { observationId, timestamp, device, surveyType } = require('./property-names').accessors
 
 class ObservationMap extends React.Component {
   constructor (props) {
@@ -136,7 +136,7 @@ class ObservationMap extends React.Component {
       <h2 class='data__title'>${get(properties, observationId, nullValue)}</h2>
       <ul class='data__list'>
         <li class='data__item'>${coordinates(geometry.coordinates)}</li>
-        <li class='data__item'>Type: Observation</li>
+        <li class='data__item'>Type: ${get(properties, surveyType, nullValue)}</li>
       </ul>
       <dl class='meta-card__list'>
         <dt class='meta-card__title'>Device ID:</dt>

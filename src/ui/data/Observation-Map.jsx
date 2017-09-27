@@ -27,7 +27,7 @@ class ObservationMap extends React.Component {
     this.init = this.init.bind(this)
     this.mousemove = this.mousemove.bind(this)
     this.mouseclick = this.mouseclick.bind(this)
-    this.navigate = this.navigate.bind(this)
+    this.getTargetAttribute = this.getTargetAttribute.bind(this)
     const isSingleObservation = props.hasOwnProperty('observationId')
     this.state = {
       singleObservation: isSingleObservation,
@@ -102,7 +102,9 @@ class ObservationMap extends React.Component {
   mouseclick (e) {
     const features = this.map.queryRenderedFeatures(e.point, { layer: [SOURCE] })
     const id = get(features, '0.properties.id')
-    if (id) this.fit({features: [features[0]]})
+    if (!id) return
+    if (this.state.singleObservation) this.fit({features: [features[0]]})
+    else this.navigate(id)
   }
 
   open (lngLat, feature) {
@@ -146,15 +148,19 @@ class ObservationMap extends React.Component {
     `
   }
 
-  navigate ({ target }) {
+  getTargetAttribute ({ target }) {
     // true if it's an observation link
     if (typeof target.getAttribute === 'function' && target.getAttribute('data-observation')) {
       const observationId = target.getAttribute('data-href')
-      const { history, match } = this.props
-      // persist the active observation to state, in addition to changing the route
-      this.props.setActiveObservation(observationId)
-      history.push(`${match.url}/observations/${observationId}`)
+      this.navigate(observationId)
     }
+  }
+
+  navigate (observationId) {
+    const { history, match } = this.props
+    // persist the active observation to state, in addition to changing the route
+    this.props.setActiveObservation(observationId)
+    history.push(`${match.url}/observations/${observationId}`)
   }
 
   fit (activeFeatures) {
@@ -179,7 +185,7 @@ class ObservationMap extends React.Component {
 
   render () {
     return (
-      <div className='map' ref={this.init} onClick={this.navigate} />
+      <div className='map' ref={this.init} onClick={this.getTargetAttribute} />
     )
   }
 }

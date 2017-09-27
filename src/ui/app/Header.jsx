@@ -26,7 +26,7 @@ class Header extends React.Component {
             <ul>
               <li className='navItem navItemHome'>
                 <Link to='/home' className={this.activeClass('/home')}>
-                  <h1 className='header__title navItemLink'>{t.header.title}</h1>
+                  <h1 className='header__title navItemLink'><img alt='Observe Coordinator' className='logo-main' src='./assets/icons/observe-coordinator-logo.png'/></h1>
                 </Link>
               </li>
               <li className='navItem'>

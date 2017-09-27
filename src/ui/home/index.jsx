@@ -86,8 +86,8 @@ what you’ve learned with the larger community!</p>
           </div>
         </section>
         <section className='page__body row'>
-          <h1 className='section__title'>Recently Synced Data</h1>
-          <div className='body__content'>
+          <h1 className='section__title body__content'>Recently Synced Data</h1>
+          <div className='body__content clearfix'>
             {this.props.observations.map(this.renderObservation)}
           </div>
           <Link to='/data' className='link--page link--primary'>View All Data Points</Link>

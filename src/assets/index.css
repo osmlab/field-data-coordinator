@@ -67,7 +67,7 @@
   background-color: #FBFAFA;
   overflow: hidden;
   padding-top: 2rem;
-  padding-bottom: 2rem;
+  padding-bottom: 5rem;
   position: relative;
 }
 
@@ -76,11 +76,14 @@
 }
 
 .data__card {
-  width: 40%;
-  margin: 5px 5%;
+  width: 43%;
+  margin: 5px 3% 1.5em;
   display: inline-block;
   background-color: #FFF;
   box-shadow: 1px 1px 10px 1px #eeeeee;
+  border: 1px solid #eee;
+  height: 150px;
+  float: left;
 }
 
 .data__card--in {
@@ -92,8 +95,8 @@
 }
 
 .data__map {
-  width: 128px;
-  height: 128px;
+  width: 160px;
+  height: 150px;
 }
 .data__map .mapboxgl-ctrl { display: none; }
 
@@ -138,14 +141,15 @@ dl, ul {
 .meta-card__title, .meta-card__def {
   float: left;
   font-size: 0.75rem;
+  margin-bottom: .5em;
 }
 
 .meta-card__title {
   text-transform: uppercase;
+  padding-right: 0.25rem;
 }
 
 .meta-card__def {
-  padding-left: 0.25rem;
   padding-right: 0.5rem;
   margin-right: 0.5rem;
   border-right: solid 1px #948D94;

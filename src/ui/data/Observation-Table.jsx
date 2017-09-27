@@ -10,7 +10,8 @@ const { setActiveObservation } = require('../../actions')
 const { nullValue } = require('../format')
 const {
   tableHeaders,
-  tableRows
+  tableRows,
+  accessors
 } = require('./property-names')
 
 // rows of table data per page
@@ -31,7 +32,7 @@ class ObservationTable extends React.Component {
     this.navigate = this.navigate.bind(this)
     this.state = {
       page: 1,
-      sortProperty: tableHeaders[0],
+      sortProperty: accessors.timestamp,
       sortOrder: 1
     }
   }
@@ -89,13 +90,23 @@ class ObservationTable extends React.Component {
       : { start: 0, stop: features.length }
 
     // Determine the sort order
-    const sortFunction = (a, b) => a.properties[sortProperty] > b.properties[sortProperty] ? -1 : 1
+    const sortFunction = (a, b) => {
+      if (!a.properties[sortProperty]) {
+        return -1
+      } else if (!b.properties[sortProperty]) {
+        return 1
+      } else if (a.properties[sortProperty] < b.properties[sortProperty]) {
+        return -1
+      } else if (a.properties[sortProperty] > b.properties[sortProperty]) {
+        return 1
+      }
+      return 0
+    }
 
     // Get the sorted, paginated features
     const sortedRows = features.sort(sortFunction)
     if (sortOrder > 0) sortedRows.reverse()
     const visibleRows = sortedRows.slice(start, stop)
-    console.log(visibleRows)
 
     return (
       <div>
@@ -105,12 +116,12 @@ class ObservationTable extends React.Component {
             <thead>
               <tr>
                 {tableHeaders.map(n => (
-                  <th key={n}
+                  <th key={n[1]}
                     className={c('tableToggle', {
-                      'tableToggleDesc': n === sortProperty && sortOrder > 0,
-                      'tableToggleAsc': n === sortProperty && sortOrder < 0
+                      'tableToggleDesc': n[1] === sortProperty && sortOrder > 0,
+                      'tableToggleAsc': n[1] === sortProperty && sortOrder < 0
                     })}
-                    onClick={() => this.setSortProperty(n)}>{n}</th>
+                    onClick={() => this.setSortProperty(n[1])}>{n[0]}</th>
                 ))}
               </tr>
             </thead>

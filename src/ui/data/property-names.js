@@ -11,11 +11,11 @@ module.exports.accessors = {
 }
 
 module.exports.tableHeaders = [
-  'Username',
-  'Device ID',
-  'Survey ID',
-  'Observation Type',
-  'Date Submitted'
+  ['Username', 'userName'],
+  ['Device ID', 'deviceId'],
+  ['Survey ID', 'surveyId'],
+  ['Observation Type', 'surveyType'],
+  ['Date Submitted', '_timestamp']
 ]
 
 module.exports.tableRows = [

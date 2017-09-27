@@ -6,14 +6,16 @@ const { withRouter } = require('react-router-dom')
 const get = require('object-path').get
 const { getActiveFeatures } = require('../../selectors')
 const { connect } = require('react-redux')
-const nullvalue = '--'
 const { setActiveObservation } = require('../../actions')
-const { excludedProperties, formatHeader, formatRow } = require('./property-names')
+const { nullValue } = require('../format')
+const {
+  tableHeaders,
+  tableRows
+} = require('./property-names')
 
 // rows of table data per page
 const limit = 10
 const noop = e => e.preventDefault()
-const noFormat = d => d
 
 const getPaginatedStops = (features, page) => {
   const start = (page - 1) * limit
@@ -26,36 +28,19 @@ class ObservationTable extends React.Component {
     super(props)
     this.renderPagination = this.renderPagination.bind(this)
     this.setSortProperty = this.setSortProperty.bind(this)
-    this.getColumnNames = this.getColumnNames.bind(this)
     this.navigate = this.navigate.bind(this)
-    const columnNames = this.getColumnNames()
     this.state = {
       page: 1,
-      sortProperty: columnNames[0],
-      sortOrder: 1,
-      columnNames
+      sortProperty: tableHeaders[0],
+      sortOrder: 1
     }
   }
 
   componentWillReceiveProps ({ activeFeatureIds }) {
     // On new active feature list
     if (this.props.activeFeatureIds !== activeFeatureIds) {
-      this.setState({ page: 1, columnNames: this.getColumnNames() })
+      this.setState({ page: 1 })
     }
-  }
-
-  getColumnNames () {
-    // Create the world of properties to use as column headers
-    const features = get(this.props, 'activeFeatures.features', [])
-    const properties = {}
-    features.forEach(feature => {
-      for (let property in feature.properties) {
-        if (excludedProperties.indexOf(property) === -1) {
-          properties[property] = true
-        }
-      }
-    })
-    return Object.keys(properties)
   }
 
   setSortProperty (prop) {
@@ -95,7 +80,7 @@ class ObservationTable extends React.Component {
   }
 
   render () {
-    const { page, sortOrder, sortProperty, columnNames } = this.state
+    const { page, sortOrder, sortProperty } = this.state
     const features = get(this.props, 'activeFeatures.features', [])
 
     // Determine if we need to paginate
@@ -110,6 +95,7 @@ class ObservationTable extends React.Component {
     const sortedRows = features.sort(sortFunction)
     if (sortOrder > 0) sortedRows.reverse()
     const visibleRows = sortedRows.slice(start, stop)
+    console.log(visibleRows)
 
     return (
       <div>
@@ -118,22 +104,22 @@ class ObservationTable extends React.Component {
           <table className='table'>
             <thead>
               <tr>
-                {columnNames.map(n => (
+                {tableHeaders.map(n => (
                   <th key={n}
                     className={c('tableToggle', {
                       'tableToggleDesc': n === sortProperty && sortOrder > 0,
                       'tableToggleAsc': n === sortProperty && sortOrder < 0
                     })}
-                    onClick={() => this.setSortProperty(n)}>{ formatHeader[n] ? formatHeader[n] : n }</th>
+                    onClick={() => this.setSortProperty(n)}>{n}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {visibleRows.map(feature => (
                 <tr key={feature.id} className='tableClickableRow' onClick={() => this.navigate(feature.id)}>
-                  {columnNames.map(n => {
-                    const format = formatRow[n] || noFormat
-                    return <td key={feature.id + n}>{format(feature.properties[n] || nullvalue)}</td>
+                  {tableRows.map(n => {
+                    const value = typeof n === 'string' ? get(feature.properties, n, nullValue) : n(feature.properties)
+                    return <td key={feature.id + n}>{value}</td>
                   })}
                 </tr>
               ))}

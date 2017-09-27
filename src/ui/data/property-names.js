@@ -1,15 +1,6 @@
 const { fullDate } = require('../format')
 
 module.exports.excludedProperties = ['id', '_version_id']
-module.exports.formatHeader = {
-  _timestamp: 'Timestamp',
-  deviceId: 'Device ID',
-  surveyId: 'Survey ID',
-  surveyType: 'Survey Type'
-}
-module.exports.formatRow = {
-  _timestamp: fullDate
-}
 
 module.exports.accessors = {
   device: 'deviceId',
@@ -20,3 +11,19 @@ module.exports.accessors = {
   p2pId: 'osm-p2p-id',
   timestamp: '_timestamp'
 }
+
+module.exports.tableHeaders = [
+  'Username',
+  'Device ID',
+  'Survey ID',
+  'Observation Type',
+  'Date Submitted'
+]
+
+module.exports.tableRows = [
+  'userName',
+  'deviceId',
+  'surveyId',
+  'surveyType',
+  (d) => fullDate(d._timestamp)
+]

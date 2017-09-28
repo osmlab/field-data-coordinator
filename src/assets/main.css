@@ -177,6 +177,7 @@ section {
 
 .selected {
   float: left;
+  margin-bottom: 4em;
 }
 
 .header__title {
@@ -307,18 +308,15 @@ fieldset {
 }
 
 .surveyInputs {
-  border: 1px solid #F0ECEC;
-  border-radius: 4px;
   margin-bottom: 3em;
-  padding: 1.5em 1.8em 2em;
   width: 600px;
   position: relative;
 }
 
 .importedSurvey {
-  border-radius: 4px;
-  margin-bottom: 3em;
-  padding: 1rem 0;
+  margin-bottom: 4em;
+  padding: 1rem 0 3em;
+  border-bottom: 1px solid #F0ECEC;
 }
 
 .surveyInputGeo {
@@ -350,6 +348,10 @@ fieldset {
   color: #00BFA5;
   font-size: 0.75rem;
   font-weight: 300;
+}
+
+.link--lowercase {
+  text-transform: lowercase;
 }
 
 .link--primary--card {
@@ -395,4 +397,24 @@ fieldset {
   height: 55px;
   display: block;
   margin: 0 auto 1em;
+}
+
+.section__about {
+  margin: 2em 0;
+  max-width: 750px;
+}
+
+.paragraph--block p {
+  margin-bottom: 1em;
+}
+
+.paragraph--block {
+  max-width: 700px;
+  margin-bottom: 2.5em;
+}
+
+.img-about {
+  max-width: 550px;
+  border: 1px solid #ccc;
+  margin: 2em 0;
 }

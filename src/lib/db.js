@@ -108,6 +108,7 @@ function importBulkOsm (bbox, cb) {
           } else {
             // up the DB before deduping nodes
             osmOrgDb = osmOrgDb || osmdb(osmOrgDbPath)
+            observationsExporter = new ObserveExport(osmOrgDb, observationsDb, observationsIndex)
             // Deduplicate nodes that appear in the new OSM.org data *and* the observationsDb.
             deduplicatePlaceholderNodes(observationsDb, osmOrgDb, observationsIndex, function (err) {
               done(err, `Finished importing ${bbox}`)

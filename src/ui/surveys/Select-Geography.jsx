@@ -113,8 +113,6 @@ class SelectGeography extends React.Component {
     const { mapWidth, mapHeight, mapBounds } = this.state
     // calculate viewport area in square meters
     const viewportArea = calculateArea(bboxPolygon(mapBounds))
-    console.log(viewportArea)
-    console.log(MAX_AREA)
     // calculate the length of the edge, given a constant maximum area
     const viewportEdge = Math.min(mapWidth, mapHeight)
     const ratio = viewportArea < MAX_AREA ? 1

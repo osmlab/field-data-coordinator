@@ -1,0 +1,122 @@
+schema_version: 0.0.1
+version: 0.0.2
+
+name: OSM Survey
+description: >
+  Default OSM presets
+
+feature_types:
+  - id: osm:building=house
+    preset: building/house
+  - id: osm:building=apartments
+    preset: building/apartments
+  - id: osm:building=commercial
+    preset: building/commercial
+  - id: osm:building=industrial
+    preset: building/industrial
+  - id: osm:building=residential
+    preset: building/residential
+  - id: osm:amenity=hospital
+    preset: amenity/hospital
+  - id: osm:amenity=place_of_worship
+    preset: amenity/place_of_worship
+  - id: osm:amenity=cafe
+    preset: amenity/cafe
+  - id: osm:amenity=bar
+    preset: amenity/bar
+  - id: osm:amenity=fast_food
+    preset: amenity/fast_food
+  - id: osm:amenity=bank
+    preset: amenity/bank
+  - id: osm:amenity=restaurant
+    preset: amenity/restaurant
+  - id: osm:leisure=park
+    preset: leisure/park
+  - id: osm:landuse=residential
+    preset: landuse/residential
+  - id: osm:landuse=industrial
+    preset: landuse/industrial
+  - id: osm:landuse=commercial
+    preset: landuse/commercial
+  - id: osm:landuse=retail
+    preset: landuse/retail
+  - id: osm:landuse=farmland
+    preset: landuse/farmland
+  - id: osm:landuse=farmyard
+    preset: landuse/farmyard
+  - id: osm:landuse=forest
+    preset: landuse/forest
+  - id: osm:landuse=meadow
+    preset: landuse/meadow
+  - id: osm:landuse=aquaculture
+    preset: landuse/aquaculture
+  - id: osm:landuse=cemetery
+    preset: landuse/cemetery
+  - id: osm:landuse=military
+    preset: landuse/military
+  - id: osm:natural=water
+    preset: natural/water
+  - id: osm:natural=wood
+    preset: natural/wood
+  - id: osm:natural=scrub
+    preset: natural/scrub
+  - id: osm:natural=wetland
+    preset: natural/wetland
+  - id: osm:natural=grassland
+    preset: natural/grassland
+  - id: osm:natural=heath
+    preset: natural/heath
+  - id: osm:natural=bare_rock
+    preset: natural/bare_rock
+  - id: osm:natural=beach
+    preset: natural/beach
+  - id: osm:natural=cave_entrance
+    preset: natural/cave_entrance
+  - id: osm:natural=glacier
+    preset: natural/glacier
+  - id: osm:natural=cliff
+    preset: natural/cliff
+  - id: osm:natural=peak
+    preset: natural/peak
+
+observation_types:
+  - osm:building=house
+  - osm:building=apartments
+  - osm:building=commercial
+  - osm:building=industrial
+  - osm:building=residential
+  - osm:amenity=hospital
+  - osm:amenity=place_of_worship
+  - osm:amenity=cafe
+  - osm:amenity=restaurant
+  - osm:amenity=bar
+  - osm:amenity=bank
+  - osm:amenity=fast_food
+  - osm:leisure=park
+  - osm:landuse=residential
+  - osm:landuse=industrial
+  - osm:landuse=commercial
+  - osm:landuse=retail
+  - osm:landuse=farmland
+  - osm:landuse=farmyard
+  - osm:landuse=forest
+  - osm:landuse=meadow
+  - osm:landuse=aquaculture
+  - osm:landuse=cemetery
+  - osm:landuse=military
+  - osm:natural=water
+  - osm:natural=cliff
+  - osm:natural=peak
+  - osm:natural=wood
+  - osm:natural=scrub
+  - osm:natural=wetland
+  - osm:natural=grassland
+  - osm:natural=heath
+  - osm:natural=bare_rock
+  - osm:natural=beach
+  - osm:natural=cave_entrance
+  - osm:natural=glacier
+
+meta:
+  coordinator: Robert Banick
+  organization: GFDRR

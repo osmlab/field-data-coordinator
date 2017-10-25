@@ -1,0 +1,25 @@
+{
+  "icon": "cafe",
+  "fields": [
+      "name",
+      "cuisine",
+      "building_area",
+      "opening_hours",
+      "internet_access",
+      "smoking",
+      "outdoor_seating"
+  ],
+  "geometry": [
+      "point",
+      "area"
+  ],
+  "terms": [
+      "bistro",
+      "coffee",
+      "tea"
+  ],
+  "tags": {
+      "amenity": "cafe"
+  },
+  "name": "Cafe"
+}

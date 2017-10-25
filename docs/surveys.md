@@ -103,7 +103,7 @@ represent a good starting point.
 
 ## Command Line
 
-[`observe-tools`](../tools) includes a pair of command line utilities for working with survey definitions:
+[`observe-tools`](https://github.com/osmlab/observe-tools) includes a pair of command line utilities for working with survey definitions:
 
 * `compile-survey.js` - compiles a YAML survey definition + directory containing
   preset JSON files into a self-contained JSON survey definition (matching what

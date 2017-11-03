@@ -13,16 +13,13 @@ name: OSM
 description: Default OSM presets from iD
 ```
 
-If placed alongside iD's default presets in
-[`data/presets`](https://github.com/openstreetmap/iD/tree/master/data/presets)
-as `survey.yaml`, [Field Data
-Coordinator](https://github.com/osmlab/field-data-coordinator/) can import it
+If the yaml file placed is place alongside a iD presets as `survey.yaml`, the app can import it
 and make all iD OSM presets available available as both recognized feature and
 observation types.
 
 ![](import.png)
 
-Additional sample survey definitions are available in [`../data/surveys`](../data/surveys):
+Additional sample survey definitions are available in [`../survey-examples/surveys`](../survey-examples/surveys):
 
 * `hfh_inspections` - building inspections for Habitat for Humanity
 * `sri_lanka` - a Sri Lanka building survey
@@ -31,7 +28,7 @@ Additional sample survey definitions are available in [`../data/surveys`](../dat
 
 `sri_lanka` is derived from iD's presets--existing presets were copied from the
 iD git repository and modified (tags added / removed and options added, e.g.
-[`fields/building.json`](../data/surveys/sri_lanka/fields/building.json)).
+[`fields/building.json`](../survey-examples/surveys/sri_lanka/fields/building.json)).
 
 Here's a simplified, annotated version of the Sri Lanka survey:
 
